@@ -13,7 +13,7 @@ var functions = template.FuncMap{}
 
 // RenderTemplate ช่วยในการ render html template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
-	tmplCache, err := createTemplateCache()
+	tmplCache, err := CreateTemplateCache()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -31,7 +31,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 }
 
-func createTemplateCache() (map[string]*template.Template, error) {
+func CreateTemplateCache() (map[string]*template.Template, error) {
 
 	tmplCache := map[string]*template.Template{}
 
