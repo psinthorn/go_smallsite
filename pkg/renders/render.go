@@ -7,28 +7,29 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+
+	"github.com/psinthorn/go_smallsite/pkg/configs"
 )
 
 var (
 	functions = template.FuncMap{}
 	tmplCache = map[string]*template.Template{}
+	app       *configs.AppConfig
 )
+
+func NewTemplate(a *configs.AppConfig) {
+	app = a
+}
 
 // RenderTemplate ช่วยในการ render html template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
 
-	// Use single template
-	tmplCache, err := createSingleTemplateCache(tmpl)
-
-	// tmplCache, err := createTemplateCache(tmpl)
-	if err != nil {
-		log.Fatal(err)
-	}
+	tmplCache = app.TemplateCache
 
 	// ตรวจสอบว่ามี template ตรงที่ต้องการหรือไหม
 	newTmpl, ok := tmplCache[tmpl]
 	if !ok {
-		log.Fatal("error on parsing template")
+		log.Fatal("Template not found")
 	}
 
 	// หากทีให้ทำหารเขียนลงไปที่ bytes buffer
@@ -38,16 +39,14 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	_ = newTmpl.Execute(buff, nil)
 
 	// และเขียนส่ง buffer new template ให้ response (w)
-	_, err = buff.WriteTo(w)
+	_, err := buff.WriteTo(w)
 	if err != nil {
 		fmt.Println(fmt.Sprintf("error parsing template to browser %s ", err))
 	}
 }
 
 // createTemplateCache ตรวจสอบและสร้าง templateห แบบทั้งหมด
-func createTemplateCache(tmpl string) (map[string]*template.Template, error) {
-
-	//tmplCache := map[string]*template.Template{}
+func CreateTemplateCache() (map[string]*template.Template, error) {
 
 	pages, err := filepath.Glob("./templates/*.page.html")
 	if err != nil {
@@ -55,48 +54,39 @@ func createTemplateCache(tmpl string) (map[string]*template.Template, error) {
 		return nil, err
 	}
 
-	fmt.Println("agrs name is: ", tmpl)
-	fmt.Println("---------------------")
-
 	for _, page := range pages {
 
 		pageName := filepath.Base(page)
-		fmt.Println("page name is: ", pageName)
-		fmt.Println("---------------------")
 
-		// ตรวจสอบว่ามี page ที่ชื่อตรงกับ args หรือไม่ หากทีให้ทำการสร้าง template ขึ้นมาตามชื่อที่ส่งเข้ามา (args)
-		if pageName == tmpl {
-			tmplSet, err := template.New(pageName).Funcs(functions).ParseFiles(page)
-			if err != nil {
-				fmt.Println(fmt.Sprintf("error can't create new template set error: %s ", err))
-				return nil, err
-			}
-
-			// ตรวจสอบว่ามีไฟล์ที่ลงท้ายด้วยนามสกุล .layout.html หรือไม่หาก
-			matches, err := filepath.Glob("./templates/*.layout.html")
-			if err != nil {
-				fmt.Println(fmt.Sprintf("error can't find any layout file in templates folder error: %s ", err))
-				return nil, err
-			}
-
-			if len(matches) > 0 {
-				tmplSet, err = tmplSet.ParseGlob("./templates/*.layout.html")
-				if err != nil {
-					fmt.Println(fmt.Sprintf("error can't parse layout file to templates set error: %s ", err))
-					return nil, err
-				}
-			}
-
-			tmplCache[pageName] = tmplSet
+		tmplSet, err := template.New(pageName).Funcs(functions).ParseFiles(page)
+		if err != nil {
+			fmt.Println(fmt.Sprintf("error can't create new template set error: %s ", err))
+			return nil, err
 		}
 
+		// ตรวจสอบว่ามีไฟล์ที่ลงท้ายด้วยนามสกุล .layout.html หรือไม่หาก
+		matches, err := filepath.Glob("./templates/*.layout.html")
+		if err != nil {
+			fmt.Println(fmt.Sprintf("error can't find any layout file in templates folder error: %s ", err))
+			return nil, err
+		}
+
+		if len(matches) > 0 {
+			tmplSet, err = tmplSet.ParseGlob("./templates/*.layout.html")
+			if err != nil {
+				fmt.Println(fmt.Sprintf("error can't parse layout file to templates set error: %s ", err))
+				return nil, err
+			}
+		}
+
+		tmplCache[pageName] = tmplSet
 	}
 
 	return tmplCache, nil
 }
 
-// createSingleTemplateCache ตรวจสอบและสร้าง template ตาม args ที่ส่งเข้ามาเท่านั้น
-func createSingleTemplateCache(tmpl string) (map[string]*template.Template, error) {
+// CreateSingleTemplateCache ตรวจสอบและสร้าง template ตาม args ที่ส่งเข้ามาเท่านั้น
+func CreateSingleTemplateCache(tmpl string) (map[string]*template.Template, error) {
 
 	// หาไฟล์ชื่อที่ตรงกับ args ที่ส่งเข้ามา หากไม่ไมีมห้คืนค่า err กลับไป
 	page, err := filepath.Glob("./templates/" + tmpl)
