@@ -24,7 +24,13 @@ func NewTemplate(a *configs.AppConfig) {
 // RenderTemplate ช่วยในการ render html template
 func RenderTemplate(w http.ResponseWriter, tmpl string) {
 
-	tmplCache = app.TemplateCache
+	// หาก UseCache = true ให้อ่าน Template จาก app.AppConfig (ใช้ใน production)
+	// หาก UseCache = false ให้อ่าน Template จาก disk ใหม่ทุกครั้ง (สร้าง template ใหม่จากข้อมูลที่มีอยู่ปัจจุบันทุกครั้ง) (ใช้ใน development mode)
+	if app.UseCache {
+		tmplCache = app.TemplateCache
+	} else {
+		tmplCache, _ = CreateTemplateCache()
+	}
 
 	// ตรวจสอบว่ามี template ตรงที่ต้องการหรือไหม
 	newTmpl, ok := tmplCache[tmpl]

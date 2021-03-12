@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/psinthorn/go_smallsite/pkg/configs"
+	"github.com/psinthorn/go_smallsite/pkg/handlers"
 	"github.com/psinthorn/go_smallsite/pkg/renders"
 )
 
@@ -23,6 +24,11 @@ func Start() {
 	}
 
 	app.TemplateCache = tmplCache
+	app.UseCache = false
+
+	newRepo := handlers.NewRepository(&app)
+	handlers.NewHandlers(newRepo)
+
 	renders.NewTemplate(&app)
 
 	// Serve server service
