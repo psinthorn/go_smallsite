@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/psinthorn/go_smallsite/pkg/configs"
+	"github.com/psinthorn/go_smallsite/pkg/models"
 )
 
 var (
@@ -21,8 +22,12 @@ func NewTemplate(a *configs.AppConfig) {
 	app = a
 }
 
+func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+	return td
+}
+
 // RenderTemplate ช่วยในการ render html template
-func RenderTemplate(w http.ResponseWriter, tmpl string) {
+func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
 
 	// หาก UseCache = true ให้อ่าน Template จาก app.AppConfig (ใช้ใน production)
 	// หาก UseCache = false ให้อ่าน Template จาก disk ใหม่ทุกครั้ง (สร้าง template ใหม่จากข้อมูลที่มีอยู่ปัจจุบันทุกครั้ง) (ใช้ใน development mode)
@@ -41,8 +46,11 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	// หากทีให้ทำหารเขียนลงไปที่ bytes buffer
 	buff := new(bytes.Buffer)
 
+	// เพิ่มข้อมูลที่ต้องการส่งไปที่ template ทุกครั้งเม่ือ render template
+	td = AddDefaultData(td)
+
 	// และให้เขียนไปที่ template ใหม่ที่สร้างรอไว้แล้ว (newTmpl)
-	_ = newTmpl.Execute(buff, nil)
+	_ = newTmpl.Execute(buff, td)
 
 	// และเขียนส่ง buffer new template ให้ response (w)
 	_, err := buff.WriteTo(w)
@@ -51,7 +59,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string) {
 	}
 }
 
-// createTemplateCache ตรวจสอบและสร้าง templateห แบบทั้งหมด
+// CreateTemplateCache ตรวจสอบและสร้าง templateห แบบทั้งหมด
 func CreateTemplateCache() (map[string]*template.Template, error) {
 
 	pages, err := filepath.Glob("./templates/*.page.html")
