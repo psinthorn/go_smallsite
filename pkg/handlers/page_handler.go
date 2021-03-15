@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/psinthorn/go_smallsite/pkg/configs"
@@ -29,6 +30,9 @@ func NewHandlers(r *Repository) {
 
 // Home is home page render
 func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	remoteIP := r.RemoteAddr
+	fmt.Println(remoteIP)
+	rp.App.Session.Put(r.Context(), "remote_ip", remoteIP)
 
 	stringMap := make(map[string]string)
 	stringMap["greet"] = "Hello Go"
@@ -40,6 +44,12 @@ func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {
 
 // About is about page render
 func (rp *Repository) About(w http.ResponseWriter, r *http.Request) {
-	renders.RenderTemplate(w, "about.page.html", &models.TemplateData{})
+	stringMap := make(map[string]string)
+	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "about.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
 
 }
