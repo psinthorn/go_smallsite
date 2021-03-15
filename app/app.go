@@ -7,12 +7,18 @@ import (
 
 	"github.com/psinthorn/go_smallsite/pkg/handlers"
 	"github.com/psinthorn/go_smallsite/pkg/renders"
+	"github.com/psinthorn/go_smallsite/pkg/utils"
 )
 
 const portNumber = ":8080"
 
 // Start use to start new server
 func StartApp() {
+
+	utils.Utils.IsProduction(&appConfig)
+
+	fmt.Println("------------------------------------------------------------------------")
+	fmt.Println("Current environment isProduction: ", appConfig.IsProduction)
 
 	CreateSession()
 
