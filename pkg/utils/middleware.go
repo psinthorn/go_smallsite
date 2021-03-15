@@ -7,6 +7,7 @@ import (
 	"github.com/justinas/nosurf"
 )
 
+// Middleware variable as middleware type
 var Middleware middleware
 
 type middleware struct{}
@@ -19,7 +20,7 @@ func (mdw *middleware) WriteToConsole(next http.Handler) http.Handler {
 	})
 }
 
-// NoSurf CSRF token generate
+// NoSurf CSRF token generate for protection on all POST requests
 func (mdw *middleware) NoSurf(next http.Handler) http.Handler {
 	csrfHandler := nosurf.New(next)
 
@@ -31,3 +32,9 @@ func (mdw *middleware) NoSurf(next http.Handler) http.Handler {
 	})
 	return csrfHandler
 }
+
+// // SessionLoad middleware adds and save session on every requests
+// // *move this middleware to session.go file
+// func SessionLoad(next http.Handler) http.Handler {
+// 	return session.LoadAndSave(next)
+// }
