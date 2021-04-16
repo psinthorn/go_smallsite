@@ -24,7 +24,7 @@ func (u *utils) IsProduction(appConfig *configs.AppConfig) {
 	fmt.Println("Current Host name is: ", hostName)
 	// fmt.Println("------------------------------------------------------------------------")
 
-	if hostName == "imacs-iMac-2.local" {
+	if hostName == "psinthorn-macbook.local" {
 		isProduction = false
 	} else {
 		isProduction = true
