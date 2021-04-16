@@ -53,3 +53,51 @@ func (rp *Repository) About(w http.ResponseWriter, r *http.Request) {
 	})
 
 }
+
+// Room is room page render
+func (rp *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
+	stringMap := make(map[string]string)
+	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "room.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
+
+}
+
+// CheckAvailability is check-availability page render
+func (rp *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) {
+	stringMap := make(map[string]string)
+	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "check-availability.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
+
+}
+
+// Reservation is reservation page render
+func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
+	stringMap := make(map[string]string)
+	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "reservation.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
+
+}
+
+// Reservation is reservation page render
+func (rp *Repository) Contact(w http.ResponseWriter, r *http.Request) {
+	stringMap := make(map[string]string)
+	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "contact.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
+
+}
