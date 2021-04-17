@@ -1,0 +1,4 @@
+create_table("room_status") {
+    t.Column("id", "uuid", {primary: true})
+    t.Column("status_title", "string", {"default": ""})
+}
