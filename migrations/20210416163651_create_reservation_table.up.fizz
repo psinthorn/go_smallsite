@@ -6,5 +6,5 @@ create_table("reservations") {
     t.Column("phone", "string", {"default": ""})
     t.Column("start_date", "date", {})
     t.Column("end_date", "date", {})
-    t.Column("room_id", "string", {})
+    t.Column("room_id", "uuid", {})
 }
