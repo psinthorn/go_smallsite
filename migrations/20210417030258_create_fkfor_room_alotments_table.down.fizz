@@ -1,0 +1,3 @@
+drop_foreign_key("room_alotments", "room_alotments_reservations_id_fk", {})
+drop_foreign_key("room_alotments", "room_alotments_room_status_id_fk", {})
+drop_foreign_key("room_alotments", "room_alotments_rooms_id_fk", {})
