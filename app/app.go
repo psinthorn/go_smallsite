@@ -22,6 +22,13 @@ func StartApp() {
 
 	CreateSession()
 
+	// Connect to databast
+	// log.Println("Connecting to Database......")
+	// // db, err := drivers.ConnectSQL("host=localhost port=5432 dbname=go_smallsite_bookngs user=postgres password=")
+	// if err != nil {
+	// 	log.Fatal("Can't connect to database :(")
+	// }
+
 	// Create new template
 	tmplCache, err := renders.CreateTemplateCache()
 	if err != nil {
