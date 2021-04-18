@@ -1,0 +1,4 @@
+drop_index("room_alotments", "room_alotments_start_date_end_date_idx")
+drop_index("room_alotments", "room_alotments_room_id_idx")
+drop_index("room_alotments", "room_alotments_reservation_id_idx")
+drop_index("room_alotments", "room_alotments_room_status_id_idx")
