@@ -60,7 +60,7 @@ func (rp *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	renders.RenderTemplate(w, "room.page.html", &models.TemplateData{
+	renders.RenderTemplate(w, "rooms.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 
