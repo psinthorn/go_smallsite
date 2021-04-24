@@ -91,12 +91,24 @@ func (rp *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
 }
 
 // CheckAvailability is check-availability page render
-func (rp *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) CheckAlotment(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	renders.RenderTemplate(w, "check-availability.page.html", &models.TemplateData{
+	renders.RenderTemplate(w, "check-alotment.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
+
+}
+
+// CheckAvailability is check-availability page render
+func (rp *Repository) SearchAlotment(w http.ResponseWriter, r *http.Request) {
+	stringMap := make(map[string]string)
+	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "search-alotment.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 
@@ -108,7 +120,7 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	renders.RenderTemplate(w, "reservation.page.html", &models.TemplateData{
+	renders.RenderTemplate(w, "make-reservation.page.html", &models.TemplateData{
 		StringMap: stringMap,
 	})
 
