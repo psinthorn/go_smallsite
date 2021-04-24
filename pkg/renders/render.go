@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"path/filepath"
 
+	"github.com/justinas/nosurf"
 	"github.com/psinthorn/go_smallsite/pkg/configs"
 	"github.com/psinthorn/go_smallsite/pkg/models"
 )
@@ -22,12 +23,13 @@ func NewTemplate(a *configs.AppConfig) {
 	app = a
 }
 
-func AddDefaultData(td *models.TemplateData) *models.TemplateData {
+func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+	td.CSRFToken = nosurf.Token(r)
 	return td
 }
 
 // RenderTemplate ช่วยในการ render html template
-func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData) {
+func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 
 	// หาก UseCache = true ให้อ่าน Template จาก app.AppConfig (ใช้ใน production)
 	// หาก UseCache = false ให้อ่าน Template จาก disk ใหม่ทุกครั้ง (สร้าง template ใหม่จากข้อมูลที่มีอยู่ปัจจุบันทุกครั้ง) (ใช้ใน development mode)
@@ -47,7 +49,7 @@ func RenderTemplate(w http.ResponseWriter, tmpl string, td *models.TemplateData)
 	buff := new(bytes.Buffer)
 
 	// เพิ่มข้อมูลที่ต้องการส่งไปที่ template ทุกครั้งเม่ือ render template
-	td = AddDefaultData(td)
+	td = AddDefaultData(td, r)
 
 	// และให้เขียนไปที่ template ใหม่ที่สร้างรอไว้แล้ว (newTmpl)
 	_ = newTmpl.Execute(buff, td)
