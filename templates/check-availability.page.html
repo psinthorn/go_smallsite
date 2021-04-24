@@ -1,30 +1,46 @@
 {{template "base" .}}
 
-    {{define "content"}}
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <h1>Check Availability Page</h1>
-                    <p>Yes, it good</p>
-                    <p>Yes, This is UseCache testing</p>
-                    <p>Yes, This is UseCache testing</p>
-                    <p>Yes, This is UseCache testing</p>
-                </div>
-                <p>
-                    {{if ne (index .StringMap "remote_ip") ""}}
-                        Your remote ip address is {{index .StringMap "remote_ip"}}
-                    {{else}}
-                        I don't know your ip address yet. Visit the <a href="/">home page</a> so I can set it.
-                    {{end}}
-                </p>
-            </div>
-        </div>
-    {{end}}
+{{define "content"}}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <h1 class="mt-3">Search for Availability</h1>
 
-    {{define "js"}}
-    <!-- if you have specific javascript for this page put it here -->
-    <script>
-        console.log("Separate script form individual page is start here")
-    </script>
-    {{end}}
-    
+                <form action="" method="post" novalidate class="needs-validation">
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}">
+                    <div class="row">
+                        <div class="col">
+                            <div class="row" id="reservation-dates">
+                                <div class="col-md-6">
+                                    <input required class="form-control" type="text" name="start" placeholder="Arrival">
+                                </div>
+                                <div class="col-md-6">
+                                    <input required class="form-control" type="text" name="end" placeholder="Departure">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <button type="submit" class="btn btn-primary">Search Availability</button>
+
+                </form>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+    </div>
+{{end}}
+
+
+{{define "js"}}
+<script>
+    const elem = document.getElementById('reservation-dates');
+    const rangePicker = new DateRangePicker(elem, {
+        format: "yyyy-mm-dd",
+    });
+</script>
+{{end}}
+
