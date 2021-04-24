@@ -66,6 +66,30 @@ func (rp *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
 
 }
 
+// Superior is room page render
+func (rp *Repository) Superior(w http.ResponseWriter, r *http.Request) {
+	stringMap := make(map[string]string)
+	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "superior.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
+
+}
+
+// Superior is room page render
+func (rp *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
+	stringMap := make(map[string]string)
+	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
+	stringMap["remote_ip"] = remoteIP
+
+	renders.RenderTemplate(w, "deluxe.page.html", &models.TemplateData{
+		StringMap: stringMap,
+	})
+
+}
+
 // CheckAvailability is check-availability page render
 func (rp *Repository) CheckAvailability(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
