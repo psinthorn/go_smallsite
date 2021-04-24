@@ -1,12 +1,13 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/psinthorn/go_smallsite/pkg/configs"
-	"github.com/psinthorn/go_smallsite/pkg/models"
-	"github.com/psinthorn/go_smallsite/pkg/renders"
+	"github.com/psinthorn/go_smallsite/internal/configs"
+	"github.com/psinthorn/go_smallsite/internal/models"
+	"github.com/psinthorn/go_smallsite/internal/renders"
 )
 
 // Repo
@@ -119,6 +120,25 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
 	w.Write([]byte(fmt.Sprintf("Start Date: %s and End date is: %s", start, end)))
+}
+
+type jsonReponse struct {
+	OK      bool   `json: "ok"`
+	Message string `json: "message"`
+}
+
+// AvailabilityResponse is availability response in json
+func (rp *Repository) AvailabilityResponse(w http.ResponseWriter, r *http.Request) {
+	resp := jsonReponse{
+		OK:      true,
+		Message: "Hello Json",
+	}
+
+	out, _ := json.MarshalIndent(resp, "", "     ")
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
+
 }
 
 // Reservation is reservation page render

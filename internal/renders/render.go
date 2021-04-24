@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 
 	"github.com/justinas/nosurf"
-	"github.com/psinthorn/go_smallsite/pkg/configs"
-	"github.com/psinthorn/go_smallsite/pkg/models"
+	"github.com/psinthorn/go_smallsite/internal/configs"
+	"github.com/psinthorn/go_smallsite/internal/models"
 )
 
 var (
