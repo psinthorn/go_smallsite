@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/psinthorn/go_smallsite/pkg/handlers"
-	"github.com/psinthorn/go_smallsite/pkg/renders"
-	"github.com/psinthorn/go_smallsite/pkg/utils"
+	"github.com/psinthorn/go_smallsite/internal/handlers"
+	"github.com/psinthorn/go_smallsite/internal/renders"
+	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
 const portNumber = ":8080"

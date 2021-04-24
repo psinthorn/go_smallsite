@@ -28,7 +28,7 @@
         </div>
         <div class="row">
             <div class="col text-center">
-                <a id="check-availability-button" href="/make-reservation-gq" class="btn btn-success">Check Availability</a>
+                <a id="check-availability-button" href="#!" class="btn btn-success">Check Availability</a>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@
     <script>
           document.getElementById("check-availability-button").addEventListener("click", function () {
           let html = `
-          <form id="check-availability-form" action="" method="post" novalidate class="needs-validation">
+          <form id="check-availability-form" action="/search-availability-response" method="post" novalidate class="needs-validation">
               <div class="form-row">
                   <div class="col">
                       <div class="form-row" id="reservation-dates-modal">
@@ -56,8 +56,41 @@
           </form>
           `;
           attention.custom({
-              title: 'Choose your dates',
-              msg: html,
+            title: 'Choose your dates',
+            msg: html,
+
+            willOpen: () => {
+                      const elem = document.getElementById("reservation-dates-modal");
+                      const rp = new DateRangePicker(elem, {
+                          format: 'yyyy-mm-dd',
+                          showOnFocus: true,
+                      })
+            },
+
+            didOpen: () => {
+                      document.getElementById("start").removeAttribute("disabled");
+                      document.getElementById("end").removeAttribute("disabled");
+            },
+
+              callback: (results) => {
+                console.log("callback is working");
+                let form = document.getElementById("check-availability-form");
+
+                // retrive data from all form input field
+                let formData = new FormData(form);
+
+                // append csrf to form
+                formData.append("csrf_token", "{{.CSRFToken}}");
+
+                fetch("/search-availability-response", {
+                    method: 'post',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                })
+              }
           });
       })
     </script>

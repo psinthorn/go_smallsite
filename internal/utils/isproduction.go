@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/psinthorn/go_smallsite/pkg/configs"
+	"github.com/psinthorn/go_smallsite/internal/configs"
 )
 
 // Utils is use for public utilities method

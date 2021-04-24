@@ -5,9 +5,9 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/psinthorn/go_smallsite/pkg/configs"
-	"github.com/psinthorn/go_smallsite/pkg/handlers"
-	"github.com/psinthorn/go_smallsite/pkg/utils"
+	"github.com/psinthorn/go_smallsite/internal/configs"
+	"github.com/psinthorn/go_smallsite/internal/handlers"
+	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
 // Routes use to map url with controller func
@@ -28,9 +28,12 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Get("/room", handlers.Repo.Rooms)
 	mux.Get("/superior", handlers.Repo.Superior)
 	mux.Get("/deluxe", handlers.Repo.Deluxe)
+
 	// mux.Get("/check-alotment", handlers.Repo.CheckAlotment)
 	mux.Get("/search-availability", handlers.Repo.SearchAvailability)
 	mux.Post("/search-availability", handlers.Repo.PostSearchAvailability)
+	mux.Post("/search-availability-response", handlers.Repo.AvailabilityResponse)
+
 	mux.Get("/reservation", handlers.Repo.Reservation)
 	mux.Get("/make-reservation", handlers.Repo.Reservation)
 	mux.Get("/contact", handlers.Repo.Contact)
