@@ -1,5 +1,7 @@
 package models
 
+import "github.com/psinthorn/go_smallsite/internal/forms"
+
 // TemplateData struct is holds all data type that we use to send to template
 type TemplateData struct {
 	StringMap map[string]string
@@ -10,4 +12,5 @@ type TemplateData struct {
 	flash     string
 	Warnings  string
 	Error     string
+	Form      *forms.Form
 }
