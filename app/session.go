@@ -1,14 +1,19 @@
 package main
 
 import (
+	"encoding/gob"
 	"net/http"
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+	"github.com/psinthorn/go_smallsite/internal/models"
 )
 
 // CreateSession and store session to AppConfig.Session
 func CreateSession() {
+
+	// register reservation model to session
+	gob.Register(models.Reservation{})
 
 	// set up the session
 	session = scs.New()

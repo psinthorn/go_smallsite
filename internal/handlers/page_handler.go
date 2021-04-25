@@ -143,7 +143,7 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// Reservation is reservation page render
+// PostReservation is reservation page render
 func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -175,9 +175,17 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 			Form: form,
 			Data: data,
 		})
+		return
 	}
-	return
 
+	rp.App.Session.Put(r.Context(), "reservation", reservation)
+	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
+
+}
+
+// ReservationSummary
+func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	renders.RenderTemplate(w, r, "reservation-summary.page.html", &models.TemplateData{})
 }
 
 // Contact is contact page render
