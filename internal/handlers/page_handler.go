@@ -184,8 +184,18 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 }
 
 // ReservationSummary
-func (m *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
-	renders.RenderTemplate(w, r, "reservation-summary.page.html", &models.TemplateData{})
+func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(models.Reservation)
+	if !ok {
+		log.Println("can not get reservation items from session")
+	}
+
+	data := make(map[string]interface{})
+	data["reservation"] = reservation
+
+	renders.RenderTemplate(w, r, "reservation-summary.page.html", &models.TemplateData{
+		Data: data,
+	})
 }
 
 // Contact is contact page render
