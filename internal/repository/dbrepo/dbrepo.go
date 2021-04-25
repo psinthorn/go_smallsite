@@ -3,8 +3,8 @@ package dbrepo
 import (
 	"database/sql"
 
+	"github.com/psinthorn/go_smallsite/internal/configs"
 	"github.com/psinthorn/go_smallsite/internal/repository"
-	"github.com/psinthorn/go_smallsite/pkg/configs"
 )
 
 type postgresDBRepo struct {

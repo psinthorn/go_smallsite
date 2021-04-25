@@ -3,9 +3,11 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/psinthorn/go_smallsite/internal/configs"
+	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/models"
 	"github.com/psinthorn/go_smallsite/internal/renders"
 )
@@ -91,18 +93,6 @@ func (rp *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// // CheckAvailability is check-availability page render
-// func (rp *Repository) CheckAlotment(w http.ResponseWriter, r *http.Request) {
-// 	stringMap := make(map[string]string)
-// 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
-// 	stringMap["remote_ip"] = remoteIP
-
-// 	renders.RenderTemplate(w, "check-alotment.page.html", &models.TemplateData{
-// 		StringMap: stringMap,
-// 	})
-
-// }
-
 // CheckAvailability is check-availability page render
 func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
@@ -148,12 +138,42 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	stringMap["remote_ip"] = remoteIP
 
 	renders.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+		Form:      forms.New(nil),
 		StringMap: stringMap,
 	})
-
 }
 
 // Reservation is reservation page render
+func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	err := r.ParseForm()
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	reservation := models.Reservation{
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Email:     r.Form.Get("email"),
+		Phone:     r.Form.Get("phone"),
+	}
+
+	form := forms.New(r.PostForm)
+	form.Has("first_name", r)
+	if !form.Valid() {
+		data := make(map[string]interface{})
+		data["reservation"] = reservation
+
+		renders.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
+			Form: form,
+			Data: data,
+		})
+	}
+	return
+
+}
+
+// Contact is contact page render
 func (rp *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
