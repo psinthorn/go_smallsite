@@ -133,13 +133,13 @@ func (rp *Repository) AvailabilityResponse(w http.ResponseWriter, r *http.Reques
 
 // Reservation is reservation page render
 func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	stringMap := make(map[string]string)
-	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
-	stringMap["remote_ip"] = remoteIP
+	var emptyReservation models.Reservation
+	data := make(map[string]interface{})
+	data["reservation"] = emptyReservation
 
 	renders.RenderTemplate(w, r, "make-reservation.page.html", &models.TemplateData{
-		Form:      forms.New(nil),
-		StringMap: stringMap,
+		Form: forms.New(nil),
+		Data: data,
 	})
 }
 
@@ -159,7 +159,12 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	form := forms.New(r.PostForm)
-	form.Has("first_name", r)
+
+	// form.Has("first_name", r)
+	form.Required("first_name", "last_name", "email")
+	// Minimum require on input field
+	form.MinLength("first_name", 3, r)
+
 	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
