@@ -162,6 +162,19 @@
               confirmButtonText: confirmationButtonText
           })
       }
+
+    //   this notify get from seesion that we has add from default template data
+      {{with .Flash}}
+        notify("{{.}},", "success")
+      {{end}}
+
+      {{with .Error}}
+        notify("{{.}},", "error")
+      {{end}}
+
+      {{with .Warning}}
+        notify("{{.}},", "warning")
+      {{end}}
   
       function Prompt() {
           let toast = function (c) {
