@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/psinthorn/go_smallsite/internal/handlers"
 	"github.com/psinthorn/go_smallsite/internal/renders"
@@ -12,6 +13,9 @@ import (
 
 const portNumber = ":8080"
 
+var infoLog *log.Logger
+var errorLog *log.Logger
+
 // Start use to start new server
 func StartApp() {
 
@@ -19,6 +23,11 @@ func StartApp() {
 
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("Current environment isProduction: ", appConfig.IsProduction)
+
+	infoLog = log.New(os.Stdout, "Info\t", log.Ldate|log.Ltime)
+	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
+	appConfig.InfoLog = infoLog
+	appConfig.ErrorLog = errorLog
 
 	CreateSession()
 
