@@ -4,29 +4,37 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/psinthorn/go_smallsite/internal/configs"
 	"github.com/psinthorn/go_smallsite/internal/models"
 	"github.com/psinthorn/go_smallsite/internal/renders"
 )
 
-// Repo
-var Repo *Repository
+// import (
+// 	"fmt"
+// 	"net/http"
 
-type Repository struct {
-	App *configs.AppConfig
-}
+// 	"github.com/psinthorn/go_smallsite/internal/configs"
+// 	"github.com/psinthorn/go_smallsite/internal/models"
+// 	"github.com/psinthorn/go_smallsite/internal/renders"
+// )
 
-// NewRepository
-func NewRepository(a *configs.AppConfig) *Repository {
-	return &Repository{
-		App: a,
-	}
-}
+// // Repo
+// var Repo *Repository
 
-// NewHandlers
-func NewHandlers(r *Repository) {
-	Repo = r
-}
+// type Repository struct {
+// 	App *configs.AppConfig
+// }
+
+// // NewRepository
+// func NewRepository(a *configs.AppConfig) *Repository {
+// 	return &Repository{
+// 		App: a,
+// 	}
+// }
+
+// // NewHandlers
+// func NewHandlers(r *Repository) {
+// 	Repo = r
+// }
 
 // Home is home page render
 func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {

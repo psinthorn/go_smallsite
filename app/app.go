@@ -3,74 +3,55 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"os"
 
+	"github.com/psinthorn/go_smallsite/internal/drivers"
 	"github.com/psinthorn/go_smallsite/internal/handlers"
 	"github.com/psinthorn/go_smallsite/internal/renders"
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
-const portNumber = ":8080"
-
 var infoLog *log.Logger
 var errorLog *log.Logger
 
 // Start use to start new server
-func StartApp() {
+func StartApp() (*drivers.DB, error) {
 
+	// Check env is production
 	utils.Utils.IsProduction(&appConfig)
 
-	fmt.Println("------------------------------------------------------------------------")
-	fmt.Println("Current environment isProduction: ", appConfig.IsProduction)
-
+	// Write server and client error log to logs file
 	infoLog = log.New(os.Stdout, "Info\t", log.Ldate|log.Ltime)
 	errorLog = log.New(os.Stdout, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 	appConfig.InfoLog = infoLog
 	appConfig.ErrorLog = errorLog
 
+	// Start session
 	CreateSession()
-
-	// Connect to databast
-	// log.Println("Connecting to Database......")
-	// // db, err := drivers.ConnectSQL("host=localhost port=5432 dbname=go_smallsite_bookngs user=postgres password=")
-	// if err != nil {
-	// 	log.Fatal("Can't connect to database :(")
-	// }
 
 	// Create new template
 	tmplCache, err := renders.CreateTemplateCache()
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 
+	// Create and load config to templates
 	appConfig.TemplateCache = tmplCache
 	appConfig.UseCache = false
-
 	newRepo := handlers.NewRepository(&appConfig)
 	handlers.NewHandlers(newRepo)
-
 	renders.NewTemplate(&appConfig)
 
-	// Serve server service
-	serveErr := http.ListenAndServe(":8080", routes(&appConfig))
-	fmt.Println(fmt.Sprintf("Server is started on port %s", portNumber))
-	if serveErr != nil {
-		fmt.Println("------------------------------------------------------------------")
-		fmt.Println(fmt.Sprintf(":( sorry can't start server on port %s ", portNumber))
-		fmt.Println(fmt.Sprintf("error: %s", serveErr))
-		fmt.Println("------------------------------------------------------------------")
+	// Connect to postgress databast
+	fmt.Println("Connecting to Database...")
+	dsn := "host=localhost port=5432 dbname=go_smallsite_bookings user=postgres password="
+	dbConn, err := drivers.ConnectSQL("pgx", dsn)
+	if err != nil {
+		return nil, err
 	}
+	fmt.Println("Connecting to Database Success fully :)")
 
-	// // another serve server config
-	// srv := &http.Server{
-	// 	Addr:    portNumber,
-	// 	Handler: routes(&appConfig),
-	// }
-
-	// err = srv.ListenAndServe()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	// return database connect to startApp function
+	return dbConn, nil
 
 }
