@@ -1,6 +1,7 @@
 # go_smallsite
 ## Go Small Site is a website development in golang include full function of content management system 
-Schedule plan: Publish date (1 June 2021)
+#### Schedule plan: 
+> Publish date (1 June 2021)
 
 #### Features included 
 - Authenthication 
