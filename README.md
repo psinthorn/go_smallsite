@@ -1,5 +1,26 @@
 # go_smallsite
-Small website development in golang
+## Go Small Site is a website development in golang include full function of content management system 
+Schedule plan: Publish date (1 June 2021)
+
+#### Features included 
+- Authenthication 
+- Admin dashboard
+- Content management system
+- Responsive design 
+
+### Special feature GoSmallSite for Small Hotel and Resort
+- Reservation system manegement (show,add,update,delete)
+- 2Ways email support (to customer and reservation)
+- Alotments control (Availability check)
+- Calendar
+
+#### Tech Stack
+- MVC Structure
+- Golang 
+- Postgres
+- Bootstrap
+- CSS
+- Data seeds for demo (on process)
 
 
 ### Markdown Sheat-Sheet
