@@ -23,23 +23,23 @@ func routes(app *configs.AppConfig) http.Handler {
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
-	mux.Get("/", handlers.Repo.Home)
-	mux.Get("/about", handlers.Repo.About)
-	mux.Get("/room", handlers.Repo.Rooms)
-	mux.Get("/superior", handlers.Repo.Superior)
-	mux.Get("/deluxe", handlers.Repo.Deluxe)
+	mux.Get("/", handlers.HandlerRepo.Home)
+	mux.Get("/about", handlers.HandlerRepo.About)
+	mux.Get("/room", handlers.HandlerRepo.Rooms)
+	mux.Get("/superior", handlers.HandlerRepo.Superior)
+	mux.Get("/deluxe", handlers.HandlerRepo.Deluxe)
 
-	// mux.Get("/check-alotment", handlers.Repo.CheckAlotment)
-	mux.Get("/search-availability", handlers.Repo.SearchAvailability)
-	mux.Post("/search-availability", handlers.Repo.PostSearchAvailability)
-	mux.Post("/search-availability-response", handlers.Repo.AvailabilityResponse)
+	// mux.Get("/check-alotment", handlers.HandlerRepo.CheckAlotment)
+	mux.Get("/search-availability", handlers.HandlerRepo.SearchAvailability)
+	mux.Post("/search-availability", handlers.HandlerRepo.PostSearchAvailability)
+	mux.Post("/search-availability-response", handlers.HandlerRepo.AvailabilityResponse)
 
-	//mux.Get("/reservation", handlers.Repo.Reservation)
-	mux.Get("/make-reservation", handlers.Repo.Reservation)
-	mux.Post("/make-reservation", handlers.Repo.PostReservation)
-	mux.Get("/reservation-summary", handlers.Repo.ReservationSummary)
+	//mux.Get("/reservation", handlers.HandlerRepo.Reservation)
+	mux.Get("/make-reservation", handlers.HandlerRepo.Reservation)
+	mux.Post("/make-reservation", handlers.HandlerRepo.PostReservation)
+	mux.Get("/reservation-summary", handlers.HandlerRepo.ReservationSummary)
 
-	mux.Get("/contact", handlers.Repo.Contact)
+	mux.Get("/contact", handlers.HandlerRepo.Contact)
 
 	return mux
 
