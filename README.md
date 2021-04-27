@@ -1,8 +1,10 @@
 # go_smallsite
 Small website development in golang
 
+
 ### Markdown Sheat-Sheet
 https://www.markdownguide.org/cheat-sheet/
+
 
 
 ### How to install MySQL and Basic example
@@ -28,3 +30,33 @@ db, err := sql.Open("mysql", "username:password@(127.0.0.1:3306)/dbname?parseTim
 err := db.Ping()
 
 ```
+
+### How to create table
+
+SQL command query create table for example 
+```
+CREATE TABLE users (
+    id INT AUTO_INCREMENT,
+    username TEXT NOT NULL,
+    password TEXT NOT NULL,
+    created_at DATETIME,
+    PRIMARY KEY (id)
+);
+```
+
+How to excute SQL comannad query
+```
+query := `
+    CREATE TABLE users (
+        id INT AUTO_INCREMENT,
+        username TEXT NOT NULL,
+        password TEXT NOT NULL,
+        created_at DATETIME,
+        PRIMARY KEY (id)
+    );`
+
+// Executes the SQL query in our database. Check err to ensure there was no error.
+_, err := db.Exec(query)
+```
+
+
