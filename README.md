@@ -25,30 +25,32 @@ Schedule plan: Publish date (1 June 2021)
 
 > Markdown Sheat-Sheet
 > https://www.markdownguide.org/cheat-sheet/
+> 
+
 
 ### How to install and start application
-- clone or downlaod repository to your local computer and then run command as below to install dependencies
+Clone or downlaod repository to your local computer and then run command as below to install dependencies
 ```
 go mod tidy
 ```
-- prepare data connect string network (dsn)
-- run make command to start application
+Prepare data connect string network (dsn)
+Run make command to start application
 ```
 make start
 ```
-- on terminal system will show you server status and port (default port is 8080)
-- to check visite is application is ready open browser and visit url
+On terminal system will show you server status and port (default port is 8080)
+To check visite is application is ready open browser and visit url
 ```
     http://localhost:8080
 ```
-if no any other error you should see GoSmallSite landing page
+If no any other error you should see GoSmallSite landing page
 
 ### How to login to admin area
 Visite admin page url and input login: admin and password: pass 
 ```
 http://localhost/go-admin
 ```
-should show admin dashbaord after login success :)
+Should show admin dashbaord after login success :)
 
  
 
