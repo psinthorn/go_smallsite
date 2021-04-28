@@ -7,13 +7,14 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/repository"
 )
 
-type postgresDBRepo struct {
+type SQLDBRepo struct {
 	App *configs.AppConfig
 	DB  *sql.DB
 }
 
-func NewPostgresDBRepo(conn *sql.DB, ac *configs.AppConfig) repository.DatabaseRepo {
-	return &postgresDBRepo{
+// NewDBRepo will hold database connection pool and app configs
+func NewDBConnectRepo(ac *configs.AppConfig, conn *sql.DB) repository.DatabaseRepo {
+	return &SQLDBRepo{
 		App: ac,
 		DB:  conn,
 	}

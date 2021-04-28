@@ -22,7 +22,7 @@ const maxDBLifeTime = 5 * time.Minute
 
 // Connect database by specify driver this will pass to Newdatabase function
 // driver is depend on what is your database like postgres driver = "pgx"
-func ConnectSQL(driver, dsn string) (*DB, error) {
+func ConnectDB(driver, dsn string) (*DB, error) {
 	db, err := NewDatabase(driver, dsn)
 	if err != nil {
 		panic(err)
@@ -43,7 +43,7 @@ func ConnectSQL(driver, dsn string) (*DB, error) {
 }
 
 // Newdatabase to create new database connecttion by specify database driver
-// driver is depend on what is your database like postgres driver = "pgx"
+// driver is depend on what is your database like postgres driver = "pgx" mysql = "mysql"
 func NewDatabase(driver, dsn string) (*sql.DB, error) {
 	// create connection to database by using
 	db, err := sql.Open(driver, dsn)
