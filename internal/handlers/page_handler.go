@@ -8,34 +8,6 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/render"
 )
 
-// import (
-// 	"fmt"
-// 	"net/http"
-
-// 	"github.com/psinthorn/go_smallsite/internal/configs"
-// 	"github.com/psinthorn/go_smallsite/internal/models"
-// 	"github.com/psinthorn/go_smallsite/internal/render"
-// )
-
-// // Repo
-// var Repo *Repository
-
-// type Repository struct {
-// 	App *configs.AppConfig
-// }
-
-// // NewRepository
-// func NewRepository(a *configs.AppConfig) *Repository {
-// 	return &Repository{
-// 		App: a,
-// 	}
-// }
-
-// // NewHandlers
-// func NewHandlers(r *Repository) {
-// 	Repo = r
-// }
-
 // Home is home page render
 func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	ok := rp.DBConnect.GetAllUsers()

@@ -7,7 +7,7 @@ import (
 
 	"github.com/psinthorn/go_smallsite/internal/drivers"
 	"github.com/psinthorn/go_smallsite/internal/handlers"
-	"github.com/psinthorn/go_smallsite/internal/renders"
+	"github.com/psinthorn/go_smallsite/internal/render"
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
@@ -39,7 +39,7 @@ func StartApp() (*drivers.DB, error) {
 	fmt.Println("Connecting to Database Success fully :)")
 
 	// Create new template
-	tmplCache, err := renders.CreateTemplateCache()
+	tmplCache, err := render.CreateTemplateCache()
 	if err != nil {
 		return nil, err
 	}
@@ -49,7 +49,7 @@ func StartApp() (*drivers.DB, error) {
 	appConfig.UseCache = false
 	newHandlerRepo := handlers.NewHandlerRepository(&appConfig, dbConnect)
 	handlers.NewHandlers(newHandlerRepo)
-	renders.NewTemplate(&appConfig)
+	render.NewTemplate(&appConfig)
 
 	// return database connect to startApp function
 	return dbConnect, nil
