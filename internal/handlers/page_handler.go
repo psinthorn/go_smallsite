@@ -38,6 +38,13 @@ import (
 
 // Home is home page render
 func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {
+	ok := rp.DBConnect.GetAllUsers()
+	if !ok {
+		fmt.Println("no users found")
+	}
+
+	fmt.Sprintf("return from func is: %s", ok)
+
 	remoteIP := r.RemoteAddr
 	fmt.Println(remoteIP)
 	rp.App.Session.Put(r.Context(), "remote_ip", remoteIP)

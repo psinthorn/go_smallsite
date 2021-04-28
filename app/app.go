@@ -29,6 +29,15 @@ func StartApp() (*drivers.DB, error) {
 	// Start session
 	CreateSession()
 
+	// Connect to postgress databast
+	fmt.Println("Connecting to Database...")
+	dsn := "host=localhost port=5432 dbname=go_smallsite_bookings user=postgres password="
+	dbConnect, err := drivers.ConnectDB("pgx", dsn)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("Connecting to Database Success fully :)")
+
 	// Create new template
 	tmplCache, err := renders.CreateTemplateCache()
 	if err != nil {
@@ -38,20 +47,11 @@ func StartApp() (*drivers.DB, error) {
 	// Create and load config to templates
 	appConfig.TemplateCache = tmplCache
 	appConfig.UseCache = false
-	newRepo := handlers.NewRepository(&appConfig)
-	handlers.NewHandlers(newRepo)
+	newHandlerRepo := handlers.NewHandlerRepository(&appConfig, dbConnect)
+	handlers.NewHandlers(newHandlerRepo)
 	renders.NewTemplate(&appConfig)
 
-	// Connect to postgress databast
-	fmt.Println("Connecting to Database...")
-	dsn := "host=localhost port=5432 dbname=go_smallsite_bookings user=postgres password="
-	dbConn, err := drivers.ConnectSQL("pgx", dsn)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Println("Connecting to Database Success fully :)")
-
 	// return database connect to startApp function
-	return dbConn, nil
+	return dbConnect, nil
 
 }
