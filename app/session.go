@@ -12,7 +12,10 @@ import (
 // CreateSession and store session to AppConfig.Session
 func CreateSession() {
 
-	// register reservation model to session
+	// register all models to session maybe use or not use
+	gob.Register(models.User{})
+	gob.Register(models.Status{})
+	gob.Register(models.RoomStatus{})
 	gob.Register(models.Reservation{})
 
 	// set up the session

@@ -1,4 +1,4 @@
-package renders
+package render
 
 import (
 	"bytes"
@@ -31,8 +31,8 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 	return td
 }
 
-// RenderTemplate ช่วยในการ render html template
-func RenderTemplate(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
+// Template ช่วยในการ render html template
+func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
 
 	// หาก UseCache = true ให้อ่าน Template จาก app.AppConfig (ใช้ใน production)
 	// หาก UseCache = false ให้อ่าน Template จาก disk ใหม่ทุกครั้ง (สร้าง template ใหม่จากข้อมูลที่มีอยู่ปัจจุบันทุกครั้ง) (ใช้ใน development mode)
