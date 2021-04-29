@@ -2,19 +2,24 @@ package handlers
 
 import (
 	"github.com/psinthorn/go_smallsite/internal/configs"
+	"github.com/psinthorn/go_smallsite/internal/drivers"
+	"github.com/psinthorn/go_smallsite/internal/repository"
+	"github.com/psinthorn/go_smallsite/internal/repository/dbrepo"
 )
 
 // Repo
 var HandlerRepo *Repository
 
 type Repository struct {
-	App *configs.AppConfig
+	App       *configs.AppConfig
+	DBConnect repository.DatabaseRepo
 }
 
-// NewRepository
-func NewRepository(a *configs.AppConfig) *Repository {
+// NewRepository is create new handler that holds application config and database connection
+func NewHandlerRepository(a *configs.AppConfig, db *drivers.DB) *Repository {
 	return &Repository{
-		App: a,
+		App:       a,
+		DBConnect: dbrepo.NewDBConnectRepo(a, db.SQL),
 	}
 }
 
