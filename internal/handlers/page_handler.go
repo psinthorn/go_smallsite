@@ -93,10 +93,7 @@ func (rp *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "login.page.html", &models.TemplateData{})
 	rp.App.Session.Put(r.Context(), "success", "Log in success :)")
-<<<<<<< HEAD
 
-=======
->>>>>>> e9b3e2ea87ed40042db547d5b3efa533032339eb
 }
 
 // Login user login page
