@@ -19,7 +19,7 @@ var (
 	app       *configs.AppConfig
 )
 
-func NewTemplate(a *configs.AppConfig) {
+func NewRender(a *configs.AppConfig) {
 	app = a
 }
 

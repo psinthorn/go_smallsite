@@ -49,7 +49,7 @@ func StartApp() (*drivers.DB, error) {
 	appConfig.UseCache = false
 	newHandlerRepo := handlers.NewHandlerRepository(&appConfig, dbConnect)
 	handlers.NewHandlers(newHandlerRepo)
-	render.NewTemplate(&appConfig)
+	render.NewRender(&appConfig)
 
 	// return database connect to startApp function
 	return dbConnect, nil

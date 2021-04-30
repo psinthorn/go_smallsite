@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
+	"time"
 
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -66,10 +68,32 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
 // PostReservation is reservation page render
 func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+
 	err := r.ParseForm()
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
+	}
+
+	sd := r.Form.Get("start_date")
+	ed := r.Form.Get("end_date")
+
+	dateLayout := "2006-01-02"
+	startDate, err := time.Parse(dateLayout, sd)
+	if err != nil {
+		panic(err)
+		// helpers.ServerError(w, err)
+	}
+	endDate, err := time.Parse(dateLayout, ed)
+	if err != nil {
+		panic(err)
+		// helpers.ServerError(w, err)
+	}
+
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
+	if err != nil {
+		panic(err)
+		// helpers.ServerError(w, err)
 	}
 
 	reservation := models.Reservation{
@@ -77,6 +101,9 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
+		StartDate: startDate,
+		EndDate:   endDate,
+		RoomID:    roomID,
 	}
 
 	form := forms.New(r.PostForm)
@@ -91,12 +118,16 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
-
 		render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
 			Form: form,
 			Data: data,
 		})
 		return
+	}
+
+	_, err = rp.DBConnect.InsertReservation(reservation)
+	if err != nil {
+		helpers.ServerError(w, err)
 	}
 
 	rp.App.Session.Put(r.Context(), "reservation", reservation)
