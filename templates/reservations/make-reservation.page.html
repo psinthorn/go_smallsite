@@ -1,62 +1,99 @@
 {{template "base" .}}
 
 {{define "content"}}
-    <div class="container">
+    <div class="container mt-5 mb-5">
         <div class="row">
             <div class="col">
-                <h1 class="mt-3">Make Reservation</h1>
+                <h1 class="mt-5 mb-3">Make Reservation</h1>
 
                 {{$rsvn := index .Data "reservation" }}
                 <form method="post" action="/make-reservation" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
-                    <div class="form-group mt-3">
-                        <label for="first_name">First Name:</label>
-                        {{with .Form.Errors.Get "first_name"}}
-                            <label class="text-danger">{{.}}</label>
-                        {{end}}
-                        <input class="form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}"
-                               id="first_name" autocomplete="off" type='text'
-                               name='first_name' value="{{ $rsvn.FirstName }}" required>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="first_name">First Name:</label>
+                                {{with .Form.Errors.Get "first_name"}}
+                                    <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="form-control {{with .Form.Errors.Get "first_name"}} is-invalid {{end}}"
+                                       id="first_name" autocomplete="off" type='text'
+                                       name='first_name' value="{{ $rsvn.FirstName }}" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="form-group">
+                                <label for="last_name">Last Name:</label>
+                                {{with .Form.Errors.Get "last_name"}}
+                                    <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="form-control {{with .Form.Errors.Get "last_name"}} is-invalid {{end}}"
+                                       id="last_name" autocomplete="off" type='text'
+                                       name='last_name' value="{{$rsvn.LastName}}" required>
+                            </div>                           
+                        </div>
+                    </div>
+                    
+
+                   <div class="row">
+                       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="start_date">Start Date:</label>
+                            {{with .Form.Errors.Get "start_date"}}
+                                <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "start_date"}} is-invalid {{end}}"
+                                   id="start_date" autocomplete="off" type='text'
+                                   name='start_date' value="{{$rsvn.StartDate}}" required>
+                        </div>
+                       </div>
+
+                       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                        <div class="form-group">
+                            <label for="end_date">Departure Date:</label>
+                            {{with .Form.Errors.Get "end_date"}}
+                                <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "end_date"}} is-invalid {{end}}"
+                                   id="end_date" autocomplete="off" type='text'
+                                   name='end_date' value="{{$rsvn.EndDate}}" required>
+                        </div>
+
                     </div>
 
-                    <div class="form-group">
-                        <label for="last_name">Last Name:</label>
-                        {{with .Form.Errors.Get "last_name"}}
-                            <label class="text-danger">{{.}}</label>
-                        {{end}}
-                        <input class="form-control {{with .Form.Errors.Get "last_name"}} is-invalid {{end}}"
-                               id="last_name" autocomplete="off" type='text'
-                               name='last_name' value="{{$rsvn.LastName}}" required>
+                    <input type="hidden" name="room_id" value="1">
+                   </div>
+                    
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">   
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            {{with .Form.Errors.Get "email"}}
+                                <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}" id="email"
+                                autocomplete="off" type='email'
+                                name='email' value="{{$rsvn.Email}}" required>
+                        </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="email">Email:</label>
-                        {{with .Form.Errors.Get "email"}}
-                            <label class="text-danger">{{.}}</label>
-                        {{end}}
-                        <input class="form-control {{with .Form.Errors.Get "email"}} is-invalid {{end}}" id="email"
-                               autocomplete="off" type='email'
-                               name='email' value="{{$rsvn.Email}}" required>
+                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">   
+                        <div class="form-group">
+                            <label for="phone">Phone:</label>
+                            {{with .Form.Errors.Get "phone"}}
+                                <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}" id="phone"
+                                autocomplete="off" type='phone'
+                                name='phone' value="{{$rsvn.Phone}}" required>
+                        </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="phone">Phone:</label>
-                        {{with .Form.Errors.Get "phone"}}
-                            <label class="text-danger">{{.}}</label>
-                        {{end}}
-                        <input class="form-control {{with .Form.Errors.Get "phone"}} is-invalid {{end}}" id="phone"
-                               autocomplete="off" type='phone'
-                               name='phone' value="{{$rsvn.Phone}}" required>
-                    </div>
-
-                    <hr>
+                </div>
+               
                     <input type="submit" class="btn btn-primary" value="Make Reservation">
                 </form>
-
-
             </div>
         </div>
-
     </div>
 {{end}}
 

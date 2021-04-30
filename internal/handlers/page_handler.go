@@ -15,7 +15,7 @@ func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("no users found")
 	}
 
-	fmt.Sprintf("return from func is: %s", ok)
+	fmt.Sprintf("return from func is: %v", ok)
 
 	remoteIP := r.RemoteAddr
 	fmt.Println(remoteIP)
@@ -93,7 +93,6 @@ func (rp *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "login.page.html", &models.TemplateData{})
 	rp.App.Session.Put(r.Context(), "success", "Log in success :)")
-	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
 }
 
 // Login user login page
