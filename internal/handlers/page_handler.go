@@ -92,4 +92,12 @@ func (rp *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 // Login user login page
 func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "login.page.html", &models.TemplateData{})
+	rp.App.Session.Put(r.Context(), "success", "Log in success :)")
+	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
+}
+
+// Login user login page
+func (rp *Repository) Logout(w http.ResponseWriter, r *http.Request) {
+	http.Redirect(w, r, "/login", http.StatusSeeOther)
+	//render.Template(w, r, "login.page.html", &models.TemplateData{})
 }

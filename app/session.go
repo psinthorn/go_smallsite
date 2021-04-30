@@ -6,17 +6,18 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/psinthorn/go_smallsite/models"
+	"github.com/psinthorn/go_smallsite/models/reservations"
+	"github.com/psinthorn/go_smallsite/models/users"
 )
 
 // CreateSession and store session to AppConfig.Session
 func CreateSession() {
 
 	// register all models to session maybe use or not use
-	gob.Register(models.User{})
-	gob.Register(models.Status{})
-	gob.Register(models.RoomStatus{})
-	gob.Register(models.Reservation{})
+	gob.Register(users.User{})
+	gob.Register(reservations.Status{})
+	gob.Register(reservations.RoomStatus{})
+	gob.Register(reservations.Reservation{})
 
 	// set up the session
 	session = scs.New()

@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/justinas/nosurf"
-	"github.com/psinthorn/go_smallsite/internal/configs"
+	"github.com/psinthorn/go_smallsite/configs"
 	"github.com/psinthorn/go_smallsite/models"
 )
 
