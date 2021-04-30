@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/psinthorn/go_smallsite/internal/configs"
+	"github.com/psinthorn/go_smallsite/configs"
 )
 
 var app *configs.AppConfig

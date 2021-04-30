@@ -3,7 +3,7 @@ package dbrepo
 import (
 	"database/sql"
 
-	"github.com/psinthorn/go_smallsite/internal/configs"
+	"github.com/psinthorn/go_smallsite/configs"
 	"github.com/psinthorn/go_smallsite/internal/repository"
 )
 
