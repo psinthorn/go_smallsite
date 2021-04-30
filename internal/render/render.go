@@ -9,8 +9,8 @@ import (
 	"path/filepath"
 
 	"github.com/justinas/nosurf"
-	"github.com/psinthorn/go_smallsite/internal/configs"
-	"github.com/psinthorn/go_smallsite/internal/models"
+	"github.com/psinthorn/go_smallsite/configs"
+	"github.com/psinthorn/go_smallsite/models"
 )
 
 var (
@@ -67,7 +67,7 @@ func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.Te
 // CreateTemplateCache ตรวจสอบและสร้าง templateห แบบทั้งหมด
 func CreateTemplateCache() (map[string]*template.Template, error) {
 
-	pages, err := filepath.Glob("./templates/*.page.html")
+	pages, err := filepath.Glob("./templates/*/*.page.html")
 	if err != nil {
 		fmt.Println(fmt.Sprintf("error on check file path %s", err))
 		return nil, err
@@ -84,14 +84,14 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 		}
 
 		// ตรวจสอบว่ามีไฟล์ที่ลงท้ายด้วยนามสกุล .layout.html หรือไม่หาก
-		matches, err := filepath.Glob("./templates/*.layout.html")
+		matches, err := filepath.Glob("./templates/*/*.layout.html")
 		if err != nil {
 			fmt.Println(fmt.Sprintf("error can't find any layout file in templates folder error: %s ", err))
 			return nil, err
 		}
 
 		if len(matches) > 0 {
-			tmplSet, err = tmplSet.ParseGlob("./templates/*.layout.html")
+			tmplSet, err = tmplSet.ParseGlob("./templates/*/*.layout.html")
 			if err != nil {
 				fmt.Println(fmt.Sprintf("error can't parse layout file to templates set error: %s ", err))
 				return nil, err
@@ -128,7 +128,7 @@ func CreateSingleTemplateCache(tmpl string) (map[string]*template.Template, erro
 		}
 
 		// ตรวจสอบว่ามีไฟล์ที่ลงท้ายด้วยนามสกุล .layout.html หรือไม่หาก
-		matches, err := filepath.Glob("./templates/*.layout.html")
+		matches, err := filepath.Glob("./templates/*/*.layout.html")
 		if err != nil {
 			fmt.Println(fmt.Sprintf("error can't find any layout file in templates folder error: %s ", err))
 			return nil, err
@@ -136,7 +136,7 @@ func CreateSingleTemplateCache(tmpl string) (map[string]*template.Template, erro
 
 		// หากพบ layout.html มากกว่า 0 ให้ทำการเขียนข้อมูลที่มีในไฟล์ไปที่ newTmpl
 		if len(matches) > 0 {
-			newTmpl, err = newTmpl.ParseGlob("./templates/*.layout.html")
+			newTmpl, err = newTmpl.ParseGlob("./templates/*/*.layout.html")
 			if err != nil {
 				fmt.Println(fmt.Sprintf("error can't parse layout file to templates set error: %s ", err))
 				return nil, err

@@ -1,5 +1,8 @@
 package drivers
 
+// Driver multi database connection function you just need to provide database drivers name and database source name (dns) to function parameter
+// package drivers เป็นตัวช่วยในการเชื่อมต่อกับฐานข้อมูล โดยเพีบงจัดเตรียม driver และ DSN สำหรับฐานข้อมูที่ต้องการจะเชื่อมต่อเท่านั้น
+
 import (
 	"database/sql"
 	"time"

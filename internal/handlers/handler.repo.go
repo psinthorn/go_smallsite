@@ -1,8 +1,8 @@
 package handlers
 
 import (
-	"github.com/psinthorn/go_smallsite/internal/configs"
-	"github.com/psinthorn/go_smallsite/internal/drivers"
+	"github.com/psinthorn/go_smallsite/configs"
+	drivers "github.com/psinthorn/go_smallsite/datasources/drivers"
 	"github.com/psinthorn/go_smallsite/internal/repository"
 	"github.com/psinthorn/go_smallsite/internal/repository/dbrepo"
 )

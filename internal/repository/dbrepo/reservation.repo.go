@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"github.com/psinthorn/go_smallsite/internal/models"
+	"github.com/psinthorn/go_smallsite/models/reservations"
 )
 
-func (m *SQLDBRepo) InsertReservation(rsvn models.Reservation) (int, error) {
+func (m *SQLDBRepo) InsertReservation(rsvn reservations.Reservation) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 	var rsvnID int

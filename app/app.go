@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/psinthorn/go_smallsite/internal/drivers"
+	"github.com/psinthorn/go_smallsite/datasources/drivers"
 	"github.com/psinthorn/go_smallsite/internal/handlers"
 	"github.com/psinthorn/go_smallsite/internal/render"
 	"github.com/psinthorn/go_smallsite/internal/utils"

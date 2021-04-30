@@ -1,4 +1,4 @@
-package models
+package reservations
 
 import "time"
 
