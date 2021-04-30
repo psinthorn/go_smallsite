@@ -1,0 +1,35 @@
+{{template "base" .}}
+
+{{define "content"}}
+    {{$rsvn := index .Data "reservation"}}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <table class="table tabel-stripe">
+                    <thead> </thead>
+                        <tr>
+                            <td>Name</td>
+                            <td>{{$rsvn.FirstName}} {{$rsvn.LastName}}</td>
+                        </tr>
+                        <tr>
+                            <td>Arrival:</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Departure:</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>{{$rsvn.Email}}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td>{{$rsvn.Phone}}</td>
+                        </tr>
+                    </table>
+            </div>
+        </div>
+    </div>
+
+{{end}}
