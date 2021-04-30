@@ -7,8 +7,8 @@ import (
 
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
-	"github.com/psinthorn/go_smallsite/internal/models"
 	"github.com/psinthorn/go_smallsite/internal/render"
+	"github.com/psinthorn/go_smallsite/models"
 )
 
 // CheckAvailability is check-availability page render
