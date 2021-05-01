@@ -15,8 +15,8 @@ func CreateSession() {
 
 	// register all models to session maybe use or not use
 	gob.Register(users.User{})
-	gob.Register(reservations.Status{})
 	gob.Register(reservations.RoomStatus{})
+	gob.Register(reservations.RoomAlotmentStatus{})
 	gob.Register(reservations.Reservation{})
 
 	// set up the session
