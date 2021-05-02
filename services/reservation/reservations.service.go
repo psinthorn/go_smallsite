@@ -1,6 +1,6 @@
 package services
 
-import "github.com/psinthorn/go_smallsite/models/reservations"
+import "github.com/psinthorn/go_smallsite/domain/reservations"
 
 var ReservationService reservationService
 

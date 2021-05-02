@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/psinthorn/go_smallsite/models/reservations"
+	"github.com/psinthorn/go_smallsite/domain/reservations"
 )
 
 func (m *SQLDBRepo) InsertReservation(rsvn reservations.Reservation) (int, error) {
