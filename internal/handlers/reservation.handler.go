@@ -7,11 +7,11 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/psinthorn/go_smallsite/domain/reservations"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
 	"github.com/psinthorn/go_smallsite/internal/render"
 	"github.com/psinthorn/go_smallsite/models"
-	"github.com/psinthorn/go_smallsite/models/reservations"
 )
 
 // CheckAvailability is check-availability page render
@@ -126,7 +126,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = rp.DBConnect.InsertReservation(reservation)
+	_, err = rp.DB.InsertReservation(reservation)
 	if err != nil {
 		helpers.ServerError(w, err)
 	}

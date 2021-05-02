@@ -11,15 +11,15 @@ import (
 var HandlerRepo *Repository
 
 type Repository struct {
-	App       *configs.AppConfig
-	DBConnect repository.DatabaseRepo
+	App *configs.AppConfig
+	DB  repository.DatabaseRepo
 }
 
 // NewRepository is create new handler that holds application config and database connection
 func NewHandlerRepository(a *configs.AppConfig, db *drivers.DB) *Repository {
 	return &Repository{
-		App:       a,
-		DBConnect: dbrepo.NewDBConnectRepo(a, db.SQL),
+		App: a,
+		DB:  dbrepo.NewDBConnectRepo(a, db.SQL),
 	}
 }
 

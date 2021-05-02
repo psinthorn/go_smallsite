@@ -4,18 +4,19 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/render"
 	"github.com/psinthorn/go_smallsite/models"
 )
 
 // Home is home page render
 func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	ok := rp.DBConnect.GetAllUsers()
-	if !ok {
+	users, err := rp.DB.GetAllUsers()
+	if err != nil {
 		fmt.Println("no users found")
 	}
 
-	fmt.Sprintf("return from func is: %v", ok)
+	fmt.Println(users)
 
 	remoteIP := r.RemoteAddr
 	fmt.Println(remoteIP)
@@ -91,7 +92,9 @@ func (rp *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 
 // Login user login page
 func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "login.page.html", &models.TemplateData{})
+	render.Template(w, r, "login.page.html", &models.TemplateData{
+		Form: forms.New(nil),
+	})
 	rp.App.Session.Put(r.Context(), "success", "Log in success :)")
 }
 
