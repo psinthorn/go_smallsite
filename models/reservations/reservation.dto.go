@@ -1,6 +1,11 @@
 package reservations
 
-import "time"
+import (
+	"database/sql"
+	"time"
+
+	"github.com/psinthorn/go_smallsite/configs"
+)
 
 // // Reservation holds reservation data
 // type Reservation struct {
@@ -9,6 +14,11 @@ import "time"
 // 	Email     string `json: "email"`
 // 	Phone     string `json: "phone"`
 // }
+
+type SQLDBRepo struct {
+	App *configs.AppConfig
+	DB  *sql.DB
+}
 
 // Room is the room model
 // Room infomation
@@ -71,6 +81,13 @@ type RoomAlotmentStatus struct {
 }
 
 type RoomGallery struct {
+	ID        string
+	Title     string
+	Desc      string
+	Icon      string
+	image     string
+	CreatedAt time.Time `json: "created_at"`
+	UpdatedAt time.Time `json: "updated_at"`
 }
 
 type RoomFacility struct {

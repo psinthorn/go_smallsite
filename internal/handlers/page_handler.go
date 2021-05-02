@@ -10,12 +10,12 @@ import (
 
 // Home is home page render
 func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {
-	ok := rp.DBConnect.GetAllUsers()
-	if !ok {
-		fmt.Println("no users found")
-	}
+	// ok := rp.DBConnect.GetAllUsers()
+	// if !ok {
+	// 	fmt.Println("no users found")
+	// }
 
-	fmt.Sprintf("return from func is: %v", ok)
+	// fmt.Sprintf("return from func is: %v", ok)
 
 	remoteIP := r.RemoteAddr
 	fmt.Println(remoteIP)

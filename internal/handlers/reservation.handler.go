@@ -126,10 +126,10 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = rp.DBConnect.InsertReservation(reservation)
-	if err != nil {
-		helpers.ServerError(w, err)
-	}
+	// _, err = rp.DB.InsertReservation(reservation)
+	// if err != nil {
+	// 	helpers.ServerError(w, err)
+	// }
 
 	rp.App.Session.Put(r.Context(), "reservation", reservation)
 	rp.App.Session.Put(r.Context(), "success", "Thank you, Please re-check your information for next process :)")
