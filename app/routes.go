@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/psinthorn/go_smallsite/configs"
-	"github.com/psinthorn/go_smallsite/internal/handlers"
+	"github.com/psinthorn/go_smallsite/controllers"
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
@@ -24,27 +24,28 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
 	// Pages routing section
-	mux.Get("/", handlers.HandlerRepo.Home)
-	mux.Get("/about", handlers.HandlerRepo.About)
-	mux.Get("/contact", handlers.HandlerRepo.Contact)
-	mux.Get("/user/login", handlers.HandlerRepo.Login)
-	mux.Get("/user/logout", handlers.HandlerRepo.Logout)
+	mux.Get("/", controllers.PagesController.Home)
+	mux.Get("/about", controllers.PagesController.About)
+	mux.Get("/contact", controllers.PagesController.Contact)
 
 	// Room routing section
-	mux.Get("/room", handlers.HandlerRepo.Rooms)
-	mux.Get("/superior", handlers.HandlerRepo.Superior)
-	mux.Get("/deluxe", handlers.HandlerRepo.Deluxe)
+	mux.Get("/room", controllers.PagesController.Rooms)
+	mux.Get("/superior", controllers.PagesController.Superior)
+	mux.Get("/deluxe", controllers.PagesController.Deluxe)
+
+	mux.Get("/user/login", controllers.UsersController.Login)
+	mux.Get("/user/logout", controllers.UsersController.Logout)
 
 	// Reservation routing section
-	mux.Get("/search-availability", handlers.HandlerRepo.SearchAvailability)
-	mux.Post("/search-availability", handlers.HandlerRepo.PostSearchAvailability)
-	mux.Post("/search-availability-response", handlers.HandlerRepo.AvailabilityResponse)
-	mux.Get("/reservation", handlers.HandlerRepo.Reservation)
-	mux.Post("/reservation", handlers.HandlerRepo.PostReservation)
-	mux.Get("/reservation-summary", handlers.HandlerRepo.ReservationSummary)
+	mux.Get("/search-availability", controllers.ReservationsController.SearchAvailability)
+	mux.Post("/search-availability", controllers.ReservationsController.PostSearchAvailability)
+	mux.Post("/search-availability-response", controllers.ReservationsController.AvailabilityResponse)
+	mux.Get("/reservation", controllers.ReservationsController.Reservation)
+	mux.Post("/reservation", controllers.ReservationsController.PostReservation)
+	mux.Get("/reservation-summary", controllers.ReservationsController.ReservationSummary)
 
 	// Admin routing section
-	mux.Get("/admin/dashboard", handlers.HandlerRepo.Contact)
+	mux.Get("/admin/dashboard", controllers.PagesController.Contact)
 
 	return mux
 

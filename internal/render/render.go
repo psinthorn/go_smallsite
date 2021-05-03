@@ -10,7 +10,7 @@ import (
 
 	"github.com/justinas/nosurf"
 	"github.com/psinthorn/go_smallsite/configs"
-	"github.com/psinthorn/go_smallsite/models"
+	"github.com/psinthorn/go_smallsite/domain/templates"
 )
 
 var (
@@ -23,7 +23,7 @@ func NewRender(a *configs.AppConfig) {
 	app = a
 }
 
-func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateData {
+func AddDefaultData(td *templates.TemplateData, r *http.Request) *templates.TemplateData {
 	td.Flash = app.Session.PopString(r.Context(), "success")
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.Warning = app.Session.PopString(r.Context(), "warning")
@@ -32,7 +32,7 @@ func AddDefaultData(td *models.TemplateData, r *http.Request) *models.TemplateDa
 }
 
 // Template ช่วยในการ render html template
-func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *models.TemplateData) {
+func Template(w http.ResponseWriter, r *http.Request, tmpl string, td *templates.TemplateData) {
 
 	// หาก UseCache = true ให้อ่าน Template จาก app.AppConfig (ใช้ใน production)
 	// หาก UseCache = false ให้อ่าน Template จาก disk ใหม่ทุกครั้ง (สร้าง template ใหม่จากข้อมูลที่มีอยู่ปัจจุบันทุกครั้ง) (ใช้ใน development mode)
