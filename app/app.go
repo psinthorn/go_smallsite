@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/psinthorn/go_smallsite/controllers"
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
-	"github.com/psinthorn/go_smallsite/internal/handlers"
 	"github.com/psinthorn/go_smallsite/internal/render"
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
@@ -47,8 +47,8 @@ func StartApp() (*drivers.DB, error) {
 	// Create and load config to templates
 	appConfig.TemplateCache = tmplCache
 	appConfig.UseCache = false
-	newHandlerRepo := handlers.NewHandlerRepository(&appConfig, dbConnect)
-	handlers.NewHandlers(newHandlerRepo)
+	newHandlerRepo := controllers.NewHandlerRepository(&appConfig, dbConnect)
+	controllers.NewHandlers(newHandlerRepo)
 	render.NewRender(&appConfig)
 
 	// return database connect to startApp function
