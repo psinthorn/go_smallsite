@@ -1,4 +1,4 @@
-package models
+package templates
 
 import "github.com/psinthorn/go_smallsite/internal/forms"
 
