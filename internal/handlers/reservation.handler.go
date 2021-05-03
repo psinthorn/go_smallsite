@@ -8,10 +8,11 @@ import (
 	"time"
 
 	"github.com/psinthorn/go_smallsite/domain/reservations"
+	"github.com/psinthorn/go_smallsite/domain/templates"
+
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
 	"github.com/psinthorn/go_smallsite/internal/render"
-	"github.com/psinthorn/go_smallsite/models"
 )
 
 // CheckAvailability is check-availability page render
@@ -20,7 +21,7 @@ func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request)
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	render.Template(w, r, "search-availability.page.html", &models.TemplateData{
+	render.Template(w, r, "search-availability.page.html", &templates.TemplateData{
 		StringMap: stringMap,
 	})
 
@@ -61,7 +62,7 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["reservation"] = emptyReservation
 
-	render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
+	render.Template(w, r, "make-reservation.page.html", &templates.TemplateData{
 		Form: forms.New(nil),
 		Data: data,
 	})
@@ -119,7 +120,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
-		render.Template(w, r, "make-reservation.page.html", &models.TemplateData{
+		render.Template(w, r, "make-reservation.page.html", &templates.TemplateData{
 			Form: form,
 			Data: data,
 		})
@@ -151,7 +152,7 @@ func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request)
 
 	data := make(map[string]interface{})
 	data["reservation"] = reservation
-	render.Template(w, r, "reservation-summary.page.html", &models.TemplateData{
+	render.Template(w, r, "reservation-summary.page.html", &templates.TemplateData{
 		Data: data,
 	})
 }

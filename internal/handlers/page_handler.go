@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/render"
-	"github.com/psinthorn/go_smallsite/models"
 )
 
 // Home is home page render
@@ -25,7 +25,7 @@ func (rp *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["greet"] = "Hello Go"
 
-	render.Template(w, r, "home.page.html", &models.TemplateData{
+	render.Template(w, r, "home.page.html", &templates.TemplateData{
 		StringMap: stringMap,
 	})
 }
@@ -36,7 +36,7 @@ func (rp *Repository) About(w http.ResponseWriter, r *http.Request) {
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	render.Template(w, r, "about.page.html", &models.TemplateData{
+	render.Template(w, r, "about.page.html", &templates.TemplateData{
 		StringMap: stringMap,
 	})
 
@@ -48,7 +48,7 @@ func (rp *Repository) Rooms(w http.ResponseWriter, r *http.Request) {
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	render.Template(w, r, "rooms.page.html", &models.TemplateData{
+	render.Template(w, r, "rooms.page.html", &templates.TemplateData{
 		StringMap: stringMap,
 	})
 
@@ -60,7 +60,7 @@ func (rp *Repository) Superior(w http.ResponseWriter, r *http.Request) {
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	render.Template(w, r, "room-superior.page.html", &models.TemplateData{
+	render.Template(w, r, "room-superior.page.html", &templates.TemplateData{
 		StringMap: stringMap,
 	})
 
@@ -72,7 +72,7 @@ func (rp *Repository) Deluxe(w http.ResponseWriter, r *http.Request) {
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	render.Template(w, r, "room-deluxe.page.html", &models.TemplateData{
+	render.Template(w, r, "room-deluxe.page.html", &templates.TemplateData{
 		StringMap: stringMap,
 	})
 
@@ -84,7 +84,7 @@ func (rp *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
 
-	render.Template(w, r, "contact.page.html", &models.TemplateData{
+	render.Template(w, r, "contact.page.html", &templates.TemplateData{
 		StringMap: stringMap,
 	})
 
@@ -92,7 +92,7 @@ func (rp *Repository) Contact(w http.ResponseWriter, r *http.Request) {
 
 // Login user login page
 func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "login.page.html", &models.TemplateData{
+	render.Template(w, r, "login.page.html", &templates.TemplateData{
 		Form: forms.New(nil),
 	})
 	rp.App.Session.Put(r.Context(), "success", "Log in success :)")
