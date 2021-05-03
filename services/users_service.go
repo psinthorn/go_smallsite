@@ -1,8 +1,6 @@
 package services
 
-var (
-	UsersService usersServiceInterface = &userServices{}
-)
+var UsersService usersServiceInterface = &userServices{}
 
 type usersServiceInterface interface {
 	Create() error

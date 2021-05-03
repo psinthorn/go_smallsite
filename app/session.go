@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
-	"github.com/psinthorn/go_smallsite/models/reservations"
-	"github.com/psinthorn/go_smallsite/models/users"
+	"github.com/psinthorn/go_smallsite/domain/reservations"
+	"github.com/psinthorn/go_smallsite/domain/users"
 )
 
 // CreateSession and store session to AppConfig.Session
