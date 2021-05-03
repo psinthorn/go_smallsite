@@ -23,26 +23,27 @@ func routes(app *configs.AppConfig) http.Handler {
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
+	// Pages routing section
 	mux.Get("/", handlers.HandlerRepo.Home)
 	mux.Get("/about", handlers.HandlerRepo.About)
 	mux.Get("/contact", handlers.HandlerRepo.Contact)
 	mux.Get("/user/login", handlers.HandlerRepo.Login)
 	mux.Get("/user/logout", handlers.HandlerRepo.Logout)
 
+	// Room routing section
 	mux.Get("/room", handlers.HandlerRepo.Rooms)
 	mux.Get("/superior", handlers.HandlerRepo.Superior)
 	mux.Get("/deluxe", handlers.HandlerRepo.Deluxe)
 
-	// mux.Get("/check-alotment", handlers.HandlerRepo.CheckAlotment)
+	// Reservation routing section
 	mux.Get("/search-availability", handlers.HandlerRepo.SearchAvailability)
 	mux.Post("/search-availability", handlers.HandlerRepo.PostSearchAvailability)
 	mux.Post("/search-availability-response", handlers.HandlerRepo.AvailabilityResponse)
-
-	//mux.Get("/reservation", handlers.HandlerRepo.Reservation)
-	mux.Get("/make-reservation", handlers.HandlerRepo.Reservation)
-	mux.Post("/make-reservation", handlers.HandlerRepo.PostReservation)
+	mux.Get("/reservation", handlers.HandlerRepo.Reservation)
+	mux.Post("/reservation", handlers.HandlerRepo.PostReservation)
 	mux.Get("/reservation-summary", handlers.HandlerRepo.ReservationSummary)
 
+	// Admin routing section
 	mux.Get("/admin/dashboard", handlers.HandlerRepo.Contact)
 
 	return mux
