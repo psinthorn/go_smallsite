@@ -7,7 +7,6 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/psinthorn/go_smallsite/configs"
 	"github.com/psinthorn/go_smallsite/domain/reservations"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
@@ -15,25 +14,26 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/render"
 )
 
-var (
-	ReservationsController reservationsControllerInterface = &reservationsController{}
-)
+// var (
+// 	ReservationsController reservationsController
+// )
 
-type reservationsControllerInterface interface {
-	SearchAvailability(w http.ResponseWriter, r *http.Request)
-	PostSearchAvailability(w http.ResponseWriter, r *http.Request)
-	AvailabilityResponse(w http.ResponseWriter, r *http.Request)
-	Reservation(w http.ResponseWriter, r *http.Request)
-	PostReservation(w http.ResponseWriter, r *http.Request)
-	ReservationSummary(w http.ResponseWriter, r *http.Request)
-}
-type reservationsController struct {
-	App *configs.AppConfig
-	DB  interface{}
-}
+// type reservationsControllerInterface interface {
+// 	SearchAvailability(w http.ResponseWriter, r *http.Request)
+// 	PostSearchAvailability(w http.ResponseWriter, r *http.Request)
+// 	AvailabilityResponse(w http.ResponseWriter, r *http.Request)
+// 	Reservation(w http.ResponseWriter, r *http.Request)
+// 	PostReservation(w http.ResponseWriter, r *http.Request)
+// 	ReservationSummary(w http.ResponseWriter, r *http.Request)
+// }
+
+// type reservationsController struct {
+// 	// App *configs.AppConfig
+// 	// DB  interface{}
+// }
 
 // CheckAvailability is check-availability page render
-func (rp *reservationsController) SearchAvailability(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
@@ -45,7 +45,7 @@ func (rp *reservationsController) SearchAvailability(w http.ResponseWriter, r *h
 }
 
 // PostSearchAlotment is check-availability page render
-func (rp *reservationsController) PostSearchAvailability(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Request) {
 	start := r.Form.Get("start")
 	end := r.Form.Get("end")
 	w.Write([]byte(fmt.Sprintf("Start Date: %s and End date is: %s", start, end)))
@@ -57,7 +57,7 @@ type jsonReponse struct {
 }
 
 // AvailabilityResponse is availability response in json
-func (rp *reservationsController) AvailabilityResponse(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) AvailabilityResponse(w http.ResponseWriter, r *http.Request) {
 	resp := jsonReponse{
 		OK:      true,
 		Message: "Hello Json",
@@ -74,7 +74,7 @@ func (rp *reservationsController) AvailabilityResponse(w http.ResponseWriter, r 
 }
 
 // Reservation is reservation page render
-func (rp *reservationsController) Reservation(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	var emptyReservation reservations.Reservation
 	data := make(map[string]interface{})
 	data["reservation"] = emptyReservation
@@ -86,7 +86,7 @@ func (rp *reservationsController) Reservation(w http.ResponseWriter, r *http.Req
 }
 
 // PostReservation is reservation page render
-func (rp *reservationsController) PostReservation(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	err := r.ParseForm()
 	if err != nil {
@@ -156,7 +156,7 @@ func (rp *reservationsController) PostReservation(w http.ResponseWriter, r *http
 }
 
 // ReservationSummary for customer recheck information before submit
-func (rp *reservationsController) ReservationSummary(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(reservations.Reservation)
 	if !ok {
 		rp.App.ErrorLog.Println("can't get reservation information from session")

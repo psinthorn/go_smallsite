@@ -15,7 +15,7 @@ var infoLog *log.Logger
 var errorLog *log.Logger
 
 // Start use to start new server
-func StartApp() (*drivers.DB, error) {
+func StartApp() (*drivers.DbConn, error) {
 
 	// Check env is production
 	utils.Utils.IsProduction(&appConfig)
