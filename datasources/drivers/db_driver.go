@@ -13,19 +13,22 @@ import (
 )
 
 // DB to holds and store SLQ driver after we make database connection success
-type DB struct {
+
+var Conn = &DbConn{}
+
+type DbConn struct {
 	SQL *sql.DB
 }
 
-var dbConn = &DB{}
-
-const maxDBConn = 10
-const maxDBIdleConn = 5
-const maxDBLifeTime = 5 * time.Minute
+const (
+	maxDBConn     = 10
+	maxDBIdleConn = 5
+	maxDBLifeTime = 5 * time.Minute
+)
 
 // Connect database by specify driver this will pass to Newdatabase function
 // driver is depend on what is your database like postgres driver = "pgx"
-func ConnectDB(driver, dsn string) (*DB, error) {
+func ConnectDB(driver, dsn string) (*DbConn, error) {
 	db, err := NewDatabase(driver, dsn)
 	if err != nil {
 		panic(err)
@@ -35,14 +38,14 @@ func ConnectDB(driver, dsn string) (*DB, error) {
 	db.SetMaxIdleConns(maxDBIdleConn)
 	db.SetConnMaxLifetime(maxDBLifeTime)
 
-	dbConn.SQL = db
+	Conn.SQL = db
 
 	err = testDB(db)
 	if err != nil {
 		return nil, err
 	}
 
-	return dbConn, nil
+	return Conn, nil
 }
 
 // Newdatabase to create new database connecttion by specify database driver
