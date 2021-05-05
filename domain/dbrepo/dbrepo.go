@@ -7,6 +7,8 @@ import (
 	repository "github.com/psinthorn/go_smallsite/domain"
 )
 
+// var SqlDbRepo sqlDbRepo
+
 type sqlDbRepo struct {
 	App *configs.AppConfig
 	DB  *sql.DB

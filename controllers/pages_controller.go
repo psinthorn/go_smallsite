@@ -1,3 +1,5 @@
+// routes -> controllers -> services -> domain
+
 package controllers
 
 import (
