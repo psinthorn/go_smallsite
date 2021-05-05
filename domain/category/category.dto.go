@@ -1,14 +1,14 @@
-package category
+package dbrepo
 
-var Category category
+// var Category category
 
-type category struct {
-	ID          string
-	Title       string
-	Desc        string
-	Section     string
-	Parent      string
-	AccessLevel int
-	CreatedAt   string
-	UpdatedAt   string
-}
+// type category struct {
+// 	ID          string
+// 	Title       string
+// 	Desc        string
+// 	Section     string
+// 	Parent      string
+// 	AccessLevel int
+// 	CreatedAt   string
+// 	UpdatedAt   string
+// }

@@ -1,3 +1,5 @@
+// routes -> controllers -> services -> domain
+
 package controllers
 
 import (
@@ -7,7 +9,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/psinthorn/go_smallsite/domain/reservations"
+	"github.com/psinthorn/go_smallsite/domain/dbrepo"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -75,7 +77,7 @@ func (rp *Repository) AvailabilityResponse(w http.ResponseWriter, r *http.Reques
 
 // Reservation is reservation page render
 func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	var emptyReservation reservations.Reservation
+	var emptyReservation dbrepo.Reservation
 	data := make(map[string]interface{})
 	data["reservation"] = emptyReservation
 
@@ -115,7 +117,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		// helpers.ServerError(w, err)
 	}
 
-	reservation := reservations.Reservation{
+	reservation := dbrepo.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
@@ -157,7 +159,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 // ReservationSummary for customer recheck information before submit
 func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
-	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(reservations.Reservation)
+	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(dbrepo.Reservation)
 	if !ok {
 		rp.App.ErrorLog.Println("can't get reservation information from session")
 		rp.App.Session.Put(r.Context(), "error", "can't get reservation information from session")
