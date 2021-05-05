@@ -3,6 +3,7 @@ package controllers
 import (
 	"net/http"
 
+	"github.com/psinthorn/go_smallsite/domain/reservations"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/render"
@@ -26,7 +27,9 @@ import (
 
 // Register new user
 func (rp *Repository) Register(w http.ResponseWriter, r *http.Request) {
-
+	resp := reservations.Ping()
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte(resp))
 }
 
 //  GetAllUsers

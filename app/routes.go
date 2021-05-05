@@ -33,6 +33,7 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Get("/superior", controllers.HandlerRepo.Superior)
 	mux.Get("/deluxe", controllers.HandlerRepo.Deluxe)
 
+	mux.Get("/users/register", controllers.HandlerRepo.Register)
 	// mux.Get("/user/login", controllers.UsersController.Login)
 	// mux.Get("/user/logout", controllers.UsersController.Logout)
 

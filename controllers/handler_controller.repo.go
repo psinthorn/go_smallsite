@@ -23,9 +23,6 @@ func NewHandlerRepository(a *configs.AppConfig, db *drivers.DbConn) *Repository 
 	return &Repository{
 		App: a,
 		DB:  dbrepo.NewDBConnectRepo(a, db.SQL),
-		// Pages: dbrepo.NewDBConnectRepo(a, db.SQL),
-		// Reservations: dbrepo.NewDBConnectRepo(a, db.SQL),
-		// Users:        dbrepo.NewDBConnectRepo(a, db.SQL),
 	}
 }
 
