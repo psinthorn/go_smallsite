@@ -30,19 +30,19 @@ func routes(app *configs.AppConfig) http.Handler {
 
 	// Room routing section
 	mux.Get("/room", controllers.HandlerRepo.Rooms)
-	mux.Get("/superior", controllers.HandlerRepo.Superior)
-	mux.Get("/deluxe", controllers.HandlerRepo.Deluxe)
+	mux.Get("/rooms/superior", controllers.HandlerRepo.Superior)
+	mux.Get("/rooms/deluxe", controllers.HandlerRepo.Deluxe)
 
-	// mux.Get("/user/login", controllers.UsersController.Login)
-	// mux.Get("/user/logout", controllers.UsersController.Logout)
+	mux.Get("/users/login", controllers.HandlerRepo.Login)
+	mux.Get("/users/logout", controllers.HandlerRepo.Logout)
 
-	// // Reservation routing section
-	// mux.Get("/search-availability", controllers.ReservationsController.SearchAvailability)
-	// mux.Post("/search-availability", controllers.ReservationsController.PostSearchAvailability)
-	// mux.Post("/search-availability-response", controllers.ReservationsController.AvailabilityResponse)
-	// mux.Get("/reservation", controllers.ReservationsController.Reservation)
-	// mux.Post("/reservation", controllers.ReservationsController.PostReservation)
-	// mux.Get("/reservation-summary", controllers.ReservationsController.ReservationSummary)
+	// Reservation routing section
+	mux.Get("/search-availability", controllers.HandlerRepo.SearchAvailability)
+	mux.Post("/search-availability", controllers.HandlerRepo.PostSearchAvailability)
+	mux.Post("/search-availability-response", controllers.HandlerRepo.AvailabilityResponse)
+	mux.Get("/reservation", controllers.HandlerRepo.Reservation)
+	mux.Post("/reservation", controllers.HandlerRepo.PostReservation)
+	mux.Get("/reservation-summary", controllers.HandlerRepo.ReservationSummary)
 
 	// Admin routing section
 	mux.Get("/admin/dashboard", controllers.HandlerRepo.Contact)

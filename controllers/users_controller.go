@@ -30,7 +30,9 @@ func (rp *Repository) Register(w http.ResponseWriter, r *http.Request) {
 }
 
 //  GetAllUsers
-func (rp *Repository) GetAllUsers(w http.ResponseWriter, r *http.Request) {}
+func (rp *Repository) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	rp.DB.GetAllUsers()
+}
 
 // Login user login page
 func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
@@ -43,5 +45,5 @@ func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
 // Login user login page
 func (rp *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/login", http.StatusSeeOther)
-	//render.Template(w, r, "login.page.html", &models.TemplateData{})
+	render.Template(w, r, "login.page.html", &templates.TemplateData{})
 }
