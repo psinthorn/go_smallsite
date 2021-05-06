@@ -6,7 +6,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/psinthorn/go_smallsite/configs"
-	"github.com/psinthorn/go_smallsite/controllers"
+	controllers "github.com/psinthorn/go_smallsite/controllers/handlers"
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
@@ -33,7 +33,8 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Get("/rooms/superior", controllers.HandlerRepo.Superior)
 	mux.Get("/rooms/deluxe", controllers.HandlerRepo.Deluxe)
 
-	//mux.Get("/users/register", controllers.HandlerRepo.R)
+	mux.Get("/users/register", controllers.HandlerRepo.Register)
+	mux.Get("/users/getall", controllers.HandlerRepo.GetAllUsers)
 	mux.Get("/users/login", controllers.HandlerRepo.Login)
 	mux.Get("/users/logout", controllers.HandlerRepo.Logout)
 
