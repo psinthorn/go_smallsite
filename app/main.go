@@ -9,7 +9,7 @@ import (
 func main() {
 	const portNumber = ":8080"
 	// start application and connect to database
-	dbConn, err := StartApp()
+	err := StartApp()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -27,5 +27,4 @@ func main() {
 		fmt.Println("------------------------------------------------------------------")
 	}
 
-	defer dbConn.SQL.Close()
 }

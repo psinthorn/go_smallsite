@@ -48,6 +48,8 @@ func routes(app *configs.AppConfig) http.Handler {
 
 	// Admin routing section
 	mux.Get("/admin/dashboard", controllers.HandlerRepo.Contact)
+	mux.Get("/rooms/new", controllers.HandlerRepo.Rooms)
+	mux.Post("/rooms/new", controllers.HandlerRepo.CreatRoom)
 
 	return mux
 

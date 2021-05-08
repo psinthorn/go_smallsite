@@ -28,7 +28,7 @@ import (
 
 //  GetAllUsers
 func (rp *Repository) Register(w http.ResponseWriter, r *http.Request) {
-	resp, err := dbrepo.User.Register()
+	resp, err := dbrepo.UserService.Register()
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -38,7 +38,7 @@ func (rp *Repository) Register(w http.ResponseWriter, r *http.Request) {
 
 //  GetAllUsers
 func (rp *Repository) GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	resp, err := dbrepo.User.GetAllUsers()
+	resp, err := dbrepo.UserService.GetAllUsers()
 	if err != nil {
 		log.Fatal(err)
 	}

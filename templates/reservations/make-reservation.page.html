@@ -7,7 +7,7 @@
                 <h1 class="mt-5 mb-3">Make Reservation</h1>
 
                 {{$rsvn := index .Data "reservation" }}
-                <form method="post" action="/make-reservation" class="" novalidate>
+                <form method="post" action="/rooms/reservation" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -44,7 +44,7 @@
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get "start_date"}} is-invalid {{end}}"
                                    id="start_date" autocomplete="off" type='text'
-                                   name='start_date' value="{{$rsvn.StartDate}}" required>
+                                   name='start_date'  required>
                         </div>
                        </div>
 
@@ -56,7 +56,7 @@
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get "end_date"}} is-invalid {{end}}"
                                    id="end_date" autocomplete="off" type='text'
-                                   name='end_date' value="{{$rsvn.EndDate}}" required>
+                                   name='end_date'  required>
                         </div>
 
                     </div>
