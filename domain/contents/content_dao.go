@@ -1,5 +1,12 @@
 package contents
 
+import (
+	"context"
+	"time"
+
+	"github.com/psinthorn/go_smallsite/datasources/drivers"
+)
+
 // import (
 // 	mysql_db "github.com/psinthorn/gostack_users-api/datasources/mysql/users_db"
 // 	"github.com/psinthorn/gostack_users-api/domains/errors"
@@ -7,54 +14,68 @@ package contents
 // 	mysql_utils "github.com/psinthorn/gostack_users-api/utils/mysql"
 // )
 
-// const (
-// 	queryInsertContent     = "INSERT INTO contents(title, sub_title, content, content_type, category, image, tags, author, status, date_created) VALUES(?,?,?,?,?,?,?,?,?,?);"
-// 	queryGetContentById    = "SELECT * FROM contents WHERE id = ?"
-// 	queryDeleteContentById = "DELETE FROM contents where id = ?"
-// 	queryGetAllContents    = "SELECT * FROM contents ORDER BY id DESC"
-// )
+const (
+	queryInsertContent     = "INSERT INTO contents(title, sub_title, content, content_type, category, image, tags, author, status, date_created) VALUES(?,?,?,?,?,?,?,?,?,?);"
+	queryGetContentById    = "SELECT * FROM contents WHERE id = ?"
+	queryDeleteContentById = "DELETE FROM contents where id = ?"
+	queryGetAllContents    = "SELECT * FROM contents ORDER BY id DESC"
+)
 
-// var (
-// 	contentDB = make(map[int64]*Content)
-// )
+var (
+	ContentService contentDomainInterface = &Content{}
+)
 
-// //
-// // Get All content by ID
-// //
+type Content content
+type contentDomainInterface interface {
+	Create(ct Content) (int, error)
+	GetAll() (Content, error)
+}
 
-// func GetAll() ([]Content, error) {
+var (
+	contentDB = make(map[int64]*Content)
+)
 
-// 	//prepar statments
-// 	stmt, err := mysql_db.Client.Prepare(queryGetAllContents)
-// 	// if error handle it
-// 	if err != nil {
-// 		return nil, mysql_utils.PareError(err)
-// 	}
-// 	// Close statment protect run out connection
-// 	defer stmt.Close()
+// ------------------------------------
+// Create new content
+func (c *Content) Create(ct Content) (int, error) {
+	return 0, nil
+}
 
-// 	results, err := stmt.Query()
-// 	if err != nil {
-// 		return nil, mysql_utils.PareError(err)
-// 	}
-// 	defer results.Close()
+// ------------------------------------
+// Get All content by ID
+func (c *Content) GetAll() (Content, error) {
 
-// 	allContents := make([]Content, 0)
-// 	for results.Next() {
-// 		var content Content
-// 		err := results.Scan(&content.Id, &content.Title, &content.SubTitle, &content.Content, &content.ContentType, &content.Category, &content.Image, &content.Tags, &content.Author, &content.Status, &content.DateCreated)
-// 		if err != nil {
-// 			return nil, mysql_utils.PareError(err)
-// 		}
-// 		allContents = append(allContents, content)
-// 	}
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
 
-// 	if len(allContents) == 0 {
-// 		return nil, errors.NewNotFoundError("No content found")
-// 	}
-// 	return allContents, nil
+	db, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		panic(err)
+	}
+	results, err := db.SQL.ExecContext(ctx, queryGetAllContents)
+	if err != nil {
+		panic(err)
+	}
 
-// }
+	results.LastInsertId()
+	defer db.SQL.Close()
+
+	// allContents := make([]Content, 0)
+	// for results.Next(){
+	// 	var content Content
+	// 	err := results.SQL.Scan(&content.Id, &content.Title, &content.SubTitle, &content.Content, &content.ContentType, &content.Category, &content.Image, &content.Tags, &content.Author, &content.Status, &content.DateCreated)
+	// 	if err != nil {
+	// 		return nil, err
+	// 	}
+	// 	allContents = append(allContents, content)
+	// }
+
+	// if len(results) == 0 {
+	// 	return nil, errors.NewNotFoundError("No content found")
+	// }
+	return Content{}, nil
+
+}
 
 // //
 // // Get content by ID

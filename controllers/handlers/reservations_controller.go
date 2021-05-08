@@ -36,6 +36,7 @@ import (
 
 // CheckAvailability is check-availability page render
 func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request) {
+
 	stringMap := make(map[string]string)
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
@@ -89,16 +90,6 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
 // PostReservation is reservation page render
 func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
-
-	// 	start := r.Form.Get("start")
-	// 	end := r.Form.Get("end")
-	// 	w.Write([]byte(fmt.Sprintf("Start Date: %s and End date is: %s", start, end)))
-	// }
-
-	// type jsonReponse struct {
-	// 	OK      bool   `json: "ok"`
-	// 	Message string `json: "message"`
-
 	err := r.ParseForm()
 	if err != nil {
 		helpers.ServerError(w, err)
@@ -107,6 +98,8 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	sd := r.Form.Get("start_date")
 	ed := r.Form.Get("end_date")
+	fmt.Println("Start Date: ", sd)
+	fmt.Println("End Date: ", ed)
 
 	dateLayout := "2006-01-02"
 	startDate, err := time.Parse(dateLayout, sd)
@@ -114,11 +107,13 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 		// helpers.ServerError(w, err)
 	}
+	//startDate.Format("2006-01-02 15:04:05")
 	endDate, err := time.Parse(dateLayout, ed)
 	if err != nil {
 		panic(err)
 		// helpers.ServerError(w, err)
 	}
+	//endDate.Format("2006-01-02 15:04:05")
 
 	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
 	if err != nil {
@@ -131,9 +126,12 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
+		RoomID:    roomID,
+		Status:    "stay",
 		StartDate: startDate,
 		EndDate:   endDate,
-		RoomID:    roomID,
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
 	}
 
 	form := forms.New(r.PostForm)
@@ -155,14 +153,14 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// _, err = rp.DB.InsertReservation(reservation)
-	// if err != nil {
-	// 	helpers.ServerError(w, err)
-	// }
+	_, err = dbrepo.ReservationService.Create(reservation)
+	if err != nil {
+		panic(err)
+	}
 
 	rp.App.Session.Put(r.Context(), "reservation", reservation)
 	rp.App.Session.Put(r.Context(), "success", "Thank you, Please re-check your information for next process :)")
-	http.Redirect(w, r, "/reservation-summary", http.StatusSeeOther)
+	http.Redirect(w, r, "/rooms/reservation-summary", http.StatusSeeOther)
 
 }
 

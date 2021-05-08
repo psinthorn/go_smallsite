@@ -1,8 +1,8 @@
 create_table("room_alotments") {
-    t.Column("id", "uuid", {primary: true})
+    t.Column("id", "integer", {primary: true})
     t.Column("start_date", "date", {})
     t.Column("end_date", "date", {})
-    t.Column("room_id", "uuid", {})
-    t.Column("reservation_id", "uuid", {})
-    t.Column("room_status_id", "uuid", {})
+    t.Column("room_id", "integer", {})
+    t.Column("reservation_id", "int", {})
+    t.Column("room_status_id", "int", {})
 }

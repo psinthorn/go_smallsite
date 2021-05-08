@@ -12,8 +12,11 @@ import (
 	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
-// DB to holds and store SLQ driver after we make database connection success
+var (
+	postgresDsn = "host=localhost port=5432 dbname=go_smallsite_bookings user=postgres password="
+)
 
+// DB to holds and store SLQ driver after we make database connection success
 var Conn = &DbConn{}
 
 type DbConn struct {
@@ -24,7 +27,23 @@ const (
 	maxDBConn     = 10
 	maxDBIdleConn = 5
 	maxDBLifeTime = 5 * time.Minute
+
+	dsn = "host=localhost port=5432 dbname=go_smallsite_bookings user=postgres password="
 )
+
+// func init() {
+// 	// Connect to postgress databast
+// 	fmt.Println("Connecting to Database...")
+
+// 	DbClient, err := sql.Open("pgx", dsn)
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// 	if err = DbClient.Ping(); err != nil {
+// 		panic(err)
+// 	}
+// 	fmt.Println("Connecting to Database Success fully :)")
+// }
 
 // Connect database by specify driver this will pass to Newdatabase function
 // driver is depend on what is your database like postgres driver = "pgx"

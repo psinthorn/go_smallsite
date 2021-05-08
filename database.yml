@@ -1,3 +1,4 @@
+# //Soda database migration connection
 development:
   dialect: postgres
   database: go_smallsite_bookings

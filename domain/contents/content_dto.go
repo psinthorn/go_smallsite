@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-type Content struct {
+type content struct {
 	Id          int64  `json: "id" bson: "id"`
 	Title       string `json: "title" bson: "title"`
 	SubTitle    string `json: "sub_title" bson: "sub_title"`
@@ -24,9 +24,9 @@ type Content struct {
 // Validate content input
 //
 
-func (content *Content) Validate() error {
-	content.Title = strings.TrimSpace(content.Title)
-	if content.Title == "" {
+func (ct *content) Validate() error {
+	ct.Title = strings.TrimSpace(ct.Title)
+	if ct.Title == "" {
 		return errors.New("Title can not be empty!")
 	}
 	return nil
