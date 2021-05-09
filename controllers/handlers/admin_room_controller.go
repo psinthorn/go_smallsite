@@ -32,32 +32,32 @@ func (rp *Repository) RoomGetForm(w http.ResponseWriter, r *http.Request) {
 
 // PostReservation is reservation page render
 func (rp *Repository) RoomCreate(w http.ResponseWriter, r *http.Request) {
-
 	err := r.ParseForm()
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	roomTypeId, err := strconv.Atoi(r.Form.Get("room_type_id"))
+	roomTypeId, err := strconv.Atoi(r.Form.Get("roomtype_id"))
 	if err != nil {
 		panic(err)
 	}
 	room := dbrepo.Room{
-		RoomTypeId: roomTypeId,
-		RoomName:   r.Form.Get("room_name"),
-		RoomNo:     r.Form.Get("room_no"),
-		Desc:       r.Form.Get("desc"),
-		Status:     r.Form.Get("status"),
-		CreatedAt:  time.Now(),
-		UpdatedAt:  time.Now(),
+		RoomTypeId:  roomTypeId,
+		RoomName:    r.Form.Get("room_name"),
+		RoomNo:      r.Form.Get("room_no"),
+		Description: r.Form.Get("description"),
+		Status:      r.Form.Get("status"),
+		CreatedAt:   time.Now(),
+		UpdatedAt:   time.Now(),
 	}
 	fmt.Println(room)
+
 	form := forms.New(r.PostForm)
 	if !form.Valid() {
 		data := make(map[string]interface{})
 		data["room"] = room
-		render.Template(w, r, "room-create.page.html", &templates.TemplateData{
+		render.Template(w, r, "room-add-form.page.html", &templates.TemplateData{
 			Form: form,
 			Data: data,
 		})

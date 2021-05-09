@@ -12,18 +12,18 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <div class="form-group">
-                                <label for="first_name">Room Type:</label>
-                                {{with .Form.Errors.Get "room_type_id"}}
+                                <label for="roomtype_id">Room Type:</label>
+                                {{with .Form.Errors.Get "roomtype_id"}}
                                     <label class="text-danger">{{.}}</label>
                                 {{end}}
-                                <input class="form-control {{with .Form.Errors.Get "room_type_id"}} is-invalid {{end}}"
-                                       id="room_type_id" autocomplete="off" type='text'
-                                       name='room_type_id' value="{{ $r.RoomTypeId }}" required>
+                                <input class="form-control {{with .Form.Errors.Get "roomtype_id"}} is-invalid {{end}}"
+                                       id="roomtype_id" autocomplete="off" type='text'
+                                       name="roomtype_id" value="{{$r.RoomTypeId}}" required>
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <div class="form-group">
-                                <label for="last_name">Room Name:</label>
+                                <label for="room_name">Room Name:</label>
                                 {{with .Form.Errors.Get "room_name"}}
                                     <label class="text-danger">{{.}}</label>
                                 {{end}}
@@ -35,13 +35,13 @@
 
                         <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
                             <div class="form-group">
-                                <label for="start_date">Room No:</label>
+                                <label for="room_no">Room No:</label>
                                 {{with .Form.Errors.Get "room_no"}}
                                     <label class="text-danger">{{.}}</label>
                                 {{end}}
                                 <input class="form-control {{with .Form.Errors.Get "room_no"}} is-invalid {{end}}"
                                        id="room_no" autocomplete="off" type='text'
-                                       name='room_no'  required>
+                                       name='room_no' value="{{$r.RoomNo}}" required>
                             </div>
                            </div>
                     </div>
@@ -51,25 +51,25 @@
                        
                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                         <div class="form-group">
-                            <label for="end_date">Room Description:</label>
-                            {{with .Form.Errors.Get "desc"}}
+                            <label for="description">Room Description:</label>
+                            {{with .Form.Errors.Get "description"}}
                                 <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get "desc"}} is-invalid {{end}}"
-                                   id="desc" autocomplete="off" type='text'
-                                   name='desc'  required>
+                                   id="description" autocomplete="off" type='text'
+                                   name='description'  value="{{$r.Description}}" required>
                         </div>
                     </div>
 
                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">   
                         <div class="form-group">
-                            <label for="email">Room Status:</label>
+                            <label for="Status">Room Status:</label>
                             {{with .Form.Errors.Get "status"}}
                                 <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get "status"}} is-invalid {{end}}" 
                                 id="status"
-                                autocomplete="off" type='room_status'
+                                autocomplete="off" type='text'
                                 name='status' value="{{$r.Status}}" required>
                         </div>
                     </div>
