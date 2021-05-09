@@ -1,0 +1,90 @@
+{{template "base" .}}
+
+{{define "content"}}
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col">
+                <h1 class="mt-5 mb-3">Room Management: Add New Room</h1>
+
+                {{$r := index .Data "room" }}
+                <form method="post" action="/admin/rooms/new" class="" novalidate>
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <label for="first_name">Room Type:</label>
+                                {{with .Form.Errors.Get "room_type_id"}}
+                                    <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="form-control {{with .Form.Errors.Get "room_type_id"}} is-invalid {{end}}"
+                                       id="room_type_id" autocomplete="off" type='text'
+                                       name='room_type_id' value="{{ $r.RoomTypeId }}" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <label for="last_name">Room Name:</label>
+                                {{with .Form.Errors.Get "room_name"}}
+                                    <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="form-control {{with .Form.Errors.Get "room_name"}} is-invalid {{end}}"
+                                       id="room_name" autocomplete="off" type='text'
+                                       name='room_name' value="{{$r.RoomName}}" required>
+                            </div>                           
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                            <div class="form-group">
+                                <label for="start_date">Room No:</label>
+                                {{with .Form.Errors.Get "room_no"}}
+                                    <label class="text-danger">{{.}}</label>
+                                {{end}}
+                                <input class="form-control {{with .Form.Errors.Get "room_no"}} is-invalid {{end}}"
+                                       id="room_no" autocomplete="off" type='text'
+                                       name='room_no'  required>
+                            </div>
+                           </div>
+                    </div>
+                    
+
+                   <div class="row">
+                       
+                       <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                        <div class="form-group">
+                            <label for="end_date">Room Description:</label>
+                            {{with .Form.Errors.Get "desc"}}
+                                <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "desc"}} is-invalid {{end}}"
+                                   id="desc" autocomplete="off" type='text'
+                                   name='desc'  required>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">   
+                        <div class="form-group">
+                            <label for="email">Room Status:</label>
+                            {{with .Form.Errors.Get "status"}}
+                                <label class="text-danger">{{.}}</label>
+                            {{end}}
+                            <input class="form-control {{with .Form.Errors.Get "status"}} is-invalid {{end}}" 
+                                id="status"
+                                autocomplete="off" type='room_status'
+                                name='status' value="{{$r.Status}}" required>
+                        </div>
+                    </div>
+                   </div>            
+                    <input type="submit" class="btn btn-primary" value="Make Reservation">
+                </form>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+    <script>
+        console.log("Separate script form individual page is start here")
+    </script>
+{{end}}
+    

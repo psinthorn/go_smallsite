@@ -42,14 +42,16 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Get("/rooms/search-availability", controllers.HandlerRepo.SearchAvailability)
 	mux.Post("/rooms/search-availability", controllers.HandlerRepo.PostSearchAvailability)
 	mux.Post("/rooms/search-availability-response", controllers.HandlerRepo.AvailabilityResponse)
+	mux.Get("/rooms", controllers.HandlerRepo.Rooms)
 	mux.Get("/rooms/reservation", controllers.HandlerRepo.Reservation)
 	mux.Post("/rooms/reservation", controllers.HandlerRepo.PostReservation)
 	mux.Get("/rooms/reservation-summary", controllers.HandlerRepo.ReservationSummary)
 
 	// Admin routing section
 	mux.Get("/admin/dashboard", controllers.HandlerRepo.Contact)
-	mux.Get("/rooms/new", controllers.HandlerRepo.Rooms)
-	mux.Post("/rooms/new", controllers.HandlerRepo.CreatRoom)
+	mux.Get("/admin/rooms", controllers.HandlerRepo.RoomGetAll)
+	mux.Get("/admin/rooms/new", controllers.HandlerRepo.RoomGetForm)
+	mux.Post("/admin/rooms/new", controllers.HandlerRepo.RoomCreate)
 
 	return mux
 
