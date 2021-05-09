@@ -3,13 +3,13 @@ package dbrepo
 import "time"
 
 type RoomType struct {
-	ID        int       `json: "id"`
-	Title     string    `json: "title"`
-	Desc      string    `json: "desc"`
-	Room      string    `json: "status"` // public, disable
-	Facility  string    `json: "facility"`
-	CreatedAt time.Time `json: "created_at"`
-	UpdatedAt time.Time `json: "updated_at"`
+	ID          int       `json: "id"`
+	Title       string    `json: "title"`
+	Description string    `json: "description"`
+	Facility    string    `json: "facility"`
+	Status      string    `json: "status"` // public, disable
+	CreatedAt   time.Time `json: "created_at"`
+	UpdatedAt   time.Time `json: "updated_at"`
 }
 
 type Facility struct{}
