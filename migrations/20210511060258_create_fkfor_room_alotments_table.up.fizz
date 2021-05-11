@@ -1,0 +1,15 @@
+add_foreign_key("room_alotments", "room_type_id", {"room_types": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
+
+add_foreign_key("room_alotments", "room_status_id", {"room_status": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
+
+add_foreign_key("room_alotments", "reservation_id", {"reservations": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
+

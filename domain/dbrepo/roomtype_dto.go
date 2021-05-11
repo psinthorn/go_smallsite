@@ -2,7 +2,7 @@ package dbrepo
 
 import "time"
 
-type RoomType struct {
+type roomType struct {
 	ID          int       `json: "id"`
 	Title       string    `json: "title"`
 	Description string    `json: "description"`

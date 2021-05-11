@@ -15,6 +15,7 @@ func CreateSession() {
 	// register all models to session maybe use or not use
 	gob.Register(dbrepo.User{})
 	gob.Register(dbrepo.Room{})
+	gob.Register(dbrepo.RoomType{})
 	gob.Register(dbrepo.RoomStatus{})
 	gob.Register(dbrepo.RoomAllotmentStatus{})
 	gob.Register(dbrepo.Reservation{})

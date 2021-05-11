@@ -28,7 +28,7 @@ import (
 
 //  GetAllUsers
 func (rp *Repository) Register(w http.ResponseWriter, r *http.Request) {
-	resp, err := dbrepo.UserService.Register()
+	resp, err := dbrepo.UserService.Create()
 	if err != nil {
 		log.Fatal(err)
 	}

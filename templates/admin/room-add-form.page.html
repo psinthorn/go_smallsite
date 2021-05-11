@@ -5,6 +5,7 @@
         <div class="row">
             <div class="col">
                 <h1 class="mt-5 mb-3">Room Management: Add New Room</h1>
+                <a href="/admin/rooms" type="button" class="btn btn-warning">Back</a>
 
                 {{$r := index .Data "room" }}
                 <form method="post" action="/admin/rooms/new" class="" novalidate>

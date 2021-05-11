@@ -10,6 +10,7 @@ import (
 
 const (
 	queryInsertReservation = "insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id"
+	querySelectAllRsvn     = "SELECT * FROM reservations"
 )
 
 var ReservationService reservationDomainInterface = &Reservation{}
@@ -39,14 +40,14 @@ func (r *Reservation) Create(rsvn Reservation) (int, error) {
 	if err != nil {
 		panic(err)
 	}
-	var newId int
-	err = dbConn.SQL.QueryRowContext(ctx, queryInsertReservation, rsvn.FirstName, rsvn.LastName, rsvn.Email, rsvn.Phone, rsvn.RoomID, rsvn.Status, rsvn.StartDate, rsvn.EndDate, rsvn.CreatedAt, rsvn.UpdatedAt).Scan(&newId)
+	var newReservationId int
+	err = dbConn.SQL.QueryRowContext(ctx, queryInsertReservation, rsvn.FirstName, rsvn.LastName, rsvn.Email, rsvn.Phone, rsvn.RoomID, rsvn.Status, rsvn.StartDate, rsvn.EndDate, rsvn.CreatedAt, rsvn.UpdatedAt).Scan(&newReservationId)
 	if err != nil {
 		return 0, err
 	}
 	defer dbConn.SQL.Close()
 
-	return newId, nil
+	return newReservationId, nil
 
 }
 
