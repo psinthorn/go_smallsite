@@ -27,12 +27,12 @@ func (s *Room) Create(room Room) (int, error) {
 		panic(err)
 	}
 
-	var newId int
-	err = dbConn.SQL.QueryRowContext(ctx, queryInsertRoom, room.RoomTypeId, room.RoomName, room.RoomNo, room.Description, room.Status, room.CreatedAt, room.UpdatedAt).Scan(&newId)
+	var newRoomId int
+	err = dbConn.SQL.QueryRowContext(ctx, queryInsertRoom, room.RoomTypeId, room.RoomName, room.RoomNo, room.Description, room.Status, room.CreatedAt, room.UpdatedAt).Scan(&newRoomId)
 	if err != nil {
 		return 0, err
 	}
 	defer dbConn.SQL.Close()
 
-	return newId, err
+	return newRoomId, err
 }

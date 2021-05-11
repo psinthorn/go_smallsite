@@ -15,5 +15,4 @@ type roomAllotmentStatus struct {
 	EndDate       time.Time   `json: "end_date"`
 	CreatedAt     time.Time   `json: "created_at"`
 	UpdatedAt     time.Time   `json: "updated_at"`
-	//RoomAllotmentStatusID int         `json: "room_allotment_status_id"`
 }

@@ -59,8 +59,8 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Post("/admin/rooms/roomtype/new", controllers.HandlerRepo.AddNewRoomType)
 
 	mux.Get("/admin/rooms", controllers.HandlerRepo.RoomGetAll)
-	mux.Get("/admin/rooms/new", controllers.HandlerRepo.RoomGetForm)
-	mux.Post("/admin/rooms/new", controllers.HandlerRepo.RoomCreate)
+	mux.Get("/admin/rooms/room", controllers.HandlerRepo.AddNewRoomForm)
+	mux.Post("/admin/rooms/room/new", controllers.HandlerRepo.AddNewRoom)
 
 	return mux
 

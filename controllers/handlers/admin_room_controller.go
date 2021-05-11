@@ -19,7 +19,7 @@ func (rp *Repository) RoomGetAll(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetRoomForm form for create new room
-func (rp *Repository) RoomGetForm(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) AddNewRoomForm(w http.ResponseWriter, r *http.Request) {
 	var emptyRoom dbrepo.Room
 	data := make(map[string]interface{})
 	data["room"] = emptyRoom
@@ -31,7 +31,7 @@ func (rp *Repository) RoomGetForm(w http.ResponseWriter, r *http.Request) {
 }
 
 // PostReservation is reservation page render
-func (rp *Repository) RoomCreate(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) AddNewRoom(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
 		helpers.ServerError(w, err)
@@ -71,7 +71,7 @@ func (rp *Repository) RoomCreate(w http.ResponseWriter, r *http.Request) {
 
 	rp.App.Session.Put(r.Context(), "room", room)
 	rp.App.Session.Put(r.Context(), "success", "New room is added :)")
-	http.Redirect(w, r, "/rooms", http.StatusSeeOther)
+	http.Redirect(w, r, "/admin/rooms/room", http.StatusSeeOther)
 
 }
 

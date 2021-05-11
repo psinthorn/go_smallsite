@@ -32,6 +32,7 @@ func (rs *RoomType) Create(r RoomType) (int, error) {
 	if err != nil {
 		return 0, nil
 	}
+	defer dbConn.SQL.Close()
 
 	return newRoomTypeID, nil
 }

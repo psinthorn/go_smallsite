@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	queryInsertRoomAllotmentStatus = "INSERT INTO room_allotments (room_type_id, room_no_id, reservation_id, room_status_id, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7) returning id"
+	queryInsertRoomAllotmentStatus = "INSERT INTO room_allotments (room_type_id, room_no_id, reservation_id, room_status_id, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id"
 )
 
 var RoomAllotmentStatusService roomAllotmentStatusInterface = &RoomAllotmentStatus{}
@@ -31,6 +31,7 @@ func (rm *RoomAllotmentStatus) Creat(ram RoomAllotmentStatus) (int, error) {
 	var newRoomAllotMentID int
 	err = dbConn.SQL.QueryRowContext(ctx, queryInsertRoomAllotmentStatus,
 		ram.RoomTypeID,
+		ram.RoomNoID,
 		ram.ReservationID,
 		ram.RoomStatusID,
 		ram.StartDate,
@@ -41,6 +42,7 @@ func (rm *RoomAllotmentStatus) Creat(ram RoomAllotmentStatus) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+	defer dbConn.SQL.Close()
 
 	return newRoomAllotMentID, nil
 }

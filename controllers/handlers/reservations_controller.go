@@ -160,12 +160,12 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rsvnAllmentStatus := dbrepo.RoomAllotmentStatus{
-		StartDate:     startDate,
-		EndDate:       endDate,
 		RoomTypeID:    1,
 		RoomNoID:      1,
 		ReservationID: rsvnID,
 		RoomStatusID:  2,
+		StartDate:     startDate,
+		EndDate:       endDate,
 		CreatedAt:     time.Now(),
 		UpdatedAt:     time.Now(),
 	}
