@@ -154,9 +154,26 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = dbrepo.ReservationService.Create(reservation)
+	rsvnID, err := dbrepo.ReservationService.Create(reservation)
 	if err != nil {
 		panic(err)
+	}
+
+	rsvnAllmentStatus := dbrepo.RoomAllotmentStatus{
+		RoomTypeID:    1,
+		RoomNoID:      1,
+		ReservationID: rsvnID,
+		RoomStatusID:  2,
+		StartDate:     startDate,
+		EndDate:       endDate,
+		CreatedAt:     time.Now(),
+		UpdatedAt:     time.Now(),
+	}
+
+	_, err = dbrepo.RoomAllotmentStatusService.Creat(rsvnAllmentStatus)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	rp.App.Session.Put(r.Context(), "reservation", reservation)

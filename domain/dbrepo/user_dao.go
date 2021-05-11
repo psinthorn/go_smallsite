@@ -3,7 +3,7 @@ package dbrepo
 var UserService userDomainInterface = &User{}
 
 type userDomainInterface interface {
-	Register() (string, error)
+	Create() (string, error)
 	GetAllUsers() (string, error)
 	GetByID()
 	Update()
@@ -11,7 +11,7 @@ type userDomainInterface interface {
 }
 
 // Register new user
-func (u *User) Register() (string, error) {
+func (u *User) Create() (string, error) {
 
 	return "Implement Me! Register function", nil
 }

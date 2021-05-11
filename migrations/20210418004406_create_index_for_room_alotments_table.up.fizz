@@ -1,4 +1,4 @@
-add_index("room_alotments", ["start_date", "end_date"], {})
-add_index("room_alotments", "room_id", {})
-add_index("room_alotments", "reservation_id", {})
-add_index("room_alotments", "room_status_id", {})
+add_index("room_allotments", ["start_date", "end_date"], {})
+add_index("room_allotments", "room_no_id", {})
+add_index("room_allotments", "reservation_id", {})
+add_index("room_allotments", "room_status_id", {})

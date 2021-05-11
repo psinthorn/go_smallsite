@@ -1,0 +1,28 @@
+{{template "base" .}}
+
+{{define "content"}}
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col">
+                <h1 class="mt-5 mb-3">Room Management</h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="container mt-5 mb-5">
+        <div class="row">
+            <div class="col">
+                <a href="/admin/rooms/new" type="button" class="btn btn-success" >Add</a>
+                <a href="/admin/rooms" type="button" class="btn btn-warning">Back</a>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+    <script>
+        console.log("Separate script form individual page is start here")
+    </script>
+{{end}}
+    
