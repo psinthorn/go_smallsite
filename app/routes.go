@@ -33,7 +33,6 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Get("/rooms/superior", controllers.HandlerRepo.Superior)
 	mux.Get("/rooms/deluxe", controllers.HandlerRepo.Deluxe)
 
-	mux.Get("/users/register", controllers.HandlerRepo.Register)
 	mux.Get("/users/getall", controllers.HandlerRepo.GetAllUsers)
 	mux.Get("/users/login", controllers.HandlerRepo.Login)
 	mux.Get("/users/logout", controllers.HandlerRepo.Logout)
@@ -49,6 +48,10 @@ func routes(app *configs.AppConfig) http.Handler {
 
 	// Admin routing section
 	mux.Get("/admin/dashboard", controllers.HandlerRepo.Contact)
+
+	// Admin user management
+	mux.Get("/admin/users/register", controllers.HandlerRepo.AddNewUserForm)
+	mux.Post("/admin/users/user/new", controllers.HandlerRepo.AddNewUser)
 
 	// Room Status
 	mux.Get("/admin/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)

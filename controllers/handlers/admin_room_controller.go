@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/psinthorn/go_smallsite/domain/dbrepo"
+	"github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -20,7 +21,7 @@ func (rp *Repository) RoomGetAll(w http.ResponseWriter, r *http.Request) {
 
 // GetRoomForm form for create new room
 func (rp *Repository) AddNewRoomForm(w http.ResponseWriter, r *http.Request) {
-	var emptyRoom dbrepo.Room
+	var emptyRoom rooms.Room
 	data := make(map[string]interface{})
 	data["room"] = emptyRoom
 
@@ -42,7 +43,7 @@ func (rp *Repository) AddNewRoom(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	room := dbrepo.Room{
+	room := rooms.Room{
 		RoomTypeId:  roomTypeId,
 		RoomName:    r.Form.Get("room_name"),
 		RoomNo:      r.Form.Get("room_no"),
@@ -53,6 +54,7 @@ func (rp *Repository) AddNewRoom(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(room)
 
+	// Form validation form validation not pass then create new form and pass data back to form
 	form := forms.New(r.PostForm)
 	if !form.Valid() {
 		data := make(map[string]interface{})
@@ -64,7 +66,7 @@ func (rp *Repository) AddNewRoom(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = dbrepo.RoomService.Create(room)
+	_, err = rooms.RoomService.Create(room)
 	if err != nil {
 		panic(err)
 	}
@@ -95,7 +97,7 @@ func (rp *Repository) RoomSummary(w http.ResponseWriter, r *http.Request) {
 }
 
 // RoomsAll show all rooms
-func (rp *Repository) RoomsAll() (dbrepo.Room, error) {
-	var roomsAll = dbrepo.Room{}
+func (rp *Repository) RoomsAll() (rooms.Room, error) {
+	var roomsAll = rooms.Room{}
 	return roomsAll, nil
 }
