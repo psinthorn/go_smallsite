@@ -7,6 +7,7 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/psinthorn/go_smallsite/domain/dbrepo"
+	"github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/users"
 )
 
@@ -15,10 +16,10 @@ func CreateSession() {
 
 	// register all models to session maybe use or not use
 	gob.Register(users.User{})
-	gob.Register(dbrepo.Room{})
-	gob.Register(dbrepo.RoomType{})
-	gob.Register(dbrepo.RoomStatus{})
-	gob.Register(dbrepo.RoomAllotmentStatus{})
+	gob.Register(rooms.Room{})
+	gob.Register(rooms.RoomType{})
+	gob.Register(rooms.RoomStatus{})
+	gob.Register(rooms.RoomAllotmentStatus{})
 	gob.Register(dbrepo.Reservation{})
 
 	// set up the session
