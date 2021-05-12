@@ -7,13 +7,14 @@ import (
 
 	"github.com/alexedwards/scs/v2"
 	"github.com/psinthorn/go_smallsite/domain/dbrepo"
+	"github.com/psinthorn/go_smallsite/domain/users"
 )
 
 // CreateSession and store session to AppConfig.Session
 func CreateSession() {
 
 	// register all models to session maybe use or not use
-	gob.Register(dbrepo.User{})
+	gob.Register(users.User{})
 	gob.Register(dbrepo.Room{})
 	gob.Register(dbrepo.RoomType{})
 	gob.Register(dbrepo.RoomStatus{})

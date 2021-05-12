@@ -46,7 +46,6 @@ func (rp *Repository) AddNewRoomType(w http.ResponseWriter, r *http.Request) {
 		UpdatedAt:   time.Now(),
 	}
 
-	//
 	form := forms.New(r.PostForm)
 	if !form.Valid() {
 		data := make(map[string]interface{})

@@ -53,6 +53,7 @@ func (rp *Repository) AddNewRoom(w http.ResponseWriter, r *http.Request) {
 	}
 	fmt.Println(room)
 
+	// Form validation form validation not pass then create new form and pass data back to form
 	form := forms.New(r.PostForm)
 	if !form.Valid() {
 		data := make(map[string]interface{})
