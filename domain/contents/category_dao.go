@@ -1,4 +1,4 @@
-package dbrepo
+package contents
 
 var CategoryService contentsDomainInterface = &Category{}
 

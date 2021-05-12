@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/psinthorn/go_smallsite/domain/dbrepo"
+	"github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -18,7 +18,7 @@ func (rp *Repository) GetAllRoomType(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rp *Repository) AddNewRoomTypeForm(w http.ResponseWriter, r *http.Request) {
-	var emptyRoomStatus dbrepo.RoomStatus
+	var emptyRoomStatus rooms.RoomStatus
 	data := make(map[string]interface{})
 	data["room"] = emptyRoomStatus
 
@@ -38,7 +38,7 @@ func (rp *Repository) AddNewRoomType(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Receive form value and pass to room status models
-	roomType := dbrepo.RoomType{
+	roomType := rooms.RoomType{
 		Title:       r.FormValue("title"),
 		Description: r.Form.Get("description"),
 		Status:      r.Form.Get("status"),
@@ -57,7 +57,7 @@ func (rp *Repository) AddNewRoomType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = dbrepo.RoomTypeService.Create(roomType)
+	_, err = rooms.RoomTypeService.Create(roomType)
 	if err != nil {
 		fmt.Println(err)
 		return

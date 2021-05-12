@@ -1,4 +1,4 @@
-package dbrepo
+package contents
 
 type category struct {
 	ID          string

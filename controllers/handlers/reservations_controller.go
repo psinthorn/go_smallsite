@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/psinthorn/go_smallsite/domain/dbrepo"
+	"github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -36,7 +37,6 @@ import (
 
 // CheckAvailability is check-availability page render
 func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request) {
-
 	stringMap := make(map[string]string)
 	remoteIP := rp.App.Session.GetString(r.Context(), "remote_ip")
 	stringMap["remote_ip"] = remoteIP
@@ -127,7 +127,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
 		RoomID:    roomID,
-		Room:      dbrepo.Room{},
+		Room:      rooms.Room{},
 		Status:    "stay",
 		StartDate: startDate,
 		EndDate:   endDate,
@@ -159,7 +159,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		panic(err)
 	}
 
-	rsvnAllmentStatus := dbrepo.RoomAllotmentStatus{
+	rsvnAllmentStatus := rooms.RoomAllotmentStatus{
 		RoomTypeID:    1,
 		RoomNoID:      1,
 		ReservationID: rsvnID,
@@ -170,7 +170,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		UpdatedAt:     time.Now(),
 	}
 
-	_, err = dbrepo.RoomAllotmentStatusService.Creat(rsvnAllmentStatus)
+	_, err = rooms.RoomAllotmentStatusService.Creat(rsvnAllmentStatus)
 	if err != nil {
 		fmt.Println(err)
 		return

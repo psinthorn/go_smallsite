@@ -41,9 +41,6 @@ func (m *User) Create(u User) (int, error) {
 		return 0, err
 	}
 	defer dbConn.SQL.Close()
-
-	fmt.Println(newUserID)
-
 	return newUserID, nil
 }
 
