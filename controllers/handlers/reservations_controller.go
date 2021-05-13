@@ -127,7 +127,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
 		RoomID:    roomID,
-		//Room:      rooms.Room{},
+		// Room:      rooms.Room{},
 		Status:    "stay",
 		StartDate: startDate,
 		EndDate:   endDate,

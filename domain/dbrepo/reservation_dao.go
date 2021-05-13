@@ -9,8 +9,9 @@ import (
 )
 
 const (
-	queryInsertReservation = "insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id"
-	querySelectAllRsvn     = "SELECT * FROM reservations"
+	queryInsertReservation  = "insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id"
+	querySelectAllRsvn      = "SELECT * FROM reservations"
+	querySearchAvailability = "SELECT count(id) FROM room_allotments WHERE room_no_id = $1 AND $2 < end_date AND $3 > start_date"
 )
 
 var ReservationService reservationDomainInterface = &Reservation{}
@@ -23,7 +24,7 @@ type reservationDomainInterface interface {
 	Update()
 	Delete()
 
-	SearchAvailability()
+	SearchAvailabilityByRoomId(roomID int, start, end time.Time) (bool, error)
 	PostSearchAvailability(sd string, ed string) (string, error)
 	AvailabilityResponse()
 }
@@ -75,7 +76,28 @@ func (r *Reservation) Update()  {}
 func (r *Reservation) Delete()  {}
 
 // CheckAvailability is check-availability page render
-func (r *Reservation) SearchAvailability() {
+func (r *Reservation) SearchAvailabilityByRoomId(roomID int, start, end time.Time) (bool, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return false, err
+	}
+
+	var numRows int
+	row := dbConn.SQL.QueryRowContext(ctx, querySearchAvailability, roomID, start, end)
+	err = row.Scan(&numRows)
+	if err != nil {
+		return false, err
+	}
+
+	if numRows == 0 {
+		return true, nil
+	}
+
+	defer dbConn.SQL.Close()
+	return false, nil
 
 }
 
