@@ -2,7 +2,6 @@ package dbrepo
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
@@ -13,7 +12,7 @@ const (
 	queryInsertReservation         = "insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id"
 	querySelectAllRsvn             = "SELECT * FROM reservations"
 	querySearchAvailability        = "SELECT count(id) FROM room_allotments WHERE room_no_id = $1 AND $2 < end_date AND $3 > start_date"
-	querySearchAvailabilityAllRoom = `SELECT r.id, r.room_name, r.room_type_id, room_no FROM rooms r WHERE r.id not in (SELECT room_id FROM room_allotments ra WHERE $1 < ra.end_date AND $2 > ra.start_date);`
+	querySearchAvailabilityAllRoom = `SELECT r.id, r.roomtype_id, r.room_no FROM rooms r WHERE r.id not in (SELECT ra.room_no_id FROM room_allotments ra WHERE $1 < ra.end_date AND $2 > ra.start_date)`
 )
 
 var ReservationService reservationDomainInterface = &Reservation{}
@@ -27,8 +26,7 @@ type reservationDomainInterface interface {
 	Delete()
 
 	SearchAvailabilityByRoomId(roomID int, start, end time.Time) (bool, error)
-	PostSearchAvailability(sd string, ed string) (string, error)
-	AvailabilityResponse()
+	SearchAvailabilityAllRoom(start, end time.Time) ([]rooms.Room, error)
 }
 
 // PostReservation is reservation page render
@@ -37,8 +35,6 @@ func (r *Reservation) Create(rsvn Reservation) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	fmt.Println(rsvn.StartDate)
-	fmt.Println(rsvn.EndDate)
 	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
 	if err != nil {
 		panic(err)
@@ -90,7 +86,7 @@ func (r *Reservation) SearchAvailabilityByRoomId(roomID int, start, end time.Tim
 }
 
 // SearchCheckAvailabilityAllRoom return a slice of available rooms for given date range
-func (r *Reservation) SearchAvailabilityAllRoom(start, end time.Time) ([]rooms.Room, error) {
+func (r *Reservation) SearchAvailabilityAllRoom(startDate, endDate time.Time) ([]rooms.Room, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -100,13 +96,13 @@ func (r *Reservation) SearchAvailabilityAllRoom(start, end time.Time) ([]rooms.R
 	}
 
 	var availableRooms []rooms.Room
-	rows, err := dbConn.SQL.QueryContext(ctx, querySearchAvailability, start, end)
+	rows, err := dbConn.SQL.QueryContext(ctx, querySearchAvailabilityAllRoom, startDate, endDate)
+
 	for rows.Next() {
 		var room rooms.Room
-		err = rows.Scan(
+		err := rows.Scan(
 			&room.ID,
 			&room.RoomTypeId,
-			&room.RoomName,
 			&room.RoomNo,
 		)
 		if err != nil {
@@ -117,38 +113,8 @@ func (r *Reservation) SearchAvailabilityAllRoom(start, end time.Time) ([]rooms.R
 	if err = rows.Err(); err != nil {
 		return nil, err
 	}
-	defer dbConn.SQL.Close()
 
+	defer dbConn.SQL.Close()
 	return availableRooms, nil
 
 }
-
-// PostSearchAlotment is check-availability page render
-func (r *Reservation) PostSearchAvailability(sd string, ed string) (string, error) {
-	return "", nil
-}
-
-// // AvailabilityResponse is availability response in json
-func (r *Reservation) AvailabilityResponse() {
-	// 	resp := jsonReponse{
-	// 		OK:      true,
-	// 		Message: "Hello Json",
-	// 	}
-
-	// 	out, err := json.MarshalIndent(resp, "", "     ")
-	// 	if err != nil {
-	// 		helpers.ServerError(w, err)
-	// 		return
-	// 	}
-	// 	w.Header().Set("Content-Type", "application/json")
-	// 	w.Write(out)
-
-}
-
-// Reservation is reservation page render
-// func Reservation() {
-// 	var emptyReservation Reservation
-// 	data := make(map[string]interface{})
-// 	data["reservation"] = emptyReservation
-
-// }

@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -15,11 +16,14 @@ func (m *Utils) StringToTime(sd, ed string) (time.Time, time.Time, error) {
 		return time.Time{}, time.Time{}, err
 	}
 
+	fmt.Println(startDate)
+
 	// zero time.Time value is time.Time{s}
 	endDate, err := time.Parse(dateLayout, ed)
 	if err != nil {
 		return time.Time{}, time.Time{}, err
 	}
+	fmt.Println(endDate)
 
 	return startDate, endDate, nil
 }

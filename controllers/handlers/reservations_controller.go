@@ -50,9 +50,37 @@ func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request)
 
 // PostSearchAlotment is check-availability page render
 func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Request) {
-	start := r.Form.Get("start")
-	end := r.Form.Get("end")
-	w.Write([]byte(fmt.Sprintf("Start Date: %s and End date is: %s", start, end)))
+
+	startDate, endDate, err := utils.UtilsService.StringToTime(r.Form.Get("start_date"), r.Form.Get("end_date"))
+	fmt.Println(startDate, endDate)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	rooms, err := dbrepo.ReservationService.SearchAvailabilityAllRoom(startDate, endDate)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	if len(rooms) == 0 {
+		rp.App.Session.Put(r.Context(), "error", "Sorry no rooms available on this period.")
+		http.Redirect(w, r, "/rooms/search-availability", http.StatusSeeOther)
+		return
+	}
+
+	data := make(map[string]interface{})
+	data["rooms"] = rooms
+
+	rsvn := dbrepo.Reservation{
+		StartDate: startDate,
+		EndDate:   endDate,
+	}
+
+	rp.App.Session.Put(r.Context(), "reservation", rsvn)
+	render.Template(w, r, "choose-room.page.html", &templates.TemplateData{
+		Data: data,
+	})
+
 }
 
 type jsonReponse struct {
@@ -102,7 +130,9 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Start Date: ", sd)
 	fmt.Println("End Date: ", ed)
 
+	// convert from string date to time.Time format
 	startDate, endDate, err := utils.UtilsService.StringToTime(sd, ed)
+
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -154,8 +184,8 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rsvnAllmentStatus := rooms.RoomAllotmentStatus{
-		RoomTypeID:    1,
-		RoomNoID:      1,
+		RoomTypeID:    3,
+		RoomNoID:      3,
 		ReservationID: rsvnID,
 		RoomStatusID:  2,
 		StartDate:     startDate,
