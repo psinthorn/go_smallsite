@@ -6,12 +6,14 @@ import (
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
+	"github.com/psinthorn/go_smallsite/domain/rooms"
 )
 
 const (
-	queryInsertReservation  = "insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id"
-	querySelectAllRsvn      = "SELECT * FROM reservations"
-	querySearchAvailability = "SELECT count(id) FROM room_allotments WHERE room_no_id = $1 AND $2 < end_date AND $3 > start_date"
+	queryInsertReservation         = "insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id"
+	querySelectAllRsvn             = "SELECT * FROM reservations"
+	querySearchAvailability        = "SELECT count(id) FROM room_allotments WHERE room_no_id = $1 AND $2 < end_date AND $3 > start_date"
+	querySearchAvailabilityAllRoom = `SELECT r.id, r.room_name, r.room_type_id, room_no FROM rooms r WHERE r.id not in (SELECT room_id FROM room_allotments ra WHERE $1 < ra.end_date AND $2 > ra.start_date);`
 )
 
 var ReservationService reservationDomainInterface = &Reservation{}
@@ -54,28 +56,14 @@ func (r *Reservation) Create(rsvn Reservation) (int, error) {
 
 // ReservationSummary for customer recheck information before submit
 func (r *Reservation) GetAll() {
-	// reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(reservations.Reservation)
-	// if !ok {
-	// 	rp.App.ErrorLog.Println("can't get reservation information from session")
-	// 	rp.App.Session.Put(r.Context(), "error", "can't get reservation information from session")
-	// 	http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
-	// 	return
-	// }
 
-	// rp.App.Session.Remove(r.Context(), "reservation")
-
-	// data := make(map[string]interface{})
-	// data["reservation"] = reservation
-	// render.Template(w, r, "reservation-summary.page.html", &templates.TemplateData{
-	// 	Data: data,
-	// })
 }
 
 func (r *Reservation) GetByID() {}
 func (r *Reservation) Update()  {}
 func (r *Reservation) Delete()  {}
 
-// CheckAvailability is check-availability page render
+// CheckAvailabilityByRoomId return available room of give room id with given dates
 func (r *Reservation) SearchAvailabilityByRoomId(roomID int, start, end time.Time) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -98,6 +86,40 @@ func (r *Reservation) SearchAvailabilityByRoomId(roomID int, start, end time.Tim
 
 	defer dbConn.SQL.Close()
 	return false, nil
+
+}
+
+// SearchCheckAvailabilityAllRoom return a slice of available rooms for given date range
+func (r *Reservation) SearchAvailabilityAllRoom(start, end time.Time) ([]rooms.Room, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return nil, err
+	}
+
+	var availableRooms []rooms.Room
+	rows, err := dbConn.SQL.QueryContext(ctx, querySearchAvailability, start, end)
+	for rows.Next() {
+		var room rooms.Room
+		err = rows.Scan(
+			&room.ID,
+			&room.RoomTypeId,
+			&room.RoomName,
+			&room.RoomNo,
+		)
+		if err != nil {
+			return nil, err
+		}
+		availableRooms = append(availableRooms, room)
+	}
+	if err = rows.Err(); err != nil {
+		return nil, err
+	}
+	defer dbConn.SQL.Close()
+
+	return availableRooms, nil
 
 }
 

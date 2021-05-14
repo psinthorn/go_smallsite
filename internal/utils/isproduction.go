@@ -7,15 +7,15 @@ import (
 	"github.com/psinthorn/go_smallsite/configs"
 )
 
-// Utils is use for public utilities method
-var (
-	Utils *utils
-)
+// // Utils is use for public utilities method
+// var (
+// 	Utils u
+// )
 
-type utils struct{}
+// type utils struct{}
 
 // IsProduction func is check local env return true or false
-func (u *utils) IsProduction(appConfig *configs.AppConfig) {
+func (u *Utils) IsProduction(appConfig *configs.AppConfig) {
 	// Add logic to check env that is dev or prod
 	hostName, _ := os.Hostname()
 	var isProduction bool

@@ -18,9 +18,9 @@ func (rp *Repository) GetAllRoomType(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rp *Repository) AddNewRoomTypeForm(w http.ResponseWriter, r *http.Request) {
-	var emptyRoomStatus rooms.RoomStatus
+	var emptyRoomType rooms.RoomType
 	data := make(map[string]interface{})
-	data["room"] = emptyRoomStatus
+	data["room"] = emptyRoomType
 
 	render.Template(w, r, "admin-roomtype-add-form.page.html", &templates.TemplateData{
 		Form: forms.New(nil),

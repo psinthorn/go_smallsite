@@ -39,8 +39,8 @@ func (rs *RoomStatus) Create(st RoomStatus) (int, error) {
 	if err != nil {
 		return 0, err
 	}
-	defer dbConn.SQL.Close()
 
+	defer dbConn.SQL.Close()
 	return newStatusId, nil
 }
 

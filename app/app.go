@@ -17,7 +17,7 @@ var errorLog *log.Logger
 func StartApp() error {
 
 	// Check env is production
-	utils.Utils.IsProduction(&appConfig)
+	utils.UtilsService.IsProduction(&appConfig)
 
 	// Write server and client error log to logs file
 	infoLog = log.New(os.Stdout, "Info\t", log.Ldate|log.Ltime)
