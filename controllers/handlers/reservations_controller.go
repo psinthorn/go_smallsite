@@ -15,6 +15,7 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
 	"github.com/psinthorn/go_smallsite/internal/render"
+	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
 // var (
@@ -101,24 +102,16 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Start Date: ", sd)
 	fmt.Println("End Date: ", ed)
 
-	dateLayout := "2006-01-02"
-	startDate, err := time.Parse(dateLayout, sd)
+	startDate, endDate, err := utils.UtilsService.StringToTime(sd, ed)
 	if err != nil {
-		panic(err)
-		// helpers.ServerError(w, err)
+		helpers.ServerError(w, err)
+		return
 	}
-	//startDate.Format("2006-01-02 15:04:05")
-	endDate, err := time.Parse(dateLayout, ed)
-	if err != nil {
-		panic(err)
-		// helpers.ServerError(w, err)
-	}
-	//endDate.Format("2006-01-02 15:04:05")
 
 	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
 	if err != nil {
-		panic(err)
-		// helpers.ServerError(w, err)
+		helpers.ServerError(w, err)
+		return
 	}
 
 	reservation := dbrepo.Reservation{
@@ -156,7 +149,8 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	rsvnID, err := dbrepo.ReservationService.Create(reservation)
 	if err != nil {
-		panic(err)
+		helpers.ServerError(w, err)
+		return
 	}
 
 	rsvnAllmentStatus := rooms.RoomAllotmentStatus{
@@ -172,7 +166,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	_, err = rooms.RoomAllotmentStatusService.Creat(rsvnAllmentStatus)
 	if err != nil {
-		fmt.Println(err)
+		helpers.ServerError(w, err)
 		return
 	}
 

@@ -22,7 +22,7 @@ func (rp *Repository) AddNewRoomStatusForm(w http.ResponseWriter, r *http.Reques
 	data := make(map[string]interface{})
 	data["room"] = emptyRoomStatus
 
-	render.Template(w, r, "room-status-add-form.page.html", &templates.TemplateData{
+	render.Template(w, r, "admin-roomstatus-add-form.page.html", &templates.TemplateData{
 		Form: forms.New(nil),
 		Data: data,
 	})
@@ -39,7 +39,7 @@ func (rp *Repository) AddNewRoomStatus(w http.ResponseWriter, r *http.Request) {
 
 	// Receive form value and pass to room status models
 	roomStatus := rooms.RoomStatus{
-		Title:       r.FormValue("title"),
+		Title:       r.Form.Get("title"),
 		Description: r.Form.Get("description"),
 		Status:      r.Form.Get("status"),
 		CreatedAt:   time.Now(),

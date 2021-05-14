@@ -18,6 +18,8 @@ type roomDomainInterface interface {
 	Create(Room) (int, error)
 }
 
+// Create insert and return room data
+// เพิ่มข้อมมูลห้องพักเก็บในดาต้าเบสและคืนข้อมูลที่เพิ่มสำเร็จแล้วกลับให้ผู้ใช้งาน
 func (s *Room) Create(room Room) (int, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
