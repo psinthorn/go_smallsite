@@ -4,11 +4,10 @@
 -- https://tableplus.com/
 --
 -- Database: go_smallsite_bookings
--- Generation Time: 2564-05-11 18:30:57.3010
+-- Generation Time: 2564-05-15 10:19:52.5490
 -- -------------------------------------------------------------
 
 
-DROP TABLE IF EXISTS "public"."room_types";
 -- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
 -- Sequence and defined type
