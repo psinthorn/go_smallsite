@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	queryInsertReservation         = "insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id"
+	queryInsertReservation         = "insert into reservations (first_name, last_name, email, phone, room_id, room_type_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10, $11) returning id"
 	querySelectAllRsvn             = "SELECT * FROM reservations"
 	querySearchAvailability        = "SELECT count(id) FROM room_allotments WHERE room_no_id = $1 AND $2 < end_date AND $3 > start_date"
 	querySearchAvailabilityAllRoom = `SELECT r.id, r.roomtype_id, r.room_no FROM rooms r WHERE r.id not in (SELECT ra.room_no_id FROM room_allotments ra WHERE $1 < ra.end_date AND $2 > ra.start_date)`

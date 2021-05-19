@@ -1,29 +1,17 @@
 package utils
 
 import (
-	"fmt"
 	"time"
 )
 
-func (m *Utils) StringToTime(sd, ed string) (time.Time, time.Time, error) {
+func (m *Utils) StringToTime(timeString string) (time.Time, error) {
 
 	// Date time layout
 	// startDate.Format("2006-01-02 15:04:05")
-	// endDate.Format("2006-01-02 15:04:05")
 	dateLayout := "2006-01-02"
-	startDate, err := time.Parse(dateLayout, sd)
+	timeTime, err := time.Parse(dateLayout, timeString)
 	if err != nil {
-		return time.Time{}, time.Time{}, err
+		return time.Time{}, err
 	}
-
-	fmt.Println(startDate)
-
-	// zero time.Time value is time.Time{s}
-	endDate, err := time.Parse(dateLayout, ed)
-	if err != nil {
-		return time.Time{}, time.Time{}, err
-	}
-	fmt.Println(endDate)
-
-	return startDate, endDate, nil
+	return timeTime, nil
 }

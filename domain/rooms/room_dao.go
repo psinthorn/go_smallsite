@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	queryInsertRoom = "insert into rooms (roomtype_id, room_name, room_no, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7) returning id"
+	queryInsertRoom  = "insert into rooms (roomtype_id, room_name, room_no, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7) returning id"
+	queryGetRoomByID = `SELECT (id, roomtype_id, room_name, room_no, description, status, created_at, updated_at) FROM rooms WHERE id = $1 `
 )
 
 var RoomService roomDomainInterface = &Room{}
@@ -37,4 +38,9 @@ func (s *Room) Create(room Room) (int, error) {
 	defer dbConn.SQL.Close()
 
 	return newRoomId, err
+}
+
+func (s *Room) GetRoomByID(id int) (Room, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+
 }

@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	queryInsertRoomType = `INSERT INTO room_types (title, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5) returning id`
+	queryInsertRoomType  = `INSERT INTO room_types (title, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5) returning id`
+	querygetRoomtypeByID = `select id, title from room_type where id = $1`
 )
 
 var RoomTypeService roomTypeInterface = &RoomType{}
@@ -38,6 +39,29 @@ func (rs *RoomType) Create(r RoomType) (int, error) {
 }
 
 func (rs *RoomType) GetAll() {}
-func (rs *RoomType) Get()    {}
+
+// GetRoomeTypeByID
+func (rs *RoomType) GetRoomTypeByID(id int) (RoomType, error) {
+
+	var roomType RoomType
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		panic(err)
+	}
+
+	err = dbConn.SQL.QueryRowContext(ctx, querygetRoomtypeByID, id).Scan(&roomType.ID, &roomType.Title)
+	if err != nil {
+		return roomType, err
+	}
+	defer dbConn.SQL.Close()
+
+	return roomType, nil
+}
+
 func (rs *RoomType) Update() {}
+
 func (rs *RoomType) Delete() {}

@@ -3,12 +3,13 @@
 package controllers
 
 import (
-	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 	"time"
 
+	"github.com/go-chi/chi"
 	"github.com/psinthorn/go_smallsite/domain/dbrepo"
 	"github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
@@ -51,7 +52,8 @@ func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request)
 // PostSearchAlotment is check-availability page render
 func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Request) {
 
-	startDate, endDate, err := utils.UtilsService.StringToTime(r.Form.Get("start_date"), r.Form.Get("end_date"))
+	startDate, err := utils.UtilsService.StringToTime(r.Form.Get("start_date"))
+	endDate, err := utils.UtilsService.StringToTime(r.Form.Get("end_date"))
 	fmt.Println(startDate, endDate)
 	if err != nil {
 		helpers.ServerError(w, err)
@@ -83,37 +85,53 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 
 }
 
-type jsonReponse struct {
-	OK      bool   `json: "ok"`
-	Message string `json: "message"`
-}
-
-// AvailabilityResponse is availability response in json
-func (rp *Repository) AvailabilityResponse(w http.ResponseWriter, r *http.Request) {
-	resp := jsonReponse{
-		OK:      true,
-		Message: "Hello Json",
-	}
-
-	out, err := json.MarshalIndent(resp, "", "     ")
+// ChooseRoom choose room for reservation
+func (rp *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
+	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
-	w.Write(out)
+
+	res, ok := rp.App.Session.Get(r.Context(), "reservation").(dbrepo.Reservation)
+	if !ok {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	res.RoomID = roomID
+	rp.App.Session.Put(r.Context(), "reservation", res)
+	http.Redirect(w, r, "/rooms/reservation", http.StatusSeeOther)
+}
+
+// AvailabilityResponse is availability response in json
+func (rp *Repository) AvailabilityResponse(w http.ResponseWriter, r *http.Request) {
 
 }
 
 // Reservation is reservation page render
 func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	var emptyReservation dbrepo.Reservation
+	rsvn, ok := rp.App.Session.Get(r.Context(), "reservation").(dbrepo.Reservation)
+	if !ok {
+		helpers.ServerError(w, errors.New("can't get reservation information"))
+		return
+	}
+
+	// convert time.Time to string for display in form
+	sd := rsvn.StartDate.Format("2006-01-02")
+	ed := rsvn.EndDate.Format("2006-01-02")
+
+	stringMap := make(map[string]string)
+	stringMap["start_date"] = sd
+	stringMap["end_date"] = ed
+
 	data := make(map[string]interface{})
-	data["reservation"] = emptyReservation
+	data["reservation"] = rsvn
 
 	render.Template(w, r, "make-reservation.page.html", &templates.TemplateData{
-		Form: forms.New(nil),
-		Data: data,
+		Form:      forms.New(nil),
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
 
@@ -131,7 +149,8 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("End Date: ", ed)
 
 	// convert from string date to time.Time format
-	startDate, endDate, err := utils.UtilsService.StringToTime(sd, ed)
+	startDate, err := utils.UtilsService.StringToTime(sd)
+	endDate, err := utils.UtilsService.StringToTime(ed)
 
 	if err != nil {
 		helpers.ServerError(w, err)
@@ -144,13 +163,18 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	roomType, err := rooms.RoomTypeService.GetRoomTypeByID()
+	if err != nil {
+
+	}
+
 	reservation := dbrepo.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
 		RoomID:    roomID,
-		// Room:      rooms.Room{},
+		Room:      rooms.Room{},
 		Status:    "stay",
 		StartDate: startDate,
 		EndDate:   endDate,

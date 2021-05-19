@@ -9,6 +9,38 @@
                 {{$rsvn := index .Data "reservation" }}
                 <form method="post" action="/rooms/reservation" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+
+                    <input type="hidden" name="room_id" value="{{$rsvn.RoomID}}">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="input-group mb-3">
+                                <label class="input-group-text w-40" for="inputGroupSelect01">Room Type: </label>
+                                <select class="form-select w-60" id="inputGroupSelect01">
+                                  <option selected>Choose...</option>
+                                  <option value="1" selected>Superior</option>
+                                  <option value="2">Deluxe</option>
+                                  <option value="3">Cabana</option>
+                                </select>
+                              </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                         <div class="form-group">
+                             <label for="start_date">Start Date:</label>
+                             <input class="form-control" id="start_date" autocomplete="off" type='text'
+                                    name='start_date'  value="{{index .StringMap "start_date"}}" required>
+                         </div>
+                        </div>
+    
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                         <div class="form-group">
+                             <label for="end_date">Departure Date:</label>
+                             <input class="form-control" id="end_date" autocomplete="off" type='text' name='end_date'  value="{{index .StringMap "end_date"}}" required>
+                         </div>
+                     </div>
+                    </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                             <div class="form-group">
@@ -32,38 +64,8 @@
                                        name='last_name' value="{{$rsvn.LastName}}" required>
                             </div>                           
                         </div>
-                    </div>
-                    
+                    </div>   
 
-                   <div class="row">
-                       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        <div class="form-group">
-                            <label for="start_date">Start Date:</label>
-                            {{with .Form.Errors.Get "start_date"}}
-                                <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get "start_date"}} is-invalid {{end}}"
-                                   id="start_date" autocomplete="off" type='text'
-                                   name='start_date'  required>
-                        </div>
-                       </div>
-
-                       <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-                        <div class="form-group">
-                            <label for="end_date">Departure Date:</label>
-                            {{with .Form.Errors.Get "end_date"}}
-                                <label class="text-danger">{{.}}</label>
-                            {{end}}
-                            <input class="form-control {{with .Form.Errors.Get "end_date"}} is-invalid {{end}}"
-                                   id="end_date" autocomplete="off" type='text'
-                                   name='end_date'  required>
-                        </div>
-
-                    </div>
-
-                    <input type="hidden" name="room_id" value="1">
-                   </div>
-                    
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">   
                         <div class="form-group">

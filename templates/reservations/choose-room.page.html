@@ -3,22 +3,23 @@
     {{define "content"}}
     <div class="container">
         <div class="row">
-            <div class="col-md-3"></div>
-            <div class="col-md-6">
                 <h1 class="mt-3">Choose room </h1>
-                {{$rooms := index .Data "rooms"}}
-                {{range $rooms}}
-                    <!-- {{.RoomName}} -->
-                    {{.RoomNo}}<br />
-                {{end}}
-               
-            </div>
-            <div class="col-md-3"></div>
-        </div>
-    
+        </div>   
+        <div class="row mt-5 mb-5">
+        {{$rooms := index .Data "rooms"}}
+            {{range $rooms}}
+                <div class="col-xs-4 col-sm-3 col-md-2 col-lg-1">
+                    <div class="card text-center">
+                        <a href="/rooms/reseration/choose-room/{{.RoomNo}}">{{.RoomNo}}</a>
+                    </div>
+                   
+                </div>
+            {{end}}
+            </div>                           
+        </div>                    
     </div>
-    
     {{end}}
+
 
     {{define "js"}}
     <!-- if you have specific javascript for this page put it here -->

@@ -2,6 +2,8 @@ package dbrepo
 
 import (
 	"time"
+
+	"github.com/psinthorn/go_smallsite/domain/rooms"
 )
 
 // Reservations is the reservation model
@@ -12,10 +14,11 @@ type reservation struct {
 	Email     string `json: "email"`
 	Phone     string `json: "phone"`
 	RoomID    int    `json: "room_id"`
-	// Room      rooms.Room `json: "room"`
-	Status    string    `json: "status"` // available, stay, clean, maintenance
-	StartDate time.Time `json: "start_date"`
-	EndDate   time.Time `json: "end_date"`
-	CreatedAt time.Time `json: "created_at"`
-	UpdatedAt time.Time `json: "updated_at"`
+	// RoomTypeID int        `json: "room_type_id"`
+	Room      rooms.Room `json: "room"`
+	Status    string     `json: "status"` // available, stay, clean, maintenance
+	StartDate time.Time  `json: "start_date"`
+	EndDate   time.Time  `json: "end_date"`
+	CreatedAt time.Time  `json: "created_at"`
+	UpdatedAt time.Time  `json: "updated_at"`
 }

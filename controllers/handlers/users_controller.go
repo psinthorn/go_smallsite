@@ -1,4 +1,4 @@
-// routes -> controllers -> services -> domain
+// routes -> controllers -> domain(models)
 
 package controllers
 
