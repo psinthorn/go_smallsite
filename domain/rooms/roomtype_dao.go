@@ -1,4 +1,4 @@
-package rooms
+package domain
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 
 const (
 	queryInsertRoomType  = `INSERT INTO room_types (title, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5) returning id`
-	querygetRoomtypeByID = `select id, title from room_type where id = $1`
+	querygetRoomtypeByID = `select id, title from room_types where id = $1`
 )
 
 var RoomTypeService roomTypeInterface = &RoomType{}
@@ -17,6 +17,7 @@ var RoomTypeService roomTypeInterface = &RoomType{}
 type RoomType roomType
 type roomTypeInterface interface {
 	Create(RoomType) (int, error)
+	GetRoomTypeByID(id int) (RoomType, error)
 }
 
 func (rs *RoomType) Create(r RoomType) (int, error) {
@@ -44,7 +45,6 @@ func (rs *RoomType) GetAll() {}
 func (rs *RoomType) GetRoomTypeByID(id int) (RoomType, error) {
 
 	var roomType RoomType
-
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 

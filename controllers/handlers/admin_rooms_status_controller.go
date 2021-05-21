@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/psinthorn/go_smallsite/domain/rooms"
+	domain "github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -18,7 +18,7 @@ func (rp *Repository) GetAllRoomStatus(w http.ResponseWriter, r *http.Request) {
 }
 
 func (rp *Repository) AddNewRoomStatusForm(w http.ResponseWriter, r *http.Request) {
-	var emptyRoomStatus rooms.RoomStatus
+	var emptyRoomStatus domain.RoomStatus
 	data := make(map[string]interface{})
 	data["room"] = emptyRoomStatus
 
@@ -38,7 +38,7 @@ func (rp *Repository) AddNewRoomStatus(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Receive form value and pass to room status models
-	roomStatus := rooms.RoomStatus{
+	roomStatus := domain.RoomStatus{
 		Title:       r.Form.Get("title"),
 		Description: r.Form.Get("description"),
 		Status:      r.Form.Get("status"),
@@ -58,7 +58,7 @@ func (rp *Repository) AddNewRoomStatus(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = rooms.RoomStatusService.Create(roomStatus)
+	_, err = domain.RoomStatusService.Create(roomStatus)
 	if err != nil {
 		fmt.Println(err)
 		return

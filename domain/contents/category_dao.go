@@ -1,4 +1,4 @@
-package contents
+package domain
 
 var CategoryService contentsDomainInterface = &Category{}
 

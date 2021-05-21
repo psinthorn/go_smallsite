@@ -10,8 +10,8 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
-	"github.com/psinthorn/go_smallsite/domain/dbrepo"
-	"github.com/psinthorn/go_smallsite/domain/rooms"
+	domain_reservation "github.com/psinthorn/go_smallsite/domain/reservations"
+	domain "github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -60,7 +60,7 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	rooms, err := dbrepo.ReservationService.SearchAvailabilityAllRoom(startDate, endDate)
+	rooms, err := domain_reservation.ReservationService.SearchAvailabilityAllRoom(startDate, endDate)
 	if err != nil {
 		helpers.ServerError(w, err)
 	}
@@ -70,10 +70,12 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
+	fmt.Println("room details: ", rooms)
+
 	data := make(map[string]interface{})
 	data["rooms"] = rooms
 
-	rsvn := dbrepo.Reservation{
+	rsvn := domain_reservation.Reservation{
 		StartDate: startDate,
 		EndDate:   endDate,
 	}
@@ -88,34 +90,50 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 // ChooseRoom choose room for reservation
 func (rp *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
+	roomTypeId, err := strconv.Atoi(chi.URLParam(r, "type"))
+	roomNo, err := strconv.Atoi(chi.URLParam(r, "no"))
+
+	fmt.Println("Choose room ------------------------------")
+	fmt.Println("Room ID: ", roomID)
+	fmt.Println("Room Type ID: ", roomTypeId)
+	fmt.Println("Room No: ", roomNo)
+	fmt.Println("------------------------------------------")
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	res, ok := rp.App.Session.Get(r.Context(), "reservation").(dbrepo.Reservation)
+	res, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
 	if !ok {
 		helpers.ServerError(w, err)
 		return
 	}
 
 	res.RoomID = roomID
+	res.Room.RoomTypeId = roomTypeId
+	res.Room.RoomNo = roomNo
+
 	rp.App.Session.Put(r.Context(), "reservation", res)
 	http.Redirect(w, r, "/rooms/reservation", http.StatusSeeOther)
 }
 
-// AvailabilityResponse is availability response in json
-func (rp *Repository) AvailabilityResponse(w http.ResponseWriter, r *http.Request) {
-
-}
-
 // Reservation is reservation page render
 func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
-	rsvn, ok := rp.App.Session.Get(r.Context(), "reservation").(dbrepo.Reservation)
+	rsvn, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
 	if !ok {
 		helpers.ServerError(w, errors.New("can't get reservation information"))
 		return
 	}
+	fmt.Println("room type ID: ", rsvn.Room.RoomTypeId)
+	roomTypeID := rsvn.Room.RoomTypeId
+	roomType, err := domain.RoomTypeService.GetRoomTypeByID(roomTypeID)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	fmt.Println("Room type by ID: ", roomType)
+	roomTypeTitle := roomType.Title
 
 	// convert time.Time to string for display in form
 	sd := rsvn.StartDate.Format("2006-01-02")
@@ -124,8 +142,11 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	stringMap := make(map[string]string)
 	stringMap["start_date"] = sd
 	stringMap["end_date"] = ed
+	stringMap["room_type"] = roomTypeTitle
+	stringMap["room_type_id"] = strconv.Itoa(roomTypeID)
 
 	data := make(map[string]interface{})
+
 	data["reservation"] = rsvn
 
 	render.Template(w, r, "make-reservation.page.html", &templates.TemplateData{
@@ -145,37 +166,49 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	sd := r.Form.Get("start_date")
 	ed := r.Form.Get("end_date")
+	roomTypeTitle := r.Form.Get("room_type")
+	roomTypeId := r.Form.Get("room_type_id")
+	roomTypeIdInt, err := strconv.Atoi(roomTypeId)
+	roomId := r.Form.Get("room_id")
+	roomIdInt, err := strconv.Atoi(roomId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	fmt.Println("Room ID is: ", roomIdInt)
+	fmt.Println("Room Type ID is: ", roomTypeIdInt)
 	fmt.Println("Start Date: ", sd)
 	fmt.Println("End Date: ", ed)
+	fmt.Println("Room type: ", roomTypeTitle)
 
 	// convert from string date to time.Time format
 	startDate, err := utils.UtilsService.StringToTime(sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 	endDate, err := utils.UtilsService.StringToTime(ed)
-
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
+	room, err := domain.RoomService.GetRoomByID(roomIdInt)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	roomType, err := rooms.RoomTypeService.GetRoomTypeByID()
-	if err != nil {
+	fmt.Println("get room by id: ", room)
 
-	}
-
-	reservation := dbrepo.Reservation{
+	reservation := domain_reservation.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
-		RoomID:    roomID,
-		Room:      rooms.Room{},
-		Status:    "stay",
+		RoomID:    roomIdInt,
+		//Room:      room,
+		Status:    "reservation",
 		StartDate: startDate,
 		EndDate:   endDate,
 		CreatedAt: time.Now(),
@@ -192,24 +225,33 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	form.IsEmail("email")
 
 	if !form.Valid() {
+		stringMap := make(map[string]string)
+		stringMap["start_date"] = sd
+		stringMap["end_date"] = ed
+		stringMap["room_type"] = roomTypeTitle
+		stringMap["room_type_id"] = roomTypeId
+
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
 		render.Template(w, r, "make-reservation.page.html", &templates.TemplateData{
-			Form: form,
-			Data: data,
+			Form:      form,
+			Data:      data,
+			StringMap: stringMap,
 		})
 		return
 	}
 
-	rsvnID, err := dbrepo.ReservationService.Create(reservation)
+	rsvnID, err := domain_reservation.ReservationService.Create(reservation)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	rsvnAllmentStatus := rooms.RoomAllotmentStatus{
-		RoomTypeID:    3,
-		RoomNoID:      3,
+	fmt.Println("room type for allotment: ", roomTypeIdInt)
+	fmt.Println("room id for allotment: ", roomIdInt)
+	rsvnAllmentStatus := domain.RoomAllotmentStatus{
+		RoomTypeID:    roomTypeIdInt,
+		RoomNoID:      roomIdInt,
 		ReservationID: rsvnID,
 		RoomStatusID:  2,
 		StartDate:     startDate,
@@ -218,7 +260,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		UpdatedAt:     time.Now(),
 	}
 
-	_, err = rooms.RoomAllotmentStatusService.Creat(rsvnAllmentStatus)
+	_, err = domain.RoomAllotmentStatusService.Creat(rsvnAllmentStatus)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -232,7 +274,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 // ReservationSummary for customer recheck information before submit
 func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
-	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(dbrepo.Reservation)
+	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
 	if !ok {
 		rp.App.ErrorLog.Println("can't get reservation information from session")
 		rp.App.Session.Put(r.Context(), "error", "can't get reservation information from session")

@@ -9,7 +9,8 @@ import (
 	"time"
 
 	"github.com/psinthorn/go_smallsite/domain/templates"
-	"github.com/psinthorn/go_smallsite/domain/users"
+	domain "github.com/psinthorn/go_smallsite/domain/users"
+
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
 	"github.com/psinthorn/go_smallsite/internal/render"
@@ -31,7 +32,7 @@ import (
 
 // AddNewUserForm
 func (rp *Repository) AddNewUserForm(w http.ResponseWriter, r *http.Request) {
-	var emptyUser users.User
+	var emptyUser domain.User
 	data := make(map[string]interface{})
 	data["user"] = emptyUser
 
@@ -54,7 +55,7 @@ func (rp *Repository) AddNewUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	newUser := users.User{
+	newUser := domain.User{
 		FirstName:   r.Form.Get("first_name"),
 		LastName:    r.Form.Get("last_name"),
 		Email:       r.Form.Get("email"),
@@ -77,7 +78,7 @@ func (rp *Repository) AddNewUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = users.UserService.Create(newUser)
+	_, err = domain.UserService.Create(newUser)
 	if err != nil {
 		log.Fatal(err)
 	}
