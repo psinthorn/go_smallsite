@@ -1,4 +1,4 @@
-package contents
+package domain
 
 import (
 	"errors"

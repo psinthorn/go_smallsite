@@ -13,5 +13,5 @@ type utils struct{}
 
 type utilsInterface interface {
 	IsProduction(appConfig *configs.AppConfig)
-	StringToTime(s1, s2 string) (time.Time, time.Time, error)
+	StringToTime(timeString string) (time.Time, error)
 }

@@ -6,8 +6,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/psinthorn/go_smallsite/domain/dbrepo"
-	"github.com/psinthorn/go_smallsite/domain/rooms"
+	domain_reservation "github.com/psinthorn/go_smallsite/domain/reservations"
+	domain "github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -21,7 +21,7 @@ func (rp *Repository) RoomGetAll(w http.ResponseWriter, r *http.Request) {
 
 // GetRoomForm form for create new room
 func (rp *Repository) AddNewRoomForm(w http.ResponseWriter, r *http.Request) {
-	var emptyRoom rooms.Room
+	var emptyRoom domain.Room
 	data := make(map[string]interface{})
 	data["room"] = emptyRoom
 
@@ -43,10 +43,10 @@ func (rp *Repository) AddNewRoom(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
-	room := rooms.Room{
-		RoomTypeId:  roomTypeId,
-		RoomName:    r.Form.Get("room_name"),
-		RoomNo:      r.Form.Get("room_no"),
+	room := domain.Room{
+		RoomTypeId: roomTypeId,
+		RoomName:   r.Form.Get("room_name"),
+		//RoomNo:      r.Form.Get("room_no"),
 		Description: r.Form.Get("description"),
 		Status:      r.Form.Get("status"),
 		CreatedAt:   time.Now(),
@@ -66,7 +66,7 @@ func (rp *Repository) AddNewRoom(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = rooms.RoomService.Create(room)
+	_, err = domain.RoomService.Create(room)
 	if err != nil {
 		panic(err)
 	}
@@ -79,7 +79,7 @@ func (rp *Repository) AddNewRoom(w http.ResponseWriter, r *http.Request) {
 
 // ReservationSummary for customer recheck information before submit
 func (rp *Repository) RoomSummary(w http.ResponseWriter, r *http.Request) {
-	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(dbrepo.Reservation)
+	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
 	if !ok {
 		rp.App.ErrorLog.Println("can't get reservation information from session")
 		rp.App.Session.Put(r.Context(), "error", "can't get reservation information from session")
@@ -97,7 +97,7 @@ func (rp *Repository) RoomSummary(w http.ResponseWriter, r *http.Request) {
 }
 
 // RoomsAll show all rooms
-func (rp *Repository) RoomsAll() (rooms.Room, error) {
-	var roomsAll = rooms.Room{}
+func (rp *Repository) RoomsAll() (domain.Room, error) {
+	var roomsAll = domain.Room{}
 	return roomsAll, nil
 }
