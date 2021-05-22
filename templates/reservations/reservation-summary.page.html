@@ -13,12 +13,16 @@
                             <td>{{$rsvn.FirstName}} {{$rsvn.LastName}}</td>
                         </tr>
                         <tr>
+                            <td>Room Type:</td>
+                            <td>{{index .StringMap "room_type"}}</td>
+                        </tr>
+                        <tr>
                             <td>Arrival:</td>
-                            <td>{{$rsvn.StartDate}}</td>
+                            <td>{{index .StringMap "start_date"}}</td>
                         </tr>
                         <tr>
                             <td>Departure:</td>
-                            <td>{{$rsvn.EndDate}}</td>
+                            <td>{{index .StringMap "end_date"}}</td>
                         </tr>
                         <tr>
                             <td>Email</td>

@@ -2,7 +2,6 @@ package domain
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
@@ -42,7 +41,7 @@ func (s *Room) Create(room Room) (int, error) {
 }
 
 func (s *Room) GetRoomByID(id int) (Room, error) {
-	fmt.Println("room id for getroomby id is: ", id)
+
 	var roombyId Room
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -65,8 +64,6 @@ func (s *Room) GetRoomByID(id int) (Room, error) {
 	if err != nil {
 		return roombyId, err
 	}
-
-	fmt.Println("print room from dao: ", roombyId)
 	defer dbConn.SQL.Close()
 
 	return roombyId, nil

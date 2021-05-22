@@ -4,7 +4,6 @@ package controllers
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -18,24 +17,6 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/render"
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
-
-// var (
-// 	ReservationsController reservationsController
-// )
-
-// type reservationsControllerInterface interface {
-// 	SearchAvailability(w http.ResponseWriter, r *http.Request)
-// 	PostSearchAvailability(w http.ResponseWriter, r *http.Request)
-// 	AvailabilityResponse(w http.ResponseWriter, r *http.Request)
-// 	Reservation(w http.ResponseWriter, r *http.Request)
-// 	PostReservation(w http.ResponseWriter, r *http.Request)
-// 	ReservationSummary(w http.ResponseWriter, r *http.Request)
-// }
-
-// type reservationsController struct {
-// 	// App *configs.AppConfig
-// 	// DB  interface{}
-// }
 
 // CheckAvailability is check-availability page render
 func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request) {
@@ -54,7 +35,6 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 
 	startDate, err := utils.UtilsService.StringToTime(r.Form.Get("start_date"))
 	endDate, err := utils.UtilsService.StringToTime(r.Form.Get("end_date"))
-	fmt.Println(startDate, endDate)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -90,12 +70,6 @@ func (rp *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	roomID, err := strconv.Atoi(chi.URLParam(r, "id"))
 	roomTypeId, err := strconv.Atoi(chi.URLParam(r, "type"))
 	roomNo, err := strconv.Atoi(chi.URLParam(r, "no"))
-
-	fmt.Println("Choose room ------------------------------")
-	fmt.Println("Room ID: ", roomID)
-	fmt.Println("Room Type ID: ", roomTypeId)
-	fmt.Println("Room No: ", roomNo)
-	fmt.Println("------------------------------------------")
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -122,7 +96,7 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, errors.New("can't get reservation information"))
 		return
 	}
-	fmt.Println("room type ID: ", rsvn.Room.RoomTypeId)
+	// fmt.Println("room type ID: ", rsvn.Room.RoomTypeId)
 	roomTypeID := rsvn.Room.RoomTypeId
 	roomType, err := domain.RoomTypeService.GetRoomTypeByID(roomTypeID)
 	if err != nil {
@@ -272,11 +246,18 @@ func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request)
 		return
 	}
 
+	sd := reservation.StartDate.Format("2006-01-02")
+	ed := reservation.EndDate.Format("2006-01-02")
+	stringMap := make(map[string]string)
+	stringMap["start_date"] = sd
+	stringMap["end_date"] = ed
+
 	rp.App.Session.Remove(r.Context(), "reservation")
 
 	data := make(map[string]interface{})
 	data["reservation"] = reservation
 	render.Template(w, r, "reservation-summary.page.html", &templates.TemplateData{
-		Data: data,
+		Data:      data,
+		StringMap: stringMap,
 	})
 }
