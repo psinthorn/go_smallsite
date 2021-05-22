@@ -70,8 +70,6 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 		return
 	}
 
-	fmt.Println("room details: ", rooms)
-
 	data := make(map[string]interface{})
 	data["rooms"] = rooms
 
@@ -131,8 +129,6 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
-
-	fmt.Println("Room type by ID: ", roomType)
 	roomTypeTitle := roomType.Title
 
 	// convert time.Time to string for display in form
@@ -169,17 +165,16 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	roomTypeTitle := r.Form.Get("room_type")
 	roomTypeId := r.Form.Get("room_type_id")
 	roomTypeIdInt, err := strconv.Atoi(roomTypeId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 	roomId := r.Form.Get("room_id")
 	roomIdInt, err := strconv.Atoi(roomId)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	fmt.Println("Room ID is: ", roomIdInt)
-	fmt.Println("Room Type ID is: ", roomTypeIdInt)
-	fmt.Println("Start Date: ", sd)
-	fmt.Println("End Date: ", ed)
-	fmt.Println("Room type: ", roomTypeTitle)
 
 	// convert from string date to time.Time format
 	startDate, err := utils.UtilsService.StringToTime(sd)
@@ -199,15 +194,13 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	fmt.Println("get room by id: ", room)
-
 	reservation := domain_reservation.Reservation{
 		FirstName: r.Form.Get("first_name"),
 		LastName:  r.Form.Get("last_name"),
 		Email:     r.Form.Get("email"),
 		Phone:     r.Form.Get("phone"),
 		RoomID:    roomIdInt,
-		//Room:      room,
+		Room:      room,
 		Status:    "reservation",
 		StartDate: startDate,
 		EndDate:   endDate,
@@ -246,9 +239,6 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
-
-	fmt.Println("room type for allotment: ", roomTypeIdInt)
-	fmt.Println("room id for allotment: ", roomIdInt)
 	rsvnAllmentStatus := domain.RoomAllotmentStatus{
 		RoomTypeID:    roomTypeIdInt,
 		RoomNoID:      roomIdInt,

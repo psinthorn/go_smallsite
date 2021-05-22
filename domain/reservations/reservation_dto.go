@@ -16,10 +16,10 @@ type reservation struct {
 	RoomID    int    `json: "room_id"`
 	// RoomNo     int         `json: "room_no"`
 	// RoomTypeID int         `json: "room_type_id"`
-	Room      domain.Room `json: "room"`
 	Status    string      `json: "status"` // available, stay, clean, maintenance
 	StartDate time.Time   `json: "start_date"`
 	EndDate   time.Time   `json: "end_date"`
 	CreatedAt time.Time   `json: "created_at"`
 	UpdatedAt time.Time   `json: "updated_at"`
+	Room      domain.Room `json: "room"`
 }
