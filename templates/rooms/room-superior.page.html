@@ -44,10 +44,10 @@
                   <div class="col">
                       <div class="form-row" id="reservation-dates-modal">
                           <div class="col">
-                              <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
+                              <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival" autocomplete="off">
                           </div>
                           <div class="col">
-                              <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
+                              <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure" autocomplete="off">
                           </div>
   
                       </div>
@@ -64,6 +64,7 @@
                       const rp = new DateRangePicker(elem, {
                           format: 'yyyy-mm-dd',
                           showOnFocus: true,
+                          minDate: new Date(),
                       })
             },
 
