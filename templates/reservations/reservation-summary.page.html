@@ -5,7 +5,8 @@
     <div class="container mt-5 mb-5">
         <div class="row">
             <div class="col">
-                <h1 class="mt-5 mb-3">Reservation Infomation</h1>
+                <h2 class="mt-5 mb-3">Thank you for reservation with us.</h2>
+                <h3 class="mt-5 mb-3">Reservation Infomation</h3>
                 <table class="table tabel-stripe">
                     <thead> </thead>
                         <tr>
@@ -14,7 +15,7 @@
                         </tr>
                         <tr>
                             <td>Room Type:</td>
-                            <td>{{index .StringMap "room_type"}}</td>
+                            <td>{{$rsvn.RoomTypeName}}</td>
                         </tr>
                         <tr>
                             <td>Arrival:</td>

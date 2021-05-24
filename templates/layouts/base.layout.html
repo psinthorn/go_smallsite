@@ -18,39 +18,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
     <link rel="stylesheet" type="text/css" href="static/css/styles.css">
 
-    <style>
-        html, body {
-            margin: 0px;
-            padding: 0px;
-        }
-
-        .btn-outline-secondary {
-            color: aqua;
-            border-color: #6c757d;
-        }
-
-        p {
-
-        }
-
-        .paraClass {
-            font-size: 3em;
-        }
-
-        .secondClass {
-            color: red;
-        }
-
-        #lastPara {
-            text-decoration: underline;
-        }
-
-        .main-carousel {
-            margin: 0px;
-            padding: 0px;
-        }
-    </style>
-
 </head>
 
 <body>
@@ -91,8 +58,19 @@
                     <a class="nav-link" href="/users/login">Login</a>
                 </li>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="/users/logout">Logout</a>
+                </li> -->
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/rooms/superior">Dashboard</a>
+                        <a class="dropdown-item" href="/rooms/deluxe">Logout</a>
+                    </div>
                 </li>
 
 
@@ -155,18 +133,13 @@
                   }, false);
               });
           }, false);
-      })();
-  
-    
-  
-      
+      })();     
       function notify(msg, msgType) {
           notie.alert({
               type: msgType,
               text: msg,
           })
-      }
-  
+      } 
       function notifyModal(title, text, icon, confirmationButtonText) {
           Swal.fire({
               title: title,

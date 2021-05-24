@@ -48,7 +48,7 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Get("/rooms/reservation-summary", controllers.HandlerRepo.ReservationSummary)
 
 	// Admin routing section
-	mux.Get("/admin/dashboard", controllers.HandlerRepo.Contact)
+	mux.Get("/admin/dashboard", controllers.HandlerRepo.AdminDashBoard)
 
 	// Admin user management
 	mux.Get("/admin/users/register", controllers.HandlerRepo.AddNewUserForm)
