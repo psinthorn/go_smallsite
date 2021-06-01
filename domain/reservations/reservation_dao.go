@@ -2,6 +2,7 @@ package domain_reservation
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
@@ -75,6 +76,8 @@ func (r *Reservation) SearchAvailabilityByRoomId(roomID int, start, end time.Tim
 	if err != nil {
 		return false, err
 	}
+
+	fmt.Println("numRows", numRows)
 
 	if numRows == 0 {
 		return true, nil

@@ -43,6 +43,23 @@
           </li>
         </ul>
         <ul class="navbar-nav navbar-nav-right">
+
+          <li class="nav-item dropdown mr-1">
+            <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
+              <i class="ti-world mx-0"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="messageDropdown">
+              <!-- <p class="mb-0 font-weight-normal float-left dropdown-header">Messages</p> -->
+              <a href="/" class="dropdown-item">               
+                <div class="item-content flex-grow">
+                  <p class="font-weight-light small-text text-muted mb-0">
+                    View Public Site
+                  </p>
+                </div>
+              </a>
+            </div>
+          </li>
+
           <li class="nav-item dropdown mr-1">
             <a class="nav-link count-indicator dropdown-toggle d-flex justify-content-center align-items-center" id="messageDropdown" href="#" data-toggle="dropdown">
               <i class="ti-email mx-0"></i>
@@ -167,6 +184,39 @@
               <span class="menu-title">Dashboard</span>
             </a>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#rsvn-sub" aria-expanded="false" aria-controls="rsvn-sub">
+              <i class="ti-ink-pen menu-icon"></i>
+              <span class="menu-title">Reservations</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="rsvn-sub">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/admin/reservations/reservation-list">All Reservations</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/rooms/reservation">New Booking</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/reservations/status">Booking Status</a></li>
+              </ul>
+            </div>
+          </li>
+
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#rooms-sub" aria-expanded="false" aria-controls="rooms-sub">
+              <i class="ti-agenda menu-icon"></i>
+              <span class="menu-title">Rooms</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="rooms-sub">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/admin/reservations/reservation-list">All Rooms</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/room">New Room</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/room-status">Room Status</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/roomtype">Room Type</a></li>
+              </ul>
+            </div>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
               <i class="ti-palette menu-icon"></i>
@@ -207,15 +257,16 @@
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
               <i class="ti-user menu-icon"></i>
-              <span class="menu-title">User Pages</span>
+              <span class="menu-title">User</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="auth">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="/static/admin/pages/samples/login.html"> Login </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/login"> Login </a></li>
                 <li class="nav-item"> <a class="nav-link" href="/static/admin/pages/samples/login-2.html"> Login 2 </a></li>
-                <li class="nav-item"> <a class="nav-link" href="/static/admin/pages/samples/register.html"> Register </a></li>
-                <li class="nav-item"> <a class="nav-link" href="/static/admin/pages/samples/register-2.html"> Register 2 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/users/register"> Register </a></li>
+                  <li class="nav-item"> <a class="nav-link" href="/static/admin/pages/samples/register.html"> Register2 </a></li>
+                <li class="nav-item"> <a class="nav-link" href="/static/admin/pages/samples/register-2.html"> Register 3 </a></li>
                 <li class="nav-item"> <a class="nav-link" href="/static/admin/pages/samples/lock-screen.html"> Lockscreen </a></li>
               </ul>
             </div>
@@ -271,19 +322,19 @@
   <!-- container-scroller -->
 
   <!-- plugins:js -->
-  <script src="vendors/base/vendor.bundle.base.js"></script>
+  <script src="/static/admin/vendors/base/vendor.bundle.base.js"></script>
   <!-- endinject -->
   <!-- Plugin js for this page-->
-  <script src="vendors/chart.js/Chart.min.js"></script>
+  <script src="/static/admin/vendors/chart.js/Chart.min.js"></script>
   <!-- End plugin js for this page-->
   <!-- inject:js -->
-  <script src="js/off-canvas.js"></script>
-  <script src="js/hoverable-collapse.js"></script>
-  <script src="js/template.js"></script>
-  <script src="js/todolist.js"></script>
+  <script src="/static/admin/js/off-canvas.js"></script>
+  <script src="/static/admin/js/hoverable-collapse.js"></script>
+  <script src="/static/admin/js/template.js"></script>
+  <script src="/static/admin/js/todolist.js"></script>
   <!-- endinject -->
   <!-- Custom js for this page-->
-  <script src="js/dashboard.js"></script>
+  <script src="/static/admin/js/dashboard.js"></script>
   <!-- End custom js for this page-->
 
   <!-- block per page javascript -->

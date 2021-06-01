@@ -3,7 +3,9 @@
 package controllers
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 	"strconv"
 	"time"
@@ -261,4 +263,51 @@ func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request)
 		Data:      data,
 		StringMap: stringMap,
 	})
+}
+
+// API section
+
+type JsonResponse struct {
+	Ok      bool   `json: "ok"`
+	Message string `json: "message"`
+}
+
+func (rp *Repository) AvailabilityJson(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("testing json 2")
+
+	startDate, err := utils.UtilsService.StringToTime(r.Form.Get("start_date"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	endDate, err := utils.UtilsService.StringToTime(r.Form.Get("end_date"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	roomID, err := strconv.Atoi(r.Form.Get("room_id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	available, err := domain_reservation.ReservationService.SearchAvailabilityByRoomId(roomID, startDate, endDate)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	res := JsonResponse{
+		Ok:      available,
+		Message: fmt.Sprintf("Room is available"),
+	}
+	out, err := json.MarshalIndent(res, "", "     ")
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(out)
 }

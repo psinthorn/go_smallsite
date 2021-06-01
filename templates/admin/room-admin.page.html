@@ -1,10 +1,14 @@
 {{template "base-admin" .}}
 
+{{define "admin-page-title"}}
+    Room management
+{{end}}
+
 {{define "content"}}
-    <div class="container mt-5 mb-5">
+    <div class="container">
         <div class="row">
             <div class="col">
-                <h1 class="mt-5 mb-3">Room Management</h1>
+                <h4 class="mt-5 mb-3">Room Management</h4>
 
                 {{$r := index .Data "room" }}
                 <form method="post" action="/rooms/reservation" class="" novalidate>

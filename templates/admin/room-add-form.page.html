@@ -1,11 +1,15 @@
 {{template "admin-base" .}}
 
+{{define "admin-page-title"}}
+    Room management
+{{end}}
+
 {{define "content"}}
-    <div class="container mt-5 mb-5">
+    <div class="container">
         <a href="/admin/rooms" type="button" class="btn btn-warning">Back</a>
         <div class="row">
             <div class="col">
-                <h1 class="mt-5 mb-3">Room Management: Add New Room</h1>
+                <h4 class="mt-5 mb-3">Add new room</h4>
 
                 {{$r := index .Data "room" }}
                 <form method="post" action="/admin/rooms/room/new" class="" novalidate>
