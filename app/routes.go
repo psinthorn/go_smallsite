@@ -40,7 +40,7 @@ func routes(app *configs.AppConfig) http.Handler {
 	// Reservation routing section
 	mux.Get("/rooms/search-availability", controllers.HandlerRepo.SearchAvailability)
 	mux.Post("/rooms/search-availability", controllers.HandlerRepo.PostSearchAvailability)
-	//mux.Post("/rooms/search-availability-response", controllers.HandlerRepo.AvailabilityResponse)
+	mux.Post("/rooms/search-availability-response", controllers.HandlerRepo.AvailabilityJson)
 	mux.Get("/rooms", controllers.HandlerRepo.Rooms)
 	mux.Get("/rooms/reservation", controllers.HandlerRepo.Reservation)
 	mux.Post("/rooms/reservation", controllers.HandlerRepo.PostReservation)

@@ -1,11 +1,15 @@
 {{template "admin-base" .}}
 
+{{define "admin-page-title"}}
+    User management
+{{end}}
+
 {{define "content"}}
-<div class="container mt-5 mb-5"> 
+<div class="container"> 
     <a href="/admin/users/user" type="button" class="btn btn-warning">Back</a>
     <div class="row">
         <div class="col">
-            <h1 class="mt-5 mb-3">User Management: Add New User</h1>
+            <h4 class="mt-5 mb-3">Add New User</h4>
             {{$r := index .Data "users" }}
             <form method="post" action="/admin/users/user/new" class="" novalidate>
                 <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
