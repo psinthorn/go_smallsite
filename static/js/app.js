@@ -65,6 +65,7 @@ function Prompt() {
             showConfirmButton = true,
             showCloseButton = true,
             showCancelButton =  true,
+            cancelButtonText = "Cancel",
         } = c;
 
         const { value: results } = await Swal.fire({
@@ -74,8 +75,10 @@ function Prompt() {
             backdrop: true,
             focusConfirm: false,
             showCloseButton: showCloseButton,
-            showCancelButton: showCancelButton,
             showConfirmButton: showConfirmButton,
+            showCancelButton: showCancelButton,
+            cancelButtonText: cancelButtonText,
+
             willOpen: () => {
                if(c.willOpen !== undefined){
                   c.willOpen();
