@@ -49,3 +49,14 @@ p {
 .datepicker {
     z-index: 10000;
 }
+
+.swal-button:focus {
+    box-shadow: none;
+  }
+
+  .class:focus { overflow: hidden; }
+
+  .swal2-popup .swal2-styled:focus {
+    box-shadow: none !important;
+}
+
