@@ -1,6 +1,5 @@
 {{template "base" .}}
 {{define "content"}}
-
     <div class="container">
         <div class="row">
             <div class="col">
@@ -93,13 +92,19 @@
                         attention.custom({
                             icon: "success",
                             showConfirmButton: false,
+                            showCloseButton: true,
+                            showCancelButton: false,
                             msg: `<p>Room is available</p>`,
                         })
                     } else {
-                        attention.contom({
+                        attention.custom({
                             icon: "warning",
                             showConfirmButton: false,
-                            msg: "Sorry room not available :(",
+                            showCloseButton: false,
+                            showCancelButton: true,
+                            cancelButtonText:
+                            'Choose new dates',
+                            msg: `<p>Sorry :( Room is not available</p>`,
                         })
                     }
                 })
