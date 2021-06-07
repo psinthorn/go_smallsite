@@ -1,4 +1,4 @@
-package rooms
+package domain
 
 import (
 	"context"
@@ -8,7 +8,8 @@ import (
 )
 
 const (
-	queryInsertRoom = "insert into rooms (roomtype_id, room_name, room_no, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7) returning id"
+	queryInsertRoom  = "insert into rooms (roomtype_id, room_name, room_no, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7) returning id"
+	queryGetRoomByID = `SELECT id, roomtype_id, room_name, room_no, description, status, created_at, updated_at FROM rooms WHERE id = $1`
 )
 
 var RoomService roomDomainInterface = &Room{}
@@ -16,6 +17,7 @@ var RoomService roomDomainInterface = &Room{}
 type Room room
 type roomDomainInterface interface {
 	Create(Room) (int, error)
+	GetRoomByID(int) (Room, error)
 }
 
 // Create insert and return room data
@@ -35,6 +37,35 @@ func (s *Room) Create(room Room) (int, error) {
 		return 0, err
 	}
 	defer dbConn.SQL.Close()
-
 	return newRoomId, err
+}
+
+func (s *Room) GetRoomByID(id int) (Room, error) {
+
+	var roombyId Room
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return roombyId, err
+	}
+
+	err = dbConn.SQL.QueryRowContext(ctx, queryGetRoomByID, id).Scan(
+		&roombyId.ID,
+		&roombyId.RoomTypeId,
+		&roombyId.RoomName,
+		&roombyId.RoomNo,
+		&roombyId.Description,
+		&roombyId.Status,
+		&roombyId.CreatedAt,
+		&roombyId.UpdatedAt,
+	)
+	if err != nil {
+		return roombyId, err
+	}
+	defer dbConn.SQL.Close()
+
+	return roombyId, nil
+
 }

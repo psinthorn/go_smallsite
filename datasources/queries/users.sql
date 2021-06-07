@@ -4,11 +4,10 @@
 -- https://tableplus.com/
 --
 -- Database: go_smallsite_bookings
--- Generation Time: 2564-05-11 18:31:37.7330
+-- Generation Time: 2564-05-15 10:19:03.7750
 -- -------------------------------------------------------------
 
 
-DROP TABLE IF EXISTS "public"."users";
 -- This script only contains the table creation statements and does not fully represent the table in the database. It's still missing: indices, triggers. Do not use it as a backup.
 
 -- Sequence and defined type
@@ -28,3 +27,5 @@ CREATE TABLE "public"."users" (
     PRIMARY KEY ("id")
 );
 
+INSERT INTO "public"."users" ("id", "first_name", "last_name", "email", "password", "access_level", "status", "created_at", "updated_at") VALUES
+(1, 'Sinthorn', 'Pradutnam', 'psinthorn@gmail.com', 'pordwass', 1, 'published', '2021-05-12 13:41:08.992021', '2021-05-12 13:41:08.992021');

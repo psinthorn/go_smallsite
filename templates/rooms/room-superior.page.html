@@ -1,5 +1,6 @@
 {{template "base" .}}
 {{define "content"}}
+
     <div class="container">
         <div class="row">
             <div class="col">
@@ -39,17 +40,17 @@
     <script>
           document.getElementById("check-availability-button").addEventListener("click", function () {
           let html = `
-          <form id="check-availability-form" action="/search-availability-response" method="post" novalidate class="needs-validation">
+          <form id="check-availability-form" action="/rooms/search-availability-response" method="post" novalidate class="needs-validation">
               <div class="form-row">
-                  <div class="col">
+                <input type="hidden" value="1" id="room_id" name="room_id">
+                <div class="col">
                       <div class="form-row" id="reservation-dates-modal">
                           <div class="col">
-                              <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
+                              <input disabled required class="form-control" type="text" name="start_date" id="start_date" placeholder="Arrival" autocomplete="off">
                           </div>
                           <div class="col">
-                              <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
+                              <input disabled required class="form-control" type="text" name="end_date" id="end_date" placeholder="Departure" autocomplete="off">
                           </div>
-  
                       </div>
                   </div>
               </div>
@@ -64,16 +65,16 @@
                       const rp = new DateRangePicker(elem, {
                           format: 'yyyy-mm-dd',
                           showOnFocus: true,
+                          minDate: new Date(),
                       })
             },
 
             didOpen: () => {
-                      document.getElementById("start").removeAttribute("disabled");
-                      document.getElementById("end").removeAttribute("disabled");
+                      document.getElementById("start_date").removeAttribute("disabled");
+                      document.getElementById("end_date").removeAttribute("disabled");
             },
 
               callback: (results) => {
-                console.log("callback is working");
                 let form = document.getElementById("check-availability-form");
 
                 // retrive data from all form input field
@@ -82,13 +83,25 @@
                 // append csrf to form
                 formData.append("csrf_token", "{{.CSRFToken}}");
 
-                fetch("/search-availability-response", {
+                fetch("/rooms/search-availability-response", {
                     method: 'post',
                     body: formData,
                 })
                 .then(response => response.json())
                 .then(data => {
-                    console.log(data);
+                    if (data.Ok) {
+                        attention.custom({
+                            icon: "success",
+                            showConfirmButton: false,
+                            msg: `<p>Room is available</p>`,
+                        })
+                    } else {
+                        attention.contom({
+                            icon: "warning",
+                            showConfirmButton: false,
+                            msg: "Sorry room not available :(",
+                        })
+                    }
                 })
               }
           });

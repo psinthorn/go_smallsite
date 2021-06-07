@@ -2,6 +2,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+
+
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -16,42 +18,15 @@
           href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css">
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/notie/dist/notie.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.css">
-    <link rel="stylesheet" type="text/css" href="static/css/styles.css">
-
-    <style>
-        html, body {
-            margin: 0px;
-            padding: 0px;
-        }
-
-        .btn-outline-secondary {
-            color: aqua;
-            border-color: #6c757d;
-        }
-
-        p {
-
-        }
-
-        .paraClass {
-            font-size: 3em;
-        }
-
-        .secondClass {
-            color: red;
-        }
-
-        #lastPara {
-            text-decoration: underline;
-        }
-
-        .main-carousel {
-            margin: 0px;
-            padding: 0px;
-        }
-    </style>
+    <link rel="stylesheet" type="text/css" href="/static/css/styles.css">
 
 </head>
+
+<!-- <style>
+    .datepicker {
+    z-index: 10000;
+}
+</style> -->
 
 <body>
     <!-- {{block "navbar-top" .}}
@@ -91,8 +66,19 @@
                     <a class="nav-link" href="/users/login">Login</a>
                 </li>
 
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="/users/logout">Logout</a>
+                </li> -->
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="/admin/dashboard">Dashboard</a>
+                        <a class="dropdown-item" href="/admin/logout">Logout</a>
+                    </div>
                 </li>
 
 
@@ -155,18 +141,13 @@
                   }, false);
               });
           }, false);
-      })();
-  
-    
-  
-      
+      })();     
       function notify(msg, msgType) {
           notie.alert({
               type: msgType,
               text: msg,
           })
-      }
-  
+      } 
       function notifyModal(title, text, icon, confirmationButtonText) {
           Swal.fire({
               title: title,
@@ -249,16 +230,20 @@
   
           async function custom(c) {
               const {
+                  icon = "",
                   msg = "",
                   title = "",
+                  showConfirmButton = true,
               } = c;
   
               const { value: results } = await Swal.fire({
+                  icon: icon,
                   title: title,
                   html: msg,
                   backdrop: false,
                   focusConfirm: false,
                   showCancelButton: true,
+                  showConfirmButton: showConfirmButton,
                   willOpen: () => {
                      if(c.willOpen !== undefined){
                         c.willOpen();
@@ -271,8 +256,8 @@
                   },
                   preConfirm: () => {
                       return [
-                          document.getElementById('start').value,
-                          document.getElementById('end').value
+                          document.getElementById('start_date').value,
+                          document.getElementById('end_date').value
                       ]
                   }
               })

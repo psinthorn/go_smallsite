@@ -4,7 +4,7 @@
 -- https://tableplus.com/
 --
 -- Database: go_smallsite_bookings
--- Generation Time: 2564-05-11 19:32:44.1760
+-- Generation Time: 2564-05-15 10:21:03.3240
 -- -------------------------------------------------------------
 
 
@@ -30,4 +30,5 @@ INSERT INTO "public"."room_status" ("id", "title", "symbol", "description", "sta
 (2, 'Stay', 'ST', 'Guest checked-in and stay and room', 'published', '2021-05-11 18:41:41.462787', '2021-05-11 18:41:41.462788'),
 (3, 'Make room', 'MR', 'Maid is on make room for guest ', 'published', '2021-05-11 18:43:11.192766', '2021-05-11 18:43:11.192766'),
 (4, 'Maintenance', 'MA', 'Maintenace room is close for maintenance reason', 'published', '2021-05-11 18:43:12.136818', '2021-05-11 18:43:12.136818'),
-(5, 'Closed', 'CL', 'Long term closed ', 'published', '2021-05-11 18:49:41.33323', '2021-05-11 18:49:41.33323');
+(5, 'Closed', 'CL', 'Long term closed ', 'published', '2021-05-11 18:49:41.33323', '2021-05-11 18:49:41.33323'),
+(6, 'Block', 'BL', 'Blocking not alloow make reservation', 'published', '2021-05-14 07:36:51.680227', '2021-05-14 07:36:51.680227');

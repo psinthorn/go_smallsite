@@ -1,4 +1,4 @@
-package contents
+package domain
 
 type category struct {
 	ID          string

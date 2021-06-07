@@ -1,0 +1,4 @@
+INSERT INTO "public"."room_types" ("title", "description", "status", "created_at", "updated_at") VALUES
+('Superior', 'Superior room', 'available', '2021-05-11 18:38:16.984122', '2021-05-11 18:38:16.984122'),
+('Deluxe', 'Deluxe room', 'available', '2021-05-11 18:38:40.285867', '2021-05-11 18:38:40.285868'),
+('Cabana', 'Cabana room type', 'published', '2021-05-11 18:51:12.788016', '2021-05-11 18:51:12.788017');
