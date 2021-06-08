@@ -32,7 +32,7 @@ func (rp *Repository) SearchAvailability(w http.ResponseWriter, r *http.Request)
 
 }
 
-// PostSearchAlotment is check-availability page render
+// PostSearchAlailability is check-availability page render
 func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Request) {
 	startDate, err := utils.UtilsService.StringToTime(r.Form.Get("start_date"))
 	endDate, err := utils.UtilsService.StringToTime(r.Form.Get("end_date"))
@@ -91,7 +91,7 @@ func (rp *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/rooms/reservation", http.StatusSeeOther)
 }
 
-// Reservation is reservation page render
+// Reservation is reservation page that will render reservation form for cutomer fill-in information
 func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	rsvn, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
 	if !ok {
@@ -127,7 +127,7 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// ReservationByRoomType is reservation by room type page render
+// ReservationByRoomType is search and reservation a room by type that render on individual page
 func (rp *Repository) ReservationByRoomType(w http.ResponseWriter, r *http.Request) {
 	rsvn := domain_reservation.Reservation{}
 
@@ -165,7 +165,7 @@ func (rp *Repository) ReservationByRoomType(w http.ResponseWriter, r *http.Reque
 	})
 }
 
-// PostReservation is reservation page render
+// PostReservation id create and save reservation information to reservaton and allotment table on database
 func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	err := r.ParseForm()
 	if err != nil {
@@ -279,7 +279,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// ReservationSummary for customer recheck information before submit
+// ReservationSummary is summary page that display reservation information for customer review
 func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request) {
 	reservation, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
 	if !ok {
