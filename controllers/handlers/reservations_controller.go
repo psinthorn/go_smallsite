@@ -42,34 +42,14 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 	}
 
 	var rooms []domain.Room
-	roomTypeId, _ := strconv.Atoi(chi.URLParam(r, "type"))
-	if roomTypeId == 0 {
-		// Search for all available room
-		// if no "type" contain in param url then earch all available room
-		rooms, err = domain_reservation.ReservationService.SearchAvailabilityAllRoom(startDate, endDate)
-		if err != nil {
-			helpers.ServerError(w, err)
-		}
-		if len(rooms) == 0 {
-			rp.App.Session.Put(r.Context(), "error", "Sorry no rooms available on this period.")
-			http.Redirect(w, r, "/rooms/search-availability", http.StatusSeeOther)
-			return
-		}
-
-	} else {
-		// Search for all available room
-		// if no "type" contain in param url then earch all available room
-		fmt.Println("pleae implenment search by room ")
-		rooms, err = domain_reservation.ReservationService.SearchAvailabilityAllRoom(startDate, endDate)
-		if err != nil {
-			helpers.ServerError(w, err)
-		}
-		if len(rooms) == 0 {
-			rp.App.Session.Put(r.Context(), "error", "Sorry no rooms available on this period.")
-			http.Redirect(w, r, "/rooms/search-availability", http.StatusSeeOther)
-			return
-		}
-
+	rooms, err = domain_reservation.ReservationService.SearchAvailabilityAllRoom(startDate, endDate)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	if len(rooms) == 0 {
+		rp.App.Session.Put(r.Context(), "error", "Sorry no rooms available on this period.")
+		http.Redirect(w, r, "/rooms/search-availability", http.StatusSeeOther)
+		return
 	}
 
 	rsvn := domain_reservation.Reservation{
@@ -97,17 +77,17 @@ func (rp *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	res, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
+	rsvn, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
 	if !ok {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	res.RoomID = roomID
-	res.Room.RoomTypeId = roomTypeId
-	res.Room.RoomNo = roomNo
+	rsvn.RoomID = roomID
+	rsvn.Room.RoomTypeId = roomTypeId
+	rsvn.Room.RoomNo = roomNo
 
-	rp.App.Session.Put(r.Context(), "reservation", res)
+	rp.App.Session.Put(r.Context(), "reservation", rsvn)
 	http.Redirect(w, r, "/rooms/reservation", http.StatusSeeOther)
 }
 
@@ -138,6 +118,43 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	stringMap["room_type_id"] = strconv.Itoa(roomTypeID)
 
 	data := make(map[string]interface{})
+	data["reservation"] = rsvn
+
+	render.Template(w, r, "make-reservation.page.html", &templates.TemplateData{
+		Form:      forms.New(nil),
+		Data:      data,
+		StringMap: stringMap,
+	})
+}
+
+// ReservationByRoomType is reservation by room type page render
+func (rp *Repository) ReservationByRoomType(w http.ResponseWriter, r *http.Request) {
+	rsvn := domain_reservation.Reservation{}
+
+	roomTypeID := r.URL.Query().Get("type")
+	roomTypeId, _ := strconv.Atoi(roomTypeID)
+	roomType, err := domain.RoomTypeService.GetRoomTypeByID(roomTypeId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	roomTypeTitle := roomType.Title
+	startDate := r.URL.Query().Get("sd")
+	endDate := r.URL.Query().Get("ed")
+	fmt.Println(startDate)
+	fmt.Println(endDate)
+
+	stringMap := make(map[string]string)
+	stringMap["start_date"] = startDate
+	stringMap["end_date"] = endDate
+	stringMap["room_type"] = roomTypeTitle
+	stringMap["room_type_id"] = strconv.Itoa(roomTypeId)
+
+	data := make(map[string]interface{})
+	rsvn.RoomID = 999
+	rsvn.Room.RoomTypeId = roomTypeId
+	rsvn.Room.RoomNo = 999
 
 	data["reservation"] = rsvn
 
@@ -184,10 +201,13 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	room, err := domain.RoomService.GetRoomByID(roomIdInt)
-	if err != nil {
-		helpers.ServerError(w, err)
-		return
+	var room domain.Room
+	if roomIdInt != 0 {
+		room, err = domain.RoomService.GetRoomByID(roomIdInt)
+		if err != nil {
+			helpers.ServerError(w, err)
+			return
+		}
 	}
 
 	reservation := domain_reservation.Reservation{
@@ -288,13 +308,14 @@ func (rp *Repository) ReservationSummary(w http.ResponseWriter, r *http.Request)
 // API section
 
 type JsonResponse struct {
-	Ok      bool   `json: "ok"`
-	RoomID  string `json: "ok"`
-	Message string `json: "message"`
+	Ok        bool   `json: "ok"`
+	RoomID    string `json: "room_id"`
+	StartDate string `json: "start_date"`
+	EndDate   string `json: "end_date"`
+	Message   string `json: "message"`
 }
 
 func (rp *Repository) AvailabilityJson(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("testing json 2")
 
 	startDate, err := utils.UtilsService.StringToTime(r.Form.Get("start_date"))
 	if err != nil {
@@ -319,10 +340,14 @@ func (rp *Repository) AvailabilityJson(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
+	sd := r.Form.Get("start_date")
+	ed := r.Form.Get("end_date")
 	res := JsonResponse{
-		Ok:      available,
-		RoomID:  strconv.Itoa(roomID),
-		Message: fmt.Sprintf("Room is available"),
+		Ok:        available,
+		RoomID:    strconv.Itoa(roomID),
+		StartDate: sd,
+		EndDate:   ed,
+		Message:   fmt.Sprintf("Room is available"),
 	}
 	out, err := json.MarshalIndent(res, "", "     ")
 	if err != nil {
