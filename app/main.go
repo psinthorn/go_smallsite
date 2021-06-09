@@ -13,6 +13,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	defer close(appConfig.MailChan)
+	fmt.Println("starting sendmail listener...")
+	sendMailListen()
 
 	fmt.Println(fmt.Sprintf("Server is started on port %s", portNumber))
 	fmt.Println("------------------------------------------------------------------------")
