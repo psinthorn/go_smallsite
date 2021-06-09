@@ -6,6 +6,7 @@ import (
 
 	//"github.com/psinthorn/go_smallsite/controllers"
 	controllers "github.com/psinthorn/go_smallsite/controllers/handlers"
+	domain_mail "github.com/psinthorn/go_smallsite/domain/mail"
 	"github.com/psinthorn/go_smallsite/internal/render"
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
@@ -27,6 +28,10 @@ func StartApp() error {
 
 	// Start session
 	CreateSession()
+
+	//Creat mail chanel
+	mailChan := make(chan domain_mail.MailDataTemplate)
+	appConfig.MailChan = mailChan
 
 	// Create new template
 	tmplCache, err := render.CreateTemplateCache()

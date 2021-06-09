@@ -5,6 +5,7 @@ import (
 	"log"
 
 	"github.com/alexedwards/scs/v2"
+	domain_mail "github.com/psinthorn/go_smallsite/domain/mail"
 )
 
 type AppConfig struct {
@@ -14,4 +15,5 @@ type AppConfig struct {
 	ErrorLog      *log.Logger
 	IsProduction  bool
 	Session       *scs.SessionManager
+	MailChan      chan domain_mail.MailDataTemplate
 }

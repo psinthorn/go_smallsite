@@ -7,9 +7,9 @@
         {{$rooms := index .Data "rooms"}}     
             <div class="row mt-5 mb-5">
                 {{range $rooms}}
-                <p>
+                <!-- <p>
                     Room No: <p>{{.RoomNo}}  Room Type: {{.ID}}</p><br/>
-                </p>
+                </p> -->
                     <div class="col-xs-4 col-sm-3 col-md-2 col-lg-1">
                         <div class="card text-center">
                             <a href="/rooms/reseration/choose-room/{{.ID}}/{{.RoomTypeId}}/{{.RoomNo}}">{{.RoomNo}}</a>

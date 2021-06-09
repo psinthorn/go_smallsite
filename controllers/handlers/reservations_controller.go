@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
+	domain_mail "github.com/psinthorn/go_smallsite/domain/mail"
 	domain_reservation "github.com/psinthorn/go_smallsite/domain/reservations"
 	domain "github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
@@ -273,8 +274,43 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// Send mail confirmation to guest
+	mailToGuest := fmt.Sprintf(`
+		<strong>Reservation Information</strong><br/>
+		Dear %s <br/>
+		This is reservation confirmation from %s to %s 
+`, reservation.FirstName, reservation.StartDate.Format("2006-02-01"), reservation.EndDate.Format("2006-02-01"))
+
+	mailMsg := domain_mail.MailDataTemplate{
+		To:       reservation.Email,
+		From:     "rsvn@gosmallsitehotel.com",
+		Subject:  "Reservation information",
+		Content:  mailToGuest,
+		Template: "",
+	}
+	//send message to mail chanle
+	rp.App.MailChan <- mailMsg
+
+	// Send mail notification to reservation
+	mailToRsvn := fmt.Sprintf(`
+		<strong>Reservation Information</strong><br/>
+		Dear %s <br/>
+		This is reservation notification from %s to %s 
+`, reservation.FirstName, reservation.StartDate.Format("2006-02-01"), reservation.EndDate.Format("2006-02-01"))
+
+	mailNotificationRsvn := domain_mail.MailDataTemplate{
+		To:       "rsvn@gosmallsitehotel.com",
+		From:     "rsvn@gosmallsitehotel.com",
+		Subject:  "Reservation Notification",
+		Content:  mailToRsvn,
+		Template: "",
+	}
+
+	//send message to mail chanle
+	rp.App.MailChan <- mailNotificationRsvn
+
 	rp.App.Session.Put(r.Context(), "reservation", reservation)
-	rp.App.Session.Put(r.Context(), "success", "Thank you, Please re-check your information for next process :)")
+	rp.App.Session.Put(r.Context(), "success", "Thank you, Please check your email for confirmation :)")
 	http.Redirect(w, r, "/rooms/reservation-summary", http.StatusSeeOther)
 
 }
