@@ -1,7 +1,10 @@
 package main
 
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
+	"strings"
 	"time"
 
 	domain_mail "github.com/psinthorn/go_smallsite/domain/mail"
@@ -36,7 +39,17 @@ func sendMail(m domain_mail.MailDataTemplate) {
 
 	email := mail.NewMSG()
 	email.SetFrom(m.From).AddTo(m.To).SetSubject(m.Subject)
-	email.SetBody(mail.TextHTML, m.Content)
+	if m.Template == "" {
+		email.SetBody(mail.TextHTML, m.Content)
+	} else {
+		templateName, err := ioutil.ReadFile(fmt.Sprintf("./email-template/%s", m.Template))
+		if err != nil {
+			appConfig.ErrorLog.Println(err)
+		}
+		emailTemplate := string(templateName)
+		mailToSend := strings.Replace(emailTemplate, "[%mail_body%]", m.Content, 1)
+		email.SetBody(mail.TextHTML, mailToSend)
+	}
 
 	err = email.Send(client)
 	if err != nil {
