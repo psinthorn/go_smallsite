@@ -1,10 +1,10 @@
 {{template "base" .}}
 
 {{define "content"}}
-    <div class="container mt-5 mb-5">
+    <div class="container mt-5">
         <div class="row">
             <div class="col">
-                <h1 class="mt-5 mb-3">Make Reservation</h1>
+                <h1 class="mt-5 mb-5">Make Reservation</h1>
 
                 {{$rsvn := index .Data "reservation" }}
                 <form method="post" action="/rooms/reservation" class="" novalidate>

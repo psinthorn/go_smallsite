@@ -1,35 +1,97 @@
 {{template "base" .}}
+{{define "banner"}}
+    <div id="main-carousel" class="carousel slide mb-5" data-ride="carousel">
+
+        <ol class="carousel-indicators">
+            <li data-target="#main-carousel" data-slide-to="0" class="active"></li>
+            <li data-target="#main-carousel" data-slide-to="1"></li>
+            <li data-target="#main-carousel" data-slide-to="2"></li>
+        </ol>
+
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="/static/images/snr_banner_01_1440x640.png" class="img-fluid d-block w-100" alt="Samui Natien Resort">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>First slide label</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/static/images/snr_banner_02_1440x640.png" class="img-fluid d-block w-100" alt="Samui Natien Resort">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Second slide label</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="/static/images/snr_banner_05_1440x640.png" class="img-fluid d-block w-100" alt="Samui Natien Resort">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Family Natural</h5>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{{end}}
 {{define "content"}}
-    <div class="container">
+    <div class="container mt-5">
+       
+
         <div class="row">
-            <div class="col">
+
+            <!-- <div class="col-sm-6 col-md-3 col-lg-3">
                 <img src="/static/images/rooms/snr_superior_room_02.jpg"
                      class="img-fluid img-thumbnail mx-auto d-block room-image" alt="room image">
+            </div> -->
+
+            <div class="col-sm-6 col-md-3 col-lg-3">
+            <img src="/static/images/rooms/snr_superior_room_02.jpg"
+                     class="img-fluid img-thumbnail mx-auto d-block" alt="room image">
+            </div>
+
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <img src="/static/images/rooms/snr_superior_room_02.jpg"
+                     class="img-fluid img-thumbnail mx-auto d-block" alt="room image">
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <img src="/static/images/rooms/snr_superior_room_02.jpg"
+                     class="img-fluid img-thumbnail mx-auto d-block" alt="room image">
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <img src="/static/images/rooms/snr_superior_room_02.jpg"
+                     class="img-fluid img-thumbnail mx-auto d-block" alt="room image">
             </div>
         </div>
+
+       
         <div class="row">
-            <div class="col">
-                <h1 class="text-center mt-4">Superior</h1>
-                <p>
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                    Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
-                    to remember.
-                </p>
+            <div class="col-sm-12 col-md-6 col-lg-6">
+                    <h1 class="text-left mt-4">Superior</h1>
+                    <p>
+                        Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                        to remember.
+                        Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                        to remember.
+                        Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                        to remember.
+                        Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                        to remember.
+                        Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                        to remember.
+                        Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
+                        to remember.
+                    </p>
             </div>
-        </div>
-        <div class="row">
-            <div class="col text-center">
-                <a id="check-availability-button" href="#!" class="btn btn-success">Check Availability</a>
+            <div class="col-sm-12 col-md-3 col-lg-3 mt-5">               
+                    <div class="col text-center h3">
+                        Facilities
+                    </div>
             </div>
+            <div class="col-sm-12 col-md-3 col-lg-3 mt-5">               
+                <div class="col text-center">
+                    <a id="check-availability-button" href="#!" class="btn btn-success">Check Availability</a>
+            </div>
+        </div>      
         </div>
     </div>
 {{end}}

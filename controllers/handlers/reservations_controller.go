@@ -286,7 +286,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		From:     "rsvn@gosmallsitehotel.com",
 		Subject:  "Reservation information",
 		Content:  mailToGuest,
-		Template: "",
+		Template: "drip.html",
 	}
 	//send message to mail chanle
 	rp.App.MailChan <- mailMsg
@@ -305,7 +305,6 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		Content:  mailToRsvn,
 		Template: "",
 	}
-
 	//send message to mail chanle
 	rp.App.MailChan <- mailNotificationRsvn
 
