@@ -21,6 +21,7 @@ func CreateSession() {
 	gob.Register(domain.RoomStatus{})
 	gob.Register(domain.RoomAllotmentStatus{})
 	gob.Register(domain_reservation.Reservation{})
+	//gob.Register("user_id")
 
 	// set up the session
 	session = scs.New()

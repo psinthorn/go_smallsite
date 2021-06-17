@@ -35,6 +35,7 @@ func routes(app *configs.AppConfig) http.Handler {
 
 	mux.Get("/users/getall", controllers.HandlerRepo.GetAllUsers)
 	mux.Get("/users/login", controllers.HandlerRepo.Login)
+	mux.Post("/users/login", controllers.HandlerRepo.PostLogin)
 	mux.Get("/users/logout", controllers.HandlerRepo.Logout)
 
 	// Reservation routing section
@@ -49,24 +50,27 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Get("/rooms/reseration/choose-room/{id}/{type}/{no}", controllers.HandlerRepo.ChooseRoom)
 	mux.Get("/rooms/reservation-summary", controllers.HandlerRepo.ReservationSummary)
 
-	// Admin routing section
-	mux.Get("/admin/dashboard", controllers.HandlerRepo.AdminDashBoard)
+	mux.Route("/admin", func(mux chi.Router) {
+		mux.Use(utils.Middleware.Auth)
+		// Admin routing section
+		mux.Get("/dashboard", controllers.HandlerRepo.AdminDashBoard)
 
-	// Admin user management
-	mux.Get("/admin/users/register", controllers.HandlerRepo.AddNewUserForm)
-	mux.Post("/admin/users/user/new", controllers.HandlerRepo.AddNewUser)
+		// Admin user management
+		mux.Get("/users/register", controllers.HandlerRepo.AddNewUserForm)
+		mux.Post("/users/user/new", controllers.HandlerRepo.AddNewUser)
 
-	// Room Status
-	mux.Get("/admin/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)
-	mux.Post("/admin/rooms/room-status/new", controllers.HandlerRepo.AddNewRoomStatus)
+		// Room Status
+		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)
+		mux.Post("/rooms/room-status/new", controllers.HandlerRepo.AddNewRoomStatus)
 
-	// Room Type
-	mux.Get("/admin/rooms/roomtype", controllers.HandlerRepo.AddNewRoomTypeForm)
-	mux.Post("/admin/rooms/roomtype/new", controllers.HandlerRepo.AddNewRoomType)
+		// Room Type
+		mux.Get("/rooms/roomtype", controllers.HandlerRepo.AddNewRoomTypeForm)
+		mux.Post("/rooms/roomtype/new", controllers.HandlerRepo.AddNewRoomType)
 
-	mux.Get("/admin/rooms", controllers.HandlerRepo.RoomGetAll)
-	mux.Get("/admin/rooms/room", controllers.HandlerRepo.AddNewRoomForm)
-	mux.Post("/admin/rooms/room/new", controllers.HandlerRepo.AddNewRoom)
+		mux.Get("/rooms", controllers.HandlerRepo.RoomGetAll)
+		mux.Get("/rooms/room", controllers.HandlerRepo.AddNewRoomForm)
+
+	})
 
 	return mux
 
