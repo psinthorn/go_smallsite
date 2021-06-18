@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-func IsAuthenticated(r *http.Request) bool {
-	exists := false
+func (u *Utils) IsAuthenticated(r *http.Request) bool {
+	exists := appConfig.Session.Exists(r.Context(), "user_id")
 	return exists
 }

@@ -10,7 +10,7 @@ import (
 // Middleware variable as middleware type
 var (
 	Middleware middleware
-	// appConfig  *configs.AppConfig
+	//appConfig  configs.AppConfig
 )
 
 type middleware struct{}
@@ -38,7 +38,7 @@ func (mdw *middleware) NoSurf(next http.Handler) http.Handler {
 
 func (mdw *middleware) Auth(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if !IsAuthenticated(r) {
+		if !UtilsService.IsAuthenticated(r) {
 			http.Redirect(w, r, "/users/login", http.StatusSeeOther)
 			return
 		}

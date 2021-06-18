@@ -45,6 +45,7 @@ func StartApp() error {
 	newHandlerRepo := controllers.NewHandlerRepository(&appConfig)
 	controllers.NewHandlers(newHandlerRepo)
 	render.NewRender(&appConfig)
+	utils.NewUtils(&appConfig)
 
 	// return database connect to startApp function
 	return nil
