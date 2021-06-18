@@ -1,9 +1,6 @@
 {{define "base"}}
 <!DOCTYPE html>
 <html lang="en">
-
-
-
   <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -22,18 +19,11 @@
 
 </head>
 
-<style>
-    .swal2-popup .swal2-styled:focus {
-    box-shadow: none !important;
-}
-
-</style>
-
 <body>
     <!-- {{block "navbar-top" .}}
     {{end}} -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">GoSmallSite</a>
+        <a class="navbar-brand" href="#">GoSmallHotel</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -63,32 +53,32 @@
                     <a class="nav-link" href="/contact">Contact</a>
                 </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="/users/login">Login</a>
-                </li>
-
-                <!-- <li class="nav-item">
+                {{ if eq .IsAuthenticate 1}}
+                  <li class="nav-item">
                     <a class="nav-link" href="/users/logout">Logout</a>
-                </li> -->
+                  </li>
 
-                <li class="nav-item dropdown">
+                  <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Admin
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         <a class="dropdown-item" href="/admin/dashboard">Dashboard</a>
-                        <a class="dropdown-item" href="/admin/logout">Logout</a>
+                        <a class="dropdown-item" href="/users/logout">Logout</a>
                     </div>
-                </li>
+                  </li>
 
-
+                {{else}}
+                  <li class="nav-item">
+                    <a class="nav-link" href="/users/login">Login</a>
+                  </li>
+                {{end}}
             </ul>
         </div>
     </nav>
-
-    {{block "banner" .}}
-    {{end}}
+  {{block "banner" .}}
+  {{end}}  
     {{block "content" .}}
     {{end}}
 
@@ -147,12 +137,15 @@
           <h5 class="text-uppercase">Manage</h5>
   
           <ul class="list-unstyled">
+            {{ if eq .IsAuthenticate 1}}
+            <li>
+              <a href="/users/logout">Logout</a>
+            </li>
+            {{else}}
             <li>
               <a href="/users/login">Login</a>
             </li>
-           <li>
-              <a href="/users/login">Logout</a>
-            </li>
+           {{end}}
             <!--  <li>
               <a href="#!">Link 3</a>
             </li>

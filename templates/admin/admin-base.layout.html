@@ -23,9 +23,8 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a class="navbar-brand brand-logo mr-5" href="/admin/dashboard">GoSmallHotel
-          <!-- <img src="/static/admin/images/logo.svg" class="mr-2" alt="logo"/> -->
-        </a>
+        <a href="/" class="navbar-brand brand-logo mr-5" href="/admin/dashboard">GoSmallHotel</a>
+        <!-- <a class="navbar-brand brand-logo mr-5" href="/admin/dashboard"><img src="/static/admin/images/logo.svg" class="mr-2" alt="logo"/></a> -->
         <a class="navbar-brand brand-logo-mini" href="/admin/dashboard"><img src="/static/admin/images/logo-mini.svg" alt="logo"/></a>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-center justify-content-end">
@@ -159,14 +158,23 @@
               <img src="/static/admin/images/faces/sinthorn-face.jpg" alt="profile"/>
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+             
+              {{ if eq .IsAuthenticate 1}}
               <a class="dropdown-item">
                 <i class="ti-settings text-primary"></i>
                 Settings
               </a>
-              <a class="dropdown-item">
+             
+              <a href="/users/logout" class="dropdown-item">
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>
+              {{else}}
+              <a href="/users/login" class="dropdown-item">
+                <i class="ti-power-off text-primary"></i>
+                Login
+              </a>
+              {{end}}
             </div>
           </li>
         </ul>
