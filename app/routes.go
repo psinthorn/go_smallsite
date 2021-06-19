@@ -23,52 +23,90 @@ func routes(app *configs.AppConfig) http.Handler {
 	fileServer := http.FileServer(http.Dir("./static/"))
 	mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
-	// Pages routing section
+	// Section: General Pages routing
 	mux.Get("/", controllers.HandlerRepo.Home)
 	mux.Get("/about", controllers.HandlerRepo.About)
 	mux.Get("/contact", controllers.HandlerRepo.Contact)
 
-	// Room routing section
+	// Section: Room routing
 	mux.Get("/rooms", controllers.HandlerRepo.Rooms)
 	mux.Get("/rooms/superior", controllers.HandlerRepo.Superior)
 	mux.Get("/rooms/deluxe", controllers.HandlerRepo.Deluxe)
 
-	mux.Get("/users/getall", controllers.HandlerRepo.GetAllUsers)
+	// Section: users routing
 	mux.Get("/users/login", controllers.HandlerRepo.Login)
 	mux.Post("/users/login", controllers.HandlerRepo.PostLogin)
 	mux.Get("/users/logout", controllers.HandlerRepo.Logout)
 
-	// Reservation routing section
-	mux.Get("/rooms/search-availability", controllers.HandlerRepo.SearchAvailability)
-	mux.Post("/rooms/search-availability", controllers.HandlerRepo.PostSearchAvailability)
-	mux.Post("/rooms/search-availability-response", controllers.HandlerRepo.AvailabilityJson)
-	mux.Get("/rooms/reservation-by-room-type", controllers.HandlerRepo.ReservationByRoomType)
-	mux.Get("/rooms", controllers.HandlerRepo.Rooms)
-	mux.Get("/rooms/reservation", controllers.HandlerRepo.Reservation)
-	mux.Post("/rooms/reservation", controllers.HandlerRepo.PostReservation)
-	// mux.Post("/rooms/reservation/by-room-type/{type}", controllers.HandlerRepo.PostReservation)
-	mux.Get("/rooms/reseration/choose-room/{id}/{type}/{no}", controllers.HandlerRepo.ChooseRoom)
-	mux.Get("/rooms/reservation-summary", controllers.HandlerRepo.ReservationSummary)
+	// Section: Reservation routing
+	mux.Route("/rooms", func(mux chi.Router) {
+		// search form
+		mux.Get("/search-availability", controllers.HandlerRepo.SearchAvailability)
+		// search all room availability
+		mux.Post("/search-availability", controllers.HandlerRepo.PostSearchAvailability)
+		// choose available room for make reservation
+		mux.Get("/reseration/choose-room/{id}/{type}/{no}", controllers.HandlerRepo.ChooseRoom)
 
+		// serch room available by room type and return as json format
+		mux.Post("/search-availability-response", controllers.HandlerRepo.AvailabilityJson)
+		// searc availability by room type
+		mux.Get("/reservation-by-room-type", controllers.HandlerRepo.ReservationByRoomType)
+
+		// reservation form
+		mux.Get("/reservation", controllers.HandlerRepo.Reservation)
+		// create new reservation
+		mux.Post("/reservation", controllers.HandlerRepo.PostReservation)
+		// show summary reservation
+		mux.Get("/reservation-summary", controllers.HandlerRepo.ReservationSummary)
+
+	})
+
+	// Administrator Section
 	mux.Route("/admin", func(mux chi.Router) {
+
+		// Authentication middleware
+		// all to below routes is need to authorize by this middleware
 		mux.Use(utils.Middleware.Auth)
-		// Admin routing section
+
+		// Dasboard Section
+		// show summary dasboard
 		mux.Get("/dashboard", controllers.HandlerRepo.AdminDashBoard)
 
-		// Admin user management
-		mux.Get("/users/register", controllers.HandlerRepo.AddNewUserForm)
-		mux.Post("/users/user/new", controllers.HandlerRepo.AddNewUser)
+		// User Section
+		// this section show all routes about user management
 
-		// Room Status
-		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)
-		mux.Post("/rooms/room-status/new", controllers.HandlerRepo.AddNewRoomStatus)
+		mux.Get("/users/register", controllers.HandlerRepo.AddNewUserForm)
+		// add new user
+		mux.Post("/users", controllers.HandlerRepo.AddNewUser)
+		// show all user
+		mux.Get("/users", controllers.HandlerRepo.GetAllUsers)
+
+		// Rooms Section
+		// this section will show all routes that concern about rooms
+
+		// Room type
+		// show form afor add room type
+		mux.Get("/rooms/roomtype/new", controllers.HandlerRepo.AddNewRoomTypeForm)
+		// add new room type
+		mux.Post("/rooms/roomtype", controllers.HandlerRepo.AddNewRoomType)
+		// show all room type
+		mux.Get("/rooms/roomtype/new", controllers.HandlerRepo.AddNewRoomTypeForm)
+
+		// Rooms
+		// show form for add room
+		mux.Get("/rooms/new", controllers.HandlerRepo.AddNewRoomForm)
+		// add rooms
+		mux.Post("/rooms", controllers.HandlerRepo.RoomGetAll)
+		// show all rooms
+		mux.Get("/rooms", controllers.HandlerRepo.RoomGetAll)
 
 		// Room Type
-		mux.Get("/rooms/roomtype", controllers.HandlerRepo.AddNewRoomTypeForm)
-		mux.Post("/rooms/roomtype/new", controllers.HandlerRepo.AddNewRoomType)
-
-		mux.Get("/rooms", controllers.HandlerRepo.RoomGetAll)
-		mux.Get("/rooms/room", controllers.HandlerRepo.AddNewRoomForm)
+		// add new room status
+		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatus)
+		// add new room status
+		mux.Post("/rooms/room-status/new", controllers.HandlerRepo.AddNewRoomStatus)
+		// show all rooms status
+		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)
 
 	})
 
