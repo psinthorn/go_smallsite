@@ -62,6 +62,8 @@ func routes(app *configs.AppConfig) http.Handler {
 	})
 
 	// Administrator Section
+	// this section is required authentication to get full access authorization
+
 	mux.Route("/admin", func(mux chi.Router) {
 
 		// Authentication middleware
@@ -90,7 +92,7 @@ func routes(app *configs.AppConfig) http.Handler {
 		// add new room type
 		mux.Post("/rooms/roomtype", controllers.HandlerRepo.AddNewRoomType)
 		// show all room type
-		mux.Get("/rooms/roomtype/new", controllers.HandlerRepo.AddNewRoomTypeForm)
+		mux.Get("/rooms/roomtype", controllers.HandlerRepo.AddNewRoomTypeForm)
 
 		// Rooms
 		// show form for add room
@@ -102,9 +104,9 @@ func routes(app *configs.AppConfig) http.Handler {
 
 		// Room Type
 		// add new room status
-		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatus)
+		mux.Get("/rooms/room-status/new", controllers.HandlerRepo.AddNewRoomStatusForm)
 		// add new room status
-		mux.Post("/rooms/room-status/new", controllers.HandlerRepo.AddNewRoomStatus)
+		mux.Post("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatus)
 		// show all rooms status
 		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)
 
