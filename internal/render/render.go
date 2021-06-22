@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/justinas/nosurf"
 	"github.com/psinthorn/go_smallsite/configs"
@@ -14,7 +15,9 @@ import (
 )
 
 var (
-	functions = template.FuncMap{}
+	functions = template.FuncMap{
+		"humanDate": HumanDate,
+	}
 	tmplCache = map[string]*template.Template{}
 	app       *configs.AppConfig
 )
@@ -154,4 +157,9 @@ func CreateSingleTemplateCache(tmpl string) (map[string]*template.Template, erro
 
 	// คืนค่า tmplCahe ให้ฟังซ์ชั่น
 	return tmplCache, nil
+}
+
+// Humandate is return time format as YYYY-MM-DD
+func HumanDate(t time.Time) string {
+	return t.Format("2006-01-02")
 }
