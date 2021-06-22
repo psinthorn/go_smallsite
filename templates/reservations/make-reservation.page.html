@@ -12,6 +12,7 @@
                 <form method="post" action="/rooms/reservation" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
                     <input type="hidden" name="room_id" value="{{$rsvn.RoomID}}">
+                    <input type="hidden" name="roomtype_name" value="$rsvn.RoomTypeName">
                     <input type="hidden" name="room_type_id" value="{{index .StringMap "room_type_id"}}">
 
                     <div class="row">

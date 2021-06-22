@@ -15,6 +15,10 @@
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="/static/admin/css/style.css">
+  <link rel="stylesheet" href="/static/admin/css/admin-style.css">
+  {{block "css" .}}
+  {{end}}
+  
   <!-- endinject -->
   <link rel="shortcut icon" href="/static/admin/images/favicon.png" />
 </head>
@@ -203,8 +207,8 @@
             </a>
             <div class="collapse" id="rsvn-sub">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="/admin/reservations/reservation-list">All Reservations</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/rooms/reservation">New Booking</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/reservations">All Reservations</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/rooms/reservations/new">New Booking</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/admin/reservations/status">Booking Status</a></li>
               </ul>
             </div>
@@ -219,10 +223,10 @@
             </a>
             <div class="collapse" id="rooms-sub">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="/admin/reservations/reservation-list">All Rooms</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/room">New Room</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/room-status">Room Status</a></li>
-                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/roomtype">Room Type</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/rooms">All Rooms</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/new">New Room</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/room-status/new">Room Status</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/rooms/roomtype/new">Room Type</a></li>
               </ul>
             </div>
           </li>
@@ -319,8 +323,8 @@
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © bootstrapdash.com 2020</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.bootstrapdash.com/" target="_blank">Bootstrap dashboard templates</a> from Bootstrapdash.com</span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © f2connect.com 2020</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.f2connect.com/" target="_blank">Small HotelWebsit templates</a> from F2 Co.,Ltd.</span>
           </div>
         </footer>
         <!-- partial -->
