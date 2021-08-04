@@ -11,7 +11,10 @@ import (
 )
 
 const (
-	queryInsertUser     = `insert into users (first_name, last_name, email, password, access_level, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`
+	queryInsertUser  = `insert into users (first_name, last_name, email, password, access_level, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8) returning id`
+	queryGetAllUsers = `select u.id, u.first_name, u.last_name, u.Email, u.access_level, u.status, u.created_at, u.updated_at
+						from users u					
+						order by u.created_at desc`
 	queryGetUserByEmail = `select id, first_name, last_name, email, password, access_level, status, created_at, updated_at from users where email = $1`
 	queryUpdateUserById = `update users set first_name = $1, last_name = $2, email = $3, password = $4, access_level = $5, status =$6, updated_at = $7) where id = $8`
 )
@@ -49,6 +52,46 @@ func (m *User) Create(u User) (int, error) {
 //  GetAllUsers
 func (m *User) GetAllUsers() ([]User, error) {
 	var users []User
+
+	// Create context
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	// Create new database connection
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return users, err
+	}
+	// Read from database
+	rows, err := dbConn.SQL.QueryContext(ctx, queryGetAllUsers)
+	if err != nil {
+		return users, err
+	}
+	defer rows.Close()
+
+	// Scan data to model
+	var u User
+	for rows.Next() {
+		err := rows.Scan(
+			&u.ID,
+			&u.FirstName,
+			&u.LastName,
+			&u.Email,
+			&u.AccessLevel,
+			&u.Status,
+			&u.CreatedAt,
+			&u.UpdatedAt,
+		)
+		if err != nil {
+			return users, err
+		}
+		users = append(users, u)
+	}
+	err = rows.Err()
+	if err != nil {
+		return users, err
+	}
+	// return data slice to user
 	return users, nil
 }
 
@@ -129,7 +172,6 @@ func (u *User) Authenticate(email, password string) (User, error) {
 		return user, errors.New("please check your email address!")
 	}
 
-	log.Println(user)
 	hashedPassword := user.Password
 	// compare password
 	// return error if compare is false  return id and token if compare is true

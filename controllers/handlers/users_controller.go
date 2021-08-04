@@ -101,5 +101,16 @@ func (rp *Repository) UpdateUser(u domain.User) (domain.User, error) {
 
 //  GetAllUsers
 func (rp *Repository) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := domain.UserService.GetAllUsers()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 
+	data := make(map[string]interface{})
+	data["users"] = users
+
+	render.Template(w, r, "admin-users-list.page.html", &templates.TemplateData{
+		Data: data,
+	})
 }

@@ -11,10 +11,12 @@ import (
 
 const (
 	queryInsertReservation = `insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id`
-	querySelectAllRsvn     = `SELECT r.id, r.first_name, r.last_name, r.email, r.phone, r.room_id, r.status, r.start_date, r.end_date, r.created_at, r.updated_at, rt.id, rt.title
+	querySelectAllRsvn     = `SELECT r.id, r.first_name, r.last_name, r.email, r.phone, r.room_id, r.status, r.start_date, r.end_date, r.created_at, r.updated_at, rt.id, rt.title, r.processed
 										FROM reservations r 
-										left join room_types rt on (r.room_id = rt.id) 
+										left join room_types rt 
+										on (r.room_id = rt.id) 
 										order by r.start_date desc`
+	queryGetRsvnById               = `SELECT * FROM reservations r WHERE id = $1`
 	querySearchAvailability        = `SELECT count(id) FROM room_allotments WHERE room_no_id = $1 AND $2 < end_date AND $3 > start_date`
 	querySearchAvailabilityAllRoom = `SELECT r.id, r.roomtype_id, r.room_no FROM rooms r WHERE r.id not in (SELECT ra.room_no_id FROM room_allotments ra WHERE $1 < ra.end_date AND $2 > ra.start_date)`
 )
@@ -25,9 +27,9 @@ type Reservation reservation
 type reservationDomainInterface interface {
 	Create(Reservation) (int, error)
 	GetAll() ([]Reservation, error)
-	GetByID()
-	Update()
-	Delete()
+	GetByID(int) (Reservation, error)
+	Update(int) (Reservation, error)
+	Delete(int) error
 
 	SearchAvailabilityByRoomId(roomID int, start, end time.Time) (bool, error)
 	SearchAvailabilityAllRoom(start, end time.Time) ([]domain.Room, error)
@@ -44,7 +46,7 @@ func (r *Reservation) Create(rsvn Reservation) (int, error) {
 		panic(err)
 	}
 	var newReservationId int
-	err = dbConn.SQL.QueryRowContext(ctx, queryInsertReservation, rsvn.FirstName, rsvn.LastName, rsvn.Email, rsvn.Phone, rsvn.RoomID, rsvn.RoomTypeName, rsvn.Status, rsvn.StartDate, rsvn.EndDate, rsvn.CreatedAt, rsvn.UpdatedAt).Scan(&newReservationId)
+	err = dbConn.SQL.QueryRowContext(ctx, queryInsertReservation, rsvn.FirstName, rsvn.LastName, rsvn.Email, rsvn.Phone, rsvn.RoomID, rsvn.Status, rsvn.StartDate, rsvn.EndDate, rsvn.CreatedAt, rsvn.UpdatedAt).Scan(&newReservationId)
 	if err != nil {
 		return 0, err
 	}
@@ -86,6 +88,7 @@ func (r *Reservation) GetAll() ([]Reservation, error) {
 			&rs.UpdatedAt,
 			&rs.RoomType.ID,
 			&rs.RoomType.Title,
+			&rs.Processed,
 		)
 
 		if err != nil {
@@ -101,9 +104,32 @@ func (r *Reservation) GetAll() ([]Reservation, error) {
 	return rsvns, nil
 }
 
-func (r *Reservation) GetByID() {}
-func (r *Reservation) Update()  {}
-func (r *Reservation) Delete()  {}
+func (r *Reservation) GetByID(id int) (Reservation, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	var rsvn Reservation
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return rsvn, err
+	}
+
+	row := dbConn.SQL.QueryRowContext(ctx, queryGetRsvnById, id)
+	//defer row()
+	row.Scan(
+		&rsvn.ID,
+		&rsvn.FirstName,
+		&rsvn.LastName,
+	)
+
+	return rsvn, nil
+}
+func (r *Reservation) Update(id int) (Reservation, error) {
+	return Reservation{}, nil
+}
+func (r *Reservation) Delete(id int) error {
+	return nil
+}
 
 // CheckAvailabilityByRoomId return available room of give room id with given dates
 func (r *Reservation) SearchAvailabilityByRoomId(roomID int, start, end time.Time) (bool, error) {

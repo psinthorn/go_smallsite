@@ -24,4 +24,5 @@ type reservation struct {
 	UpdatedAt    time.Time       `json: "updated_at"`
 	Room         domain.Room     `json: "room"`
 	RoomType     domain.RoomType `json: "room_type"`
+	Processed    int             `json: "processed"`
 }

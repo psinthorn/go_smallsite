@@ -1,2 +1,0 @@
-INSERT INTO "public"."users" ("first_name", "last_name", "email", "password", "access_level", "status", "created_at", "updated_at") VALUES
-('Sinthorn', 'Pradutnam', 'psinthorn@gmail.com', 'pordwass', 1, 'published', '2021-05-12 13:41:08.992021', '2021-05-12 13:41:08.992021');

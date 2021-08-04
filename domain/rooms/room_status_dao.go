@@ -16,10 +16,10 @@ var RoomStatusService roomStatusInterface = &RoomStatus{}
 type RoomStatus roomStatus
 type roomStatusInterface interface {
 	Create(RoomStatus) (int, error)
-	GetAll() error
-	Get() error
-	Update() error
-	Delete() error
+	GetAll() ([]RoomStatus, error)
+	GetById(int) (RoomStatus, error)
+	Update(int) (RoomStatus, error)
+	Delete(int) error
 }
 
 func (rs *RoomStatus) Create(st RoomStatus) (int, error) {
@@ -45,21 +45,24 @@ func (rs *RoomStatus) Create(st RoomStatus) (int, error) {
 }
 
 // GetAll
-func (rs *RoomStatus) GetAll() error {
-	return nil
+func (rs *RoomStatus) GetAll() ([]RoomStatus, error) {
+	var roomStatus []RoomStatus
+	return roomStatus, nil
 }
 
-// Get
-func (rs *RoomStatus) Get() error {
-	return nil
+// GetById
+func (rs *RoomStatus) GetById(id int) (RoomStatus, error) {
+	var roomStatus RoomStatus
+	return roomStatus, nil
 }
 
 // Update
-func (rs *RoomStatus) Update() error {
-	return nil
+func (rs *RoomStatus) Update(id int) (RoomStatus, error) {
+	var roomStatus RoomStatus
+	return roomStatus, nil
 }
 
 // Delete
-func (rs *RoomStatus) Delete() error {
+func (rs *RoomStatus) Delete(id int) error {
 	return nil
 }

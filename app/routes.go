@@ -76,11 +76,13 @@ func routes(app *configs.AppConfig) http.Handler {
 
 		// Section: Reservation
 
-		// Show all reservation
-		mux.Get("/reservations", controllers.HandlerRepo.ReservationLists)
 		// Add new reservation
 		mux.Get("/reservations/new", controllers.HandlerRepo.ReservationAddForm)
 		mux.Post("/reservations", controllers.HandlerRepo.ReservationAdd)
+		mux.Get("/reservations/{id}", controllers.HandlerRepo.ReservationDetails)
+		// Show all reservation
+		mux.Get("/reservations", controllers.HandlerRepo.ReservationLists)
+
 		// Edit Reservation
 		mux.Get("/reservations/edit/{id}", controllers.HandlerRepo.ReservationEditForm)
 		mux.Post("/reservations/edit/{id}", controllers.HandlerRepo.ReservationEdit)

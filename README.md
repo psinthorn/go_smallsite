@@ -118,4 +118,8 @@ if err != nil {
 }
 ```
 
+## Data Tables and pagination library
+https://github.com/fiduswriter/Simple-DataTables
+
+
 

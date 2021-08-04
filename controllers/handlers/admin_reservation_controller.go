@@ -35,6 +35,10 @@ func (rp *Repository) ReservationAdd(w http.ResponseWriter, r *http.Request) {
 
 }
 
+func (rp *Repository) ReservationDetails(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-reservations-details.page.html", &templates.TemplateData{})
+}
+
 func (rp *Repository) ReservationEditForm(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Show edit form")
 
