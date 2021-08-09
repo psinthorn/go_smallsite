@@ -1,5 +1,7 @@
 package domain
 
+import "time"
+
 type category struct {
 	ID          string
 	Title       string
@@ -7,6 +9,6 @@ type category struct {
 	Section     string
 	Parent      string
 	AccessLevel int
-	CreatedAt   string
-	UpdatedAt   string
+	CreatedAt   time.Time `json: "created_at"`
+	UpdatedAt   time.Time `json: "updated_at"`
 }

@@ -146,19 +146,30 @@
                 .then(response => response.json())
                 .then(data => {
                     if (data.Ok) {
+                        console.log(data.RoomID)
                         attention.custom({
                             icon: "success",
                             showConfirmButton: false,
                             showCloseButton: true,
                             showCancelButton: false,
-                            msg: `<p>Room is available</p> <a href="/rooms/reservation" type="button" class="btn btn-success">Book Now</a>`,
+                            msg: `<p>Room is available</p> <a href="/rooms/reservation-by-room-type?type=` 
+                            + data.RoomID 
+                            + "&sd="
+                            + data.StartDate 
+                            + "&ed="
+                            + data.EndDate
+                            + `"` 
+                            + `type="button" class="btn btn-success">`
+                            + `Book Now</a>`,
                         })
                     } else {
                         attention.custom({
                             icon: "warning",
                             showConfirmButton: false,
-                            showCancelButton: false,
-                            timer: 1500,
+                            showCloseButton: false,
+                            showCancelButton: true,
+                            cancelButtonText:
+                            'Choose new dates',
                             msg: `<p>Sorry :( Room is not available</p>`,
                         })
                     }

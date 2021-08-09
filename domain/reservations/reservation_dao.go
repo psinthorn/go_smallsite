@@ -104,6 +104,7 @@ func (r *Reservation) GetAll() ([]Reservation, error) {
 	return rsvns, nil
 }
 
+// GetByID get reservation by id
 func (r *Reservation) GetByID(id int) (Reservation, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

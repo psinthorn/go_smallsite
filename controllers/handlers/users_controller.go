@@ -52,7 +52,11 @@ func (rp *Repository) AddNewUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accessLevel, err := strconv.Atoi(r.Form.Get("access_level"))
+	acl := r.Form.Get("access_level")
+	if acl == "" {
+		acl = "0"
+	}
+	accessLevel, err := strconv.Atoi(acl)
 	if err != nil {
 		panic(err)
 	}
