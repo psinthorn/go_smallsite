@@ -61,7 +61,7 @@ func (rp *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 
 	rp.App.Session.Put(r.Context(), "user_id", user.ID)
 	fmt.Println("Print r_contxt", r.Context(), "user_id")
-	fmt.Println("Print user_idfrom session", rp.App.Session.Get(r.Context(), "user_id"))
+	fmt.Println("Print user_id from session", rp.App.Session.Get(r.Context(), "user_id"))
 	rp.App.Session.Put(r.Context(), "success", "Logged in sucessfully")
 	// render.Template(w, r, "admin-dashboard-summary.page.html", &templates.TemplateData{})
 	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)

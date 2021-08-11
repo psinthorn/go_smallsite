@@ -4,7 +4,7 @@ import (
 	"net/http"
 )
 
-// IsAuthenticated checkied user logged in or not if logged will return true
+// IsAuthenticated checked user logged in or not if logged will return true
 func (u *Utils) IsAuthenticated(r *http.Request) bool {
 	var exists bool
 	if appConfig.IsProduction == false {
@@ -12,6 +12,6 @@ func (u *Utils) IsAuthenticated(r *http.Request) bool {
 	} else {
 		exists = appConfig.Session.Exists(r.Context(), "user_id")
 	}
-
+	//exists := appConfig.Session.Exists(r.Context(), "user_id")
 	return exists
 }

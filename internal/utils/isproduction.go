@@ -24,13 +24,12 @@ func (u *Utils) IsProduction(appConfig *configs.AppConfig) {
 	fmt.Println("Current Host name is: ", hostName)
 	fmt.Println("------------------------------------------------------------------------")
 
-	// if hostName == "psinthorn-macbook.local" {
-	if hostName != "" {
+	if hostName == "psinthorn-macbook.local" {
+		// if hostName != "" {
 		isProduction = false
 	} else {
 		isProduction = true
 	}
-
 	appConfig.IsProduction = isProduction
 	return
 }
