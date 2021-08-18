@@ -18,16 +18,14 @@ import (
 func (u *Utils) IsProduction(appConfig *configs.AppConfig) {
 	// Add logic to check env that is dev or prod
 	hostName, _ := os.Hostname()
-	var isProduction bool
+	var isProduction bool = false
 
 	fmt.Println("------------------------------------------------------------------------")
 	fmt.Println("Current Host name is: ", hostName)
 	fmt.Println("------------------------------------------------------------------------")
 
-	if hostName == "psinthorn-macbook.local" {
+	if hostName != "psinthorn-macbook.local" {
 		// if hostName != "" {
-		isProduction = false
-	} else {
 		isProduction = true
 	}
 	appConfig.IsProduction = isProduction

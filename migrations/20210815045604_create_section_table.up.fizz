@@ -1,0 +1,6 @@
+create_table("users") {
+    t.Column("id", "integer", {primary: true})
+    t.Column("title", "string", {"default": "section title"})
+    t.Column("desc", "string", {"default": "description"})
+    t.Column("status", "string", {"default": "draft"})
+}

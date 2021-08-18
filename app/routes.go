@@ -74,8 +74,20 @@ func routes(app *configs.AppConfig) http.Handler {
 		// show summary dasboard
 		mux.Get("/dashboard", controllers.HandlerRepo.AdminDashBoard)
 
-		// Section: Reservation
+		// Section: Content
+		// Creat content
+		mux.Get("/contents/create", controllers.HandlerRepo.ContentForm)
+		mux.Post("/contetns", controllers.HandlerRepo.PostContent)
+		// Get content
+		mux.Get("/contents/{id}", controllers.HandlerRepo.ShowContent)
+		mux.Get("/contents", controllers.HandlerRepo.ContentLists)
+		// Edit content
+		mux.Get("/contents/edit", controllers.HandlerRepo.EditContentForm)
+		mux.Post("/contetns/edit/{id}", controllers.HandlerRepo.EditContent)
+		// Delete content
+		mux.Post("/contents/delete/{id}", controllers.HandlerRepo.DeleteContent)
 
+		// Section: Reservation
 		// Add new reservation
 		mux.Get("/reservations/new", controllers.HandlerRepo.ReservationAddForm)
 		mux.Post("/reservations", controllers.HandlerRepo.ReservationAdd)

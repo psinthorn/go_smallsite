@@ -37,16 +37,29 @@ type reservationDomainInterface interface {
 
 // PostReservation is reservation page render
 func (r *Reservation) Create(rsvn Reservation) (int, error) {
+	var newReservationId int
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
-	var newReservationId int
-	err = dbConn.SQL.QueryRowContext(ctx, queryInsertReservation, rsvn.FirstName, rsvn.LastName, rsvn.Email, rsvn.Phone, rsvn.RoomID, rsvn.Status, rsvn.StartDate, rsvn.EndDate, rsvn.CreatedAt, rsvn.UpdatedAt).Scan(&newReservationId)
+
+	err = dbConn.SQL.QueryRowContext(
+		ctx, queryInsertReservation,
+		rsvn.FirstName,
+		rsvn.LastName,
+		rsvn.Email,
+		rsvn.Phone,
+		rsvn.RoomID,
+		rsvn.Status,
+		rsvn.StartDate,
+		rsvn.EndDate,
+		rsvn.CreatedAt,
+		rsvn.UpdatedAt).Scan(&newReservationId)
+
 	if err != nil {
 		return 0, err
 	}
@@ -125,9 +138,13 @@ func (r *Reservation) GetByID(id int) (Reservation, error) {
 
 	return rsvn, nil
 }
+
+// Update reservation by id
 func (r *Reservation) Update(id int) (Reservation, error) {
 	return Reservation{}, nil
 }
+
+// Delete reservation by id
 func (r *Reservation) Delete(id int) error {
 	return nil
 }

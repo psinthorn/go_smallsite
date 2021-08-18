@@ -11,8 +11,8 @@ type content struct {
 	Title       string    `json: "title" bson: "title"`
 	SubTitle    string    `json: "sub_title" bson: "sub_title"`
 	Content     string    `json: "content" bson: "content"`
-	Section     string    `json: "section" bsin: "section"`
 	ContentType string    `json: "content_type" bson: "content_type`
+	Section     string    `json: "section" bsin: "section"`
 	Category    string    `json: "category" bson: "category"`
 	Image       string    `json: "image" bson: "image"`
 	Tags        string    `json: "tags" bson: "tags"`

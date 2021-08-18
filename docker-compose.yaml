@@ -1,0 +1,44 @@
+version: '3.9'
+services:
+  go_f2hotel:
+    build: .
+    ports:
+      - 8081:8081
+    
+    volumes:
+      - .:/app
+    depends_on:
+      -   db_mysql
+  
+
+  # Database service 
+
+  # Mysql
+  db_mysql:
+    image: mysql:5.7.22
+    restart: always
+    environment: 
+      MYSQL_DATABASE: go_f2hotel
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - .db_data:/var/lib/mysql
+    ports:
+      - 33306:3306
+    
+
+  # Postgres
+  # db_postgres:
+  #   image: 
+  #   restart: always
+  #   environment: 
+  #     POSTGRES_DATABSE: go_f2hotel
+  #     POSTGRES_USER: postgres
+  #     POSTGRES_PASSWORD: postgres
+  #     POSTGTRES_ROOT_PASSWORD: postgres
+  #   volumns:
+  #     - .db_data:/var/lib/postgres
+  #   ports:
+  #     - 54321:5432
+    
