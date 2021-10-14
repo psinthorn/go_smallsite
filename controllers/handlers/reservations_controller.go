@@ -84,6 +84,7 @@ func (rp *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	fmt.Println(rsvn.IsPromotion)
 	rsvn.RoomID = roomID
 	rsvn.Room.RoomTypeId = roomTypeId
 	rsvn.Room.RoomNo = roomNo
@@ -99,6 +100,7 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, errors.New("can't get reservation information"))
 		return
 	}
+
 	// fmt.Println("room type ID: ", rsvn.Room.RoomTypeId)
 	roomTypeID := rsvn.Room.RoomTypeId
 	roomType, err := domain.RoomTypeService.GetRoomTypeByID(roomTypeID)
@@ -210,20 +212,31 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 	}
-
+	//isPromotion, _ := strconv.ParseBool(r.Form.Get("Is_promotion"))
+	rsvn, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
+	if !ok {
+		helpers.ServerError(w, err)
+		return
+	}
+	amount, _ := strconv.Atoi(r.Form.Get("amount"))
+	perNight := rsvn.Amount / 4
 	reservation := domain_reservation.Reservation{
-		FirstName:    r.Form.Get("first_name"),
-		LastName:     r.Form.Get("last_name"),
-		Email:        r.Form.Get("email"),
-		Phone:        r.Form.Get("phone"),
-		RoomID:       roomIdInt,
-		RoomTypeName: roomTypeTitle,
-		Room:         room,
-		Status:       "reservation",
-		StartDate:    startDate,
-		EndDate:      endDate,
-		CreatedAt:    time.Now(),
-		UpdatedAt:    time.Now(),
+		FirstName:       r.Form.Get("first_name"),
+		LastName:        r.Form.Get("last_name"),
+		Email:           r.Form.Get("email"),
+		Phone:           r.Form.Get("phone"),
+		RoomID:          roomIdInt,
+		RoomTypeName:    roomTypeTitle,
+		Room:            room,
+		PromotionId:     rsvn.PromotionId,
+		PromotionTypeId: rsvn.PromotionTypeId,
+		IsPromotion:     rsvn.IsPromotion,
+		Amount:          float32(amount),
+		Status:          "reservation",
+		StartDate:       startDate,
+		EndDate:         endDate,
+		CreatedAt:       time.Now(),
+		UpdatedAt:       time.Now(),
 	}
 
 	form := forms.New(r.PostForm)
@@ -241,6 +254,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		stringMap["end_date"] = ed
 		stringMap["room_type"] = roomTypeTitle
 		stringMap["room_type_id"] = roomTypeId
+		stringMap["per_night"] = strconv.Itoa(int(perNight))
 
 		data := make(map[string]interface{})
 		data["reservation"] = reservation
@@ -274,6 +288,13 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	var subject string
+	if reservation.IsPromotion {
+		subject = "Promotion Reservation information"
+	} else {
+		subject = "Room reservation information"
+	}
+
 	// Send mail confirmation to guest
 	mailToGuest := fmt.Sprintf(`
 		<strong>Reservation Information</strong><br/>
@@ -284,7 +305,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	mailMsg := domain_mail.MailDataTemplate{
 		To:       reservation.Email,
 		From:     "rsvn@gosmallsitehotel.com",
-		Subject:  "Reservation information",
+		Subject:  subject,
 		Content:  mailToGuest,
 		Template: "drip.html",
 	}
@@ -301,7 +322,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	mailNotificationRsvn := domain_mail.MailDataTemplate{
 		To:       "rsvn@gosmallsitehotel.com",
 		From:     "rsvn@gosmallsitehotel.com",
-		Subject:  "Reservation Notification",
+		Subject:  subject,
 		Content:  mailToRsvn,
 		Template: "",
 	}

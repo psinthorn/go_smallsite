@@ -4,16 +4,26 @@
 {{end}} -->
 {{define "content"}}
     <div class="container mt-5">
+        {{$rsvn := index .Data "reservation" }}
         <div class="row">
             <div class="col">
-                <h1 class="mt-5 mb-5">Make Reservation</h1>
+                <h1 class="mt-5 mb-5">
+                    {{if $rsvn.IsPromotion}}
+                        Promotion Reservation
+                    {{else}}
+                        Room Reservation
+                    {{end}}
+                </h1>
 
-                {{$rsvn := index .Data "reservation" }}
+                
                 <form method="post" action="/rooms/reservation" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
                     <input type="hidden" name="room_id" value="{{$rsvn.RoomID}}">
                     <input type="hidden" name="roomtype_name" value="$rsvn.RoomTypeName">
                     <input type="hidden" name="room_type_id" value="{{index .StringMap "room_type_id"}}">
+                    <input type="hidden" name="is_promotion" value="{{$rsvn.IsPromotion}}">
+                    <input type="hidden" name="promotion_id" value="{{$rsvn.PromotionId}}">
+                    <input type="hidden" name="promotion_type_id" value="{{$rsvn.PromotionTypeId}}">
 
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
@@ -25,22 +35,42 @@
                         </div>
                     </div>
 
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
-                         <div class="form-group">
-                             <label for="start_date">Arrival Date:</label>
-                             <input class="form-control" id="start_date" autocomplete="off" type='text'
-                                    name='start_date'  value="{{index .StringMap "start_date"}}" readonly="true" required>
-                         </div>
-                        </div>
-    
-                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
-                         <div class="form-group">
-                             <label for="end_date">Departure Date:</label>
-                             <input class="form-control" id="end_date" autocomplete="off" type='text' name='end_date'  value="{{index .StringMap "end_date"}}" readonly="true" required>
-                         </div>
-                     </div>
+                    {{if $rsvn.IsPromotion}}
+                    
+                    <div class="row" id="reservation-dates">   
+                                          
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
+                                    <div class="form-group">
+                                        <label for="start_date">Arrival Date:</label>
+                                        <input required class="form-control" type="text" id="start_date" name='start_date' placeholder="Arrival" autocomplete="off">
+                                    </div>
+                                </div>
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
+                                    <div class="form-group">
+                                        <label for="end_date">Departure Date:</label>
+                                        <input required class="form-control" type="text" id="end_date" name='end_date' placeholder="Departure" autocomplete="off">
+                                    </div>
+                                </div>
+                            
                     </div>
+                    {{else}}
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
+                            <div class="form-group">
+                                <label for="start_date">Arrival Date:</label>
+                                <input class="form-control" id="start_date" autocomplete="off" type='text'
+                                    name='start_date'  value="{{index .StringMap "start_date"}}" readonly="true" required>                         
+                            </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
+                            <div class="form-group">
+                                <label for="end_date">Departure Date:</label>
+                                <input class="form-control" id="end_date" autocomplete="off" type='text' name='end_date'  value="{{index .StringMap "end_date"}}" readonly="true" required>
+                            </div>
+                        </div>
+                        </div>
+                    {{end}}
+
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 mt-3 p-3">
                             <h3>Personal information</h3><br/>
@@ -96,9 +126,12 @@
 {{end}}
 
 {{define "js"}}
-    <!-- if you have specific javascript for this page put it here -->
     <script>
-        console.log("Separate script form individual page is start here")
+        const elem = document.getElementById('reservation-dates');
+        const rangePicker = new DateRangePicker(elem, {
+            format: "yyyy-mm-dd",
+            minDate: new Date(),
+        });
     </script>
 {{end}}
     

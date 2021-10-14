@@ -10,7 +10,7 @@ import (
 )
 
 const (
-	queryInsertReservation = `insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id`
+	queryInsertReservation = `insert into reservations (first_name, last_name, email, phone, room_id, status, start_date, end_date, created_at, updated_at, promotion_id,promotion_type_id,is_promotion) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13) returning id`
 	querySelectAllRsvn     = `SELECT r.id, r.first_name, r.last_name, r.email, r.phone, r.room_id, r.status, r.start_date, r.end_date, r.created_at, r.updated_at, rt.id, rt.title, r.processed
 										FROM reservations r 
 										left join room_types rt 
@@ -58,7 +58,10 @@ func (r *Reservation) Create(rsvn Reservation) (int, error) {
 		rsvn.StartDate,
 		rsvn.EndDate,
 		rsvn.CreatedAt,
-		rsvn.UpdatedAt).Scan(&newReservationId)
+		rsvn.UpdatedAt,
+		rsvn.PromotionId,
+		rsvn.PromotionTypeId,
+		rsvn.IsPromotion).Scan(&newReservationId)
 
 	if err != nil {
 		return 0, err

@@ -45,7 +45,7 @@ func routes(app *configs.AppConfig) http.Handler {
 		// search all room availability
 		mux.Post("/search-availability", controllers.HandlerRepo.PostSearchAvailability)
 		// choose available room for make reservation
-		mux.Get("/reseration/choose-room/{id}/{type}/{no}", controllers.HandlerRepo.ChooseRoom)
+		mux.Get("/reservation/choose-room/{id}/{type}/{no}", controllers.HandlerRepo.ChooseRoom)
 
 		// serch room available by room type and return as json format
 		mux.Post("/search-availability-response", controllers.HandlerRepo.AvailabilityJson)
@@ -58,6 +58,35 @@ func routes(app *configs.AppConfig) http.Handler {
 		mux.Post("/reservation", controllers.HandlerRepo.PostReservation)
 		// show summary reservation
 		mux.Get("/reservation-summary", controllers.HandlerRepo.ReservationSummary)
+
+	})
+
+	// Section: Promotions routing
+	mux.Route("/promotions", func(mux chi.Router) {
+		// search form
+		// search form
+		mux.Get("/", controllers.HandlerRepo.Promotions)
+		// mux.Get("/promotion-details/{id}/{type}", controllers.HandlerRepo.PromotionDetails)
+		mux.Get("/promotion-choose-room/{type}/{id}", controllers.HandlerRepo.PromotionRoomType)
+
+		mux.Get("/types", controllers.HandlerRepo.PromotionTypes)
+
+		// // search all room availability
+		// mux.Post("/search-promotion-availability", controllers.HandlerRepo.PostSearchAvailability)
+		// // choose available room for make reservation
+		// mux.Get("/reseration/choose-room/{id}/{type}/{no}", controllers.HandlerRepo.ChooseRoom)
+
+		// // serch room available by room type and return as json format
+		// mux.Post("/search-availability-response", controllers.HandlerRepo.AvailabilityJson)
+		// // searc availability by room type
+		// mux.Get("/reservation-by-room-type", controllers.HandlerRepo.ReservationByRoomType)
+
+		// // reservation form
+		// mux.Get("/reservation", controllers.HandlerRepo.Reservation)
+		// // create new reservation
+		// mux.Post("/reservation", controllers.HandlerRepo.PostReservation)
+		// // show summary reservation
+		// mux.Get("/reservation-summary", controllers.HandlerRepo.ReservationSummary)
 
 	})
 
@@ -127,6 +156,10 @@ func routes(app *configs.AppConfig) http.Handler {
 		mux.Post("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatus)
 		// show all rooms status
 		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)
+
+		// Section: Promotion
+		mux.Get("/promotions", controllers.HandlerRepo.PromotionsList)
+		mux.Get("/promotions/types", controllers.HandlerRepo.PromotionTypes)
 
 		// Section: User
 		// Control and manage all users

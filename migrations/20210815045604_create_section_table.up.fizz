@@ -1,4 +1,4 @@
-create_table("users") {
+create_table("sections") {
     t.Column("id", "integer", {primary: true})
     t.Column("title", "string", {"default": "section title"})
     t.Column("desc", "string", {"default": "description"})

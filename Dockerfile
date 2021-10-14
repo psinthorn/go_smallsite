@@ -1,4 +1,4 @@
-FROM golang:1.16
+FROM golang:1.17
 
 # กำหนดโฟลเดอร์ที่เก็บไฟล์งานบน docker
 WORKDIR /app

@@ -1,0 +1,1 @@
+drop_foreign_key("promotions", "promotions_promotion_types_id_fk", {})
