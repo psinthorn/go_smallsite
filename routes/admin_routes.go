@@ -157,7 +157,7 @@ func routes(app *configs.AppConfig) http.Handler {
 		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)
 
 		// Section: Promotion
-		mux.Get("/promotions/new", controllers.HandlerRepo.NewPromotionForm)
+		mux.Get("/promotions/new", controllers.HandlerRepo.PromotionForm)
 		mux.Get("/promotions", controllers.HandlerRepo.PromotionsList)
 		mux.Get("/promotions/{id}/edit", controllers.HandlerRepo.PromotionTypes)
 		mux.Get("/promotions/types", controllers.HandlerRepo.PromotionTypesList)
