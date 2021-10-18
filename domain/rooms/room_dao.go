@@ -13,7 +13,7 @@ const (
 						from rooms rm 
 						left join room_types rt 
 						on (rm.roomtype_id = rt.id)
-						order by rt.title asc
+						order by rm.id asc
 						`
 	queryGetRoomByID = `SELECT id, roomtype_id, room_name, room_no, description, status, created_at, updated_at FROM rooms WHERE id = $1`
 )

@@ -1,0 +1,2 @@
+drop_column("reservations","promotion_id")
+drop_column("reservations","promotion_type_id")

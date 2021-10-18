@@ -6,7 +6,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>Hotel Admin Areas</title>
+  <title>Admin Areas</title>
   <!-- plugins:css -->
   <link rel="stylesheet" href="/static/admin/vendors/ti-icons/css/themify-icons.css">
   <link rel="stylesheet" href="/static/admin/vendors/base/vendor.bundle.base.css">
@@ -27,7 +27,7 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-center">
-        <a href="/" class="navbar-brand brand-logo mr-5" href="/admin/dashboard">GoUniqueHotel</a>
+        <a href="/" class="navbar-brand brand-logo mr-5" href="/admin/dashboard">F2xHotel</a>
         <!-- <a class="navbar-brand brand-logo mr-5" href="/admin/dashboard"><img src="/static/admin/images/logo.svg" class="mr-2" alt="logo"/></a> -->
         <a class="navbar-brand brand-logo-mini" href="/admin/dashboard"><img src="/static/admin/images/logo-mini.svg" alt="logo"/></a>
       </div>
@@ -207,7 +207,9 @@
             </a>
             <div class="collapse" id="rsvn-sub">
               <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/admin/reservations/calendar">Reservations Calendar</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/admin/reservations">All Reservations</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/reservations/new-reservations">New Reservations</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/rooms/reservations/new">New Booking</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/admin/reservations/status">Booking Status</a></li>
               </ul>
@@ -227,6 +229,21 @@
                 <li class="nav-item"> <a class="nav-link" href="/admin/rooms/new">New Room</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/admin/rooms/room-status/new">Room Status</a></li>
                 <li class="nav-item"> <a class="nav-link" href="/admin/rooms/roomtype/new">Room Type</a></li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#promotions-sub" aria-expanded="false" aria-controls="promotions-sub">
+              <i class="ti-agenda menu-icon"></i>
+              <span class="menu-title">Promotions</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="promotions-sub">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/admin/promotions">All Promotions</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/promotions/types">Promotion Types</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/promotions/room-rate">Room Rate</a></li>
               </ul>
             </div>
           </li>
@@ -286,6 +303,21 @@
               </ul>
             </div>
           </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="collapse" href="#contents-sub" aria-expanded="false" aria-controls="contents-sub">
+              <i class="ti-ink-pen menu-icon"></i>
+              <span class="menu-title">Contents</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="contents-sub">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item"> <a class="nav-link" href="/admin/contents">All Contents</a></li>
+                <li class="nav-item"> <a class="nav-link" href="/admin/contents/create">Create Content</a></li>
+              </ul>
+            </div>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link" href="/static/admin/documentation/documentation.html">
               <i class="ti-write menu-icon"></i>

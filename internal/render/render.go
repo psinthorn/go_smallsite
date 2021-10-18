@@ -161,5 +161,7 @@ func CreateSingleTemplateCache(tmpl string) (map[string]*template.Template, erro
 
 // Humandate is return time format as YYYY-MM-DD
 func HumanDate(t time.Time) string {
-	return t.Format("2006-01-02")
+	layoutUS := "January 2, 2006"
+	// layoutISO = "2006-01-02"
+	return t.Format(layoutUS)
 }

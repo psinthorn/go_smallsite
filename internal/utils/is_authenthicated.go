@@ -8,7 +8,7 @@ import (
 func (u *Utils) IsAuthenticated(r *http.Request) bool {
 	var exists bool
 	if appConfig.IsProduction == false {
-		exists = true
+		exists = false
 	} else {
 		exists = appConfig.Session.Exists(r.Context(), "user_id")
 	}

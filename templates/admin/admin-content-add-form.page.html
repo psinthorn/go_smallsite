@@ -1,0 +1,142 @@
+{{template "admin-base" .}}
+
+{{define "admin-page-title"}}
+    Content management
+{{end}}
+
+{{define "content"}}
+<div class="container"> 
+    <a href="/admin/contents/create" type="button" class="btn btn-warning">Back</a>
+    <div class="row">
+        <div class="col">
+            <h4 class="mt-5 mb-3">Add new room type</h4>
+
+            {{$d := index .Data "content" }}
+            <form method="post" action="/admin/rooms/room-status/new" class="" novalidate>
+                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+                <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="title">Title:</label>
+                                    {{with .Form.Errors.Get "title"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <input class="form-control {{with .Form.Errors.Get "title"}} is-invalid {{end}}"
+                                        id="title" autocomplete="off" type='text'
+                                        name="title" value="{{$d.Title}}" required>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="subtitle">Sub Title:</label>
+                                    {{with .Form.Errors.Get "sub_title"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <input class="form-control {{with .Form.Errors.Get "sub_title"}} is-invalid {{end}}"
+                                        id="subtitle" autocomplete="off" type='text'
+                                        name='subtitle' value="{{$d.SubTitle}}" required>
+                                </div>                           
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">   
+                                <div class="form-group">
+                                    <label for="content">Content</label>
+                                    {{with .Form.Errors.Get "content"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <textarea class="form-control {{with .Form.Errors.Get "content"}} is-invalid {{end}}" 
+                                        id="content"
+                                        autocomplete="off" rows='23'
+                                        name='content' value="{{$d.Content}}" required></textarea>
+                                </div>
+                            </div>
+                        </div>    
+                    
+                        <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                         <!-- section category content type -->
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="section">Section:</label>
+                                    {{with .Form.Errors.Get "section"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <input class="form-control {{with .Form.Errors.Get "section"}} is-invalid {{end}}"
+                                           id="section" autocomplete="off" type='text'
+                                           name="section" value="{{$d.Section}}" required>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="category">Category:</label>
+                                    {{with .Form.Errors.Get "category"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <input class="form-control {{with .Form.Errors.Get "category"}} is-invalid {{end}}"
+                                           id="category" autocomplete="off" type='text'
+                                           name='category' value="{{$d.Category}}" required>
+                                </div>                           
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">   
+                                <div class="form-group">
+                                    <label for="contenttype">Content Type</label>
+                                    {{with .Form.Errors.Get "contenttype"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <input class="form-control {{with .Form.Errors.Get "content_type"}} is-invalid {{end}}" 
+                                        id="contenttype"
+                                        autocomplete="off" type='text'
+                                        name='contenttype' value="{{$d.ContentType}}" required>
+                                </div>
+                            </div>
+
+                            <!-- Image -->
+                            <!-- show image here -->
+                            
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="image">Image</label>
+                                    {{with .Form.Errors.Get "image"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <input class="form-control {{with .Form.Errors.Get "image"}} is-invalid {{end}}"
+                                        id="image" autocomplete="off" type='text'
+                                        name="image" value="{{$d.Image}}" required>
+                                </div>
+                            </div>
+                                        
+                            <!-- tage status -->                  
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="tags">Tags</label>
+                                    {{with .Form.Errors.Get "tags"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <input class="form-control {{with .Form.Errors.Get "tags"}} is-invalid {{end}}"
+                                        id="tags" autocomplete="off" type='text'
+                                        name='tags' value="{{$d.Tags}}" required>
+                                </div>                           
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">   
+                                <div class="form-group">
+                                    <label for="status">Status</label>
+                                    {{with .Form.Errors.Get "status"}}
+                                        <label class="text-danger">{{.}}</label>
+                                    {{end}}
+                                    <input class="form-control {{with .Form.Errors.Get "status"}} is-invalid {{end}}" 
+                                        id="status"
+                                        autocomplete="off" type='text'
+                                        name='status' value="{{$d.Status}}" required>
+                                </div>
+                            </div>
+                        </div>  
+  
+                    </div>       
+                <input type="submit" class="btn btn-primary mt-1 mb-1" value="Add"> 
+            </form>
+        </div>
+    </div>
+</div>
+
+{{end}}
+
+

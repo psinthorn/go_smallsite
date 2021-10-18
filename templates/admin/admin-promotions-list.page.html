@@ -1,0 +1,82 @@
+{{template "admin-base" .}}
+{{define "css"}}
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+{{end}}
+
+{{define "admin-page-title"}}
+    Promotion management
+{{end}}
+
+{{define "content"}}
+<div class="col-sm-12 col-md-12 col-lg-12">
+    {{$pms := index .Data "promotions"}}
+        <div class="table-responsive">
+            <table class="table table-hover table-sm" id="all-promotions">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <!-- <th>Description</th> -->
+                        <th>Rate</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Promotion Type</th>
+                        <th>Status</th>
+                        <!-- <th>Create</th>
+                        <th>Last Update</th> -->
+                        <th>Actions</th>
+                    </tr>
+                    <tbody>
+                    {{range $pms }}       
+                        <tr>
+                        
+                            <td></td>
+                            <td>{{.Title}}</td>
+                            <!-- <td>{{.Description}}</td> -->
+                            <td>{{.Price}}</td> 
+                            <td>{{humanDate .StartDate}}</td>
+                            <td>{{humanDate .EndDate}}</td>
+                            <td>{{.PromotionType.Title}}</td>
+                            <td>{{.Status}}</td>
+                            <!-- <td>{{humanDate .CreatedAt}}</td>
+                            <td>{{humanDate .UpdatedAt}}</td> -->
+                            <td>                               
+                                <!-- <div class="btn-group btn-group-sm" role="group" aria-label="Small button group"> -->
+                                    <a href="/admin/promotions/{{.ID}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
+                                    <a href="/admin/promotions/{{.ID}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="/admin/promotions/{{.ID}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a>
+                                <!-- </div> -->
+                            </td>
+                        </tr>                 
+                    {{end}}
+                    </tbody>
+                </thead>
+            </table>
+        </div>
+</div>
+
+<div class="mt-5 mb-5">
+        <div class="row">
+            <div class="col">
+                <a href="/admin/promotions/new" type="button" class="btn btn-success btn-sm" >Add</a>
+                <!-- <a href="/admin/promotions" type="button" class="btn btn-warning btn-sm">Back</a> -->
+            </div>
+        </div>
+</div>
+
+{{end}}
+
+{{define "js"}}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+<script>
+    // Waiting until all the necessary contetns is loaded then working on dataTable (show list of data)
+    document.addEventListener("DOMContentLoaded",function () {
+        const dataTable = new simpleDatatables.DataTable("#all-promotions", {
+        searchable: true,
+        fixedHeight: true,
+        })
+    })
+    
+</script>
+{{end}}
+    
