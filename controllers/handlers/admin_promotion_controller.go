@@ -2,7 +2,9 @@ package controllers
 
 import (
 	"net/http"
+	"strconv"
 
+	"github.com/go-chi/chi"
 	domain "github.com/psinthorn/go_smallsite/domain/promotions"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
@@ -28,8 +30,26 @@ func (rp *Repository) PromotionsList(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+// PromotionTypeList
+func (rp *Repository) PromotionTypesList(w http.ResponseWriter, r *http.Request) {
+	st := r.URL.Query().Get("status")
+	if st == "" {
+		st = "enable"
+	}
+	promotion_types, err := domain.PromotionTypeService.Get(st)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	data := make(map[string]interface{})
+	data["promotion_types"] = promotion_types
+	render.Template(w, r, "admin-promotion-types.page.html", &templates.TemplateData{
+		Data: data,
+	})
+}
+
 // GetRoomForm form for create new room
-func (rp *Repository) AddNewPromotionForm(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) PromotionForm(w http.ResponseWriter, r *http.Request) {
 	var emptyPromotion domain.Promotion
 	data := make(map[string]interface{})
 	data["room"] = emptyPromotion
@@ -38,6 +58,41 @@ func (rp *Repository) AddNewPromotionForm(w http.ResponseWriter, r *http.Request
 		Form: forms.New(nil),
 		Data: data,
 	})
+}
+
+// Promotion return a promotion information
+func (rp *Repository) Promotion(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	stringMap := make(map[string]string)
+	readOnly := "readonly"
+	var isView, isEdit string = "true", ""
+	edit := r.URL.Query().Get("edit")
+	if edit == "true" {
+		readOnly = ""
+		isView = ""
+		isEdit = "true"
+	}
+
+	stringMap["is_read"] = readOnly
+	stringMap["is_edit"] = isEdit
+	stringMap["is_view"] = isView
+
+	pm, err := domain.PromotionService.GetByID(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	data := make(map[string]interface{})
+	data["promotion"] = pm
+	render.Template(w, r, "admin-promotion-details.page.html", &templates.TemplateData{
+		Data:      data,
+		StringMap: stringMap,
+	})
+
 }
 
 // 	rp.App.Session.Remove(r.Context(), "reservation")

@@ -65,11 +65,11 @@ func routes(app *configs.AppConfig) http.Handler {
 	mux.Route("/promotions", func(mux chi.Router) {
 		// search form
 		// search form
-		mux.Get("/", controllers.HandlerRepo.Promotions)
-		// mux.Get("/promotion-details/{id}/{type}", controllers.HandlerRepo.PromotionDetails)
+		mux.Get("/", controllers.HandlerRepo.PromotionTypes)
+		//mux.Get("/promotion-details/{id}", controllers.HandlerRepo.PromotionDetails)
 		mux.Get("/promotion-choose-room/{type}/{id}", controllers.HandlerRepo.PromotionRoomType)
 
-		mux.Get("/types", controllers.HandlerRepo.PromotionTypes)
+		mux.Get("/lists", controllers.HandlerRepo.PromotionsList)
 
 		// // search all room availability
 		// mux.Post("/search-promotion-availability", controllers.HandlerRepo.PostSearchAvailability)
@@ -97,7 +97,7 @@ func routes(app *configs.AppConfig) http.Handler {
 
 		// Authentication middleware
 		// all to below routes is need to authorize by this middleware
-		mux.Use(utils.Middleware.Auth)
+		// mux.Use(utils.Middleware.Auth)
 
 		// Dasboard Section
 		// show summary dasboard
@@ -118,11 +118,13 @@ func routes(app *configs.AppConfig) http.Handler {
 
 		// Section: Reservation
 		// Add new reservation
-		mux.Get("/reservations/new", controllers.HandlerRepo.ReservationAddForm)
+		mux.Get("/reservations/form", controllers.HandlerRepo.ReservationAddForm)
 		mux.Post("/reservations", controllers.HandlerRepo.ReservationAdd)
-		mux.Get("/reservations/{id}", controllers.HandlerRepo.ReservationDetails)
+		//mux.Get("/reservations/{id}", controllers.HandlerRepo.Promotion)
 		// Show all reservation
 		mux.Get("/reservations", controllers.HandlerRepo.ReservationLists)
+		mux.Get("/reservations/new-reservations", controllers.HandlerRepo.NewReservationLists)
+		mux.Get("/reservations/calendar", controllers.HandlerRepo.ReservationCalendar)
 
 		// Edit Reservation
 		mux.Get("/reservations/edit/{id}", controllers.HandlerRepo.ReservationEditForm)
@@ -159,7 +161,11 @@ func routes(app *configs.AppConfig) http.Handler {
 
 		// Section: Promotion
 		mux.Get("/promotions", controllers.HandlerRepo.PromotionsList)
-		mux.Get("/promotions/types", controllers.HandlerRepo.PromotionTypes)
+		mux.Get("/promotions/new", controllers.HandlerRepo.PromotionForm)
+		mux.Get("/promotions/{id}", controllers.HandlerRepo.Promotion)
+		mux.Get("/promotions/{id}/edit", controllers.HandlerRepo.PromotionTypes)
+		mux.Get("/promotions/types", controllers.HandlerRepo.PromotionTypesList)
+		// mux.Delete("/promotions/{id}", controller.)
 
 		// Section: User
 		// Control and manage all users

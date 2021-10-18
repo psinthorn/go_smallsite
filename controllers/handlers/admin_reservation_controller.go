@@ -12,17 +12,37 @@ import (
 
 // ReservationLists Show all current reservations
 func (rp *Repository) ReservationLists(w http.ResponseWriter, r *http.Request) {
+
 	rsvns, err := domain_reservation.ReservationService.GetAll()
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-
+	fmt.Println(rsvns)
 	data := make(map[string]interface{})
 	data["reservations"] = rsvns
 	render.Template(w, r, "admin-reservations-list.page.html", &templates.TemplateData{
 		Data: data,
 	})
+}
+
+// ReservationLists Show all current reservations
+func (rp *Repository) NewReservationLists(w http.ResponseWriter, r *http.Request) {
+	rsvns, err := domain_reservation.ReservationService.GetNewReservations()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	fmt.Println(rsvns)
+	data := make(map[string]interface{})
+	data["reservations"] = rsvns
+	render.Template(w, r, "admin-reservations-list.page.html", &templates.TemplateData{
+		Data: data,
+	})
+}
+
+func (rp *Repository) ReservationCalendar(w http.ResponseWriter, r *http.Request) {
+	render.Template(w, r, "admin-reservations-calendar.page.html", &templates.TemplateData{})
 }
 
 func (rp *Repository) ReservationAddForm(w http.ResponseWriter, r *http.Request) {

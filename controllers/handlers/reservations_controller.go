@@ -54,8 +54,10 @@ func (rp *Repository) PostSearchAvailability(w http.ResponseWriter, r *http.Requ
 	}
 
 	rsvn := domain_reservation.Reservation{
-		StartDate: startDate,
-		EndDate:   endDate,
+		StartDate:       startDate,
+		EndDate:         endDate,
+		PromotionId:     999,
+		PromotionTypeId: 999,
 	}
 
 	data := make(map[string]interface{})
@@ -83,7 +85,7 @@ func (rp *Repository) ChooseRoom(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
-
+	fmt.Println("choose room")
 	fmt.Println(rsvn.IsPromotion)
 	rsvn.RoomID = roomID
 	rsvn.Room.RoomTypeId = roomTypeId
@@ -100,6 +102,8 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, errors.New("can't get reservation information"))
 		return
 	}
+
+	fmt.Println(rsvn)
 
 	// fmt.Println("room type ID: ", rsvn.Room.RoomTypeId)
 	roomTypeID := rsvn.Room.RoomTypeId
@@ -132,7 +136,14 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
 // ReservationByRoomType is search and reservation a room by type that render on individual page
 func (rp *Repository) ReservationByRoomType(w http.ResponseWriter, r *http.Request) {
-	rsvn := domain_reservation.Reservation{}
+	sd := r.URL.Query().Get("sd")
+	ed := r.URL.Query().Get("ed")
+	startDate, err := utils.UtilsService.StringToTime(sd)
+	endDate, err := utils.UtilsService.StringToTime(ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 
 	roomTypeID := r.URL.Query().Get("type")
 	roomTypeId, _ := strconv.Atoi(roomTypeID)
@@ -143,33 +154,31 @@ func (rp *Repository) ReservationByRoomType(w http.ResponseWriter, r *http.Reque
 	}
 
 	roomTypeTitle := roomType.Title
-	startDate := r.URL.Query().Get("sd")
-	endDate := r.URL.Query().Get("ed")
-	fmt.Println(startDate)
-	fmt.Println(endDate)
-
 	stringMap := make(map[string]string)
-	stringMap["start_date"] = startDate
-	stringMap["end_date"] = endDate
+	// stringMap["start_date"] = sd
+	// stringMap["end_date"] = ed
 	stringMap["room_type"] = roomTypeTitle
 	stringMap["room_type_id"] = strconv.Itoa(roomTypeId)
 
 	data := make(map[string]interface{})
-	rsvn.RoomID = 999
-	rsvn.Room.RoomTypeId = roomTypeId
-	rsvn.Room.RoomNo = 999
-
+	rsvn := domain_reservation.Reservation{
+		RoomID:          999,
+		RoomNo:          999,
+		PromotionId:     999,
+		PromotionTypeId: 999,
+		StartDate:       startDate,
+		EndDate:         endDate,
+	}
+	rsvn.Room.RoomTypeId = 999
 	data["reservation"] = rsvn
+	rp.App.Session.Put(r.Context(), "reservation", rsvn)
+	http.Redirect(w, r, "/rooms/reservation", http.StatusSeeOther)
 
-	render.Template(w, r, "make-reservation.page.html", &templates.TemplateData{
-		Form:      forms.New(nil),
-		Data:      data,
-		StringMap: stringMap,
-	})
 }
 
 // PostReservation id create and save reservation information to reservaton and allotment table on database
 func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
+	form := forms.New(r.PostForm)
 	err := r.ParseForm()
 	if err != nil {
 		helpers.ServerError(w, err)
@@ -178,6 +187,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	sd := r.Form.Get("start_date")
 	ed := r.Form.Get("end_date")
+
 	roomTypeTitle := r.Form.Get("room_type")
 	roomTypeId := r.Form.Get("room_type_id")
 	roomTypeIdInt, err := strconv.Atoi(roomTypeId)
@@ -191,6 +201,13 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
+
+	// form.Has("first_name", r)
+	form.Required("first_name", "last_name", "email", "start_date", "end_date")
+	// minimum require on input field
+	form.MinLength("first_name", 3, r)
+	// email validation
+	form.IsEmail("email")
 
 	// convert from string date to time.Time format
 	startDate, err := utils.UtilsService.StringToTime(sd)
@@ -215,9 +232,12 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 	//isPromotion, _ := strconv.ParseBool(r.Form.Get("Is_promotion"))
 	rsvn, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
 	if !ok {
-		helpers.ServerError(w, err)
+		helpers.ServerError(w, errors.New("can't get reservation from session"))
 		return
 	}
+
+	fmt.Println(rsvn)
+
 	amount, _ := strconv.Atoi(r.Form.Get("amount"))
 	perNight := rsvn.Amount / 4
 	reservation := domain_reservation.Reservation{
@@ -238,15 +258,6 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}
-
-	form := forms.New(r.PostForm)
-
-	// form.Has("first_name", r)
-	form.Required("first_name", "last_name", "email")
-	// minimum require on input field
-	form.MinLength("first_name", 3, r)
-	// email validation
-	form.IsEmail("email")
 
 	if !form.Valid() {
 		stringMap := make(map[string]string)

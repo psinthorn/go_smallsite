@@ -70,7 +70,7 @@
                         </div> <!--  end row 1 -->
 
                         <div class="row pt-3 pb-3">
-                            <div class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="col-sm-12 col-md-12 col-lg-12 text-center">
                                 <h5 class="lead mt-3 mb-3">Available Package </h5>
                                 {{range $pm := $pms}}
                                 <div class="card align-middle mb-3">
@@ -79,13 +79,13 @@
                                             <div class="col-sm-12 col-md-4 col-lg-4">
                                                 <p class="lead">{{$pm.Title}}</p>
                                             </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4 mt-1 mb-3">
+                                            <div class="col-sm-12 col-md-6 col-lg-6 mt-1 mb-3">
                                                 <p class="small">
                                                     Start From <span class="lead text-danger">{{$pm.Price}}</span> baht.
-                                                    <br/><span>{{$pm.Description}}  only x,xxx pernight </span>
+                                                    <br/><span>{{$pm.Description}}</span>
                                                 </p>
                                             </div>
-                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                            <div class="col-sm-12 col-md-2 col-lg-2">
                                                 <a href="/promotions/promotion-choose-room/{{$pm.PromotionTypeId}}/{{$pm.ID}}" class="btn btn-success">Book Now</a>
                                             </div>
                                             <!-- <div class="row m-3">

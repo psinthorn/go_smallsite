@@ -1,17 +1,31 @@
-package domain
+package domain_promotions
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
 )
 
 const (
-	queryInsertPromotion  = "insert into rooms (title, description, price, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id"
-	queryGetAllPromotions = `select id, title, description, price, promotion_type_id, start_date, end_date, status, created_at, updated_at from promotions where status = $1  order by id asc`
-	queryGetPromotionByID = `SELECT id, roomtype_id, room_name, room_no, description, status, created_at, updated_at FROM rooms WHERE id = $1`
+	queryInsertPromotion = "insert into rooms (title, description, price, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id"
+
+	queryGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
+							from promotions pms
+							left join promotion_types pt 
+							on (pms.promotion_type_id = pt.id) 
+							where pms.status = $1  
+							order by pms.id asc`
+
+	queryGetPromotionByID = `SELECT pm.id, pm.title, pm.description, pm.price, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
+							from promotions pm 
+							left join promotion_types pt 
+							on (pm.promotion_type_id = pt.id) 
+							where pm.id = $1`
+
+	queryUpdateById = `update promotions set title= $1, description = $2, price = $3, status = $4, updated_at = $5`
+
+	queryDeletePromotionById = `delete promotions where id = $1`
 )
 
 var PromotionService promotionDomainInterface = &Promotion{}
@@ -20,9 +34,9 @@ type Promotion promotion
 type promotionDomainInterface interface {
 	Create(Promotion) (int, error)
 	Get(string) ([]Promotion, error)
-	// GetPromotionByID(int) (Promotion, error)
-	// Update(Promotion) (Promotion, error)
-	// Delete(int) error
+	GetByID(int) (Promotion, error)
+	Update(Promotion) error
+	Delete(int) error
 }
 
 // Create insert and return room data
@@ -75,6 +89,8 @@ func (s *Promotion) Get(st string) ([]Promotion, error) {
 			&p.Status,
 			&p.CreatedAt,
 			&p.UpdatedAt,
+			&p.PromotionType.ID,
+			&p.PromotionType.Title,
 		)
 
 		if err != nil {
@@ -88,50 +104,78 @@ func (s *Promotion) Get(st string) ([]Promotion, error) {
 		return promotions, err
 	}
 
-	fmt.Println(promotions)
-
 	return promotions, nil
 
 }
 
-// // GetRoomByID return room details
-// func (s *Room) GetRoomByID(id int) (Room, error) {
+// GetRoomByID return room details
+func (s *Promotion) GetByID(id int) (Promotion, error) {
+	var pm Promotion
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
 
-// 	var roombyId Room
-// 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
-// 	defer cancel()
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return pm, err
+	}
 
-// 	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
-// 	if err != nil {
-// 		return roombyId, err
-// 	}
+	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionByID, id).Scan(
+		&pm.ID,
+		&pm.Title,
+		&pm.Description,
+		&pm.Price,
+		&pm.PromotionTypeId,
+		&pm.StartDate,
+		&pm.EndDate,
+		&pm.Status,
+		&pm.CreatedAt,
+		&pm.UpdatedAt,
+		&pm.PromotionType.ID,
+		&pm.PromotionType.Title,
+	)
+	if err != nil {
+		return pm, err
+	}
+	defer dbConn.SQL.Close()
 
-// 	err = dbConn.SQL.QueryRowContext(ctx, queryGetRoomByID, id).Scan(
-// 		&roombyId.ID,
-// 		&roombyId.RoomTypeId,
-// 		&roombyId.RoomName,
-// 		&roombyId.RoomNo,
-// 		&roombyId.Description,
-// 		&roombyId.Status,
-// 		&roombyId.CreatedAt,
-// 		&roombyId.UpdatedAt,
-// 	)
-// 	if err != nil {
-// 		return roombyId, err
-// 	}
-// 	defer dbConn.SQL.Close()
+	return pm, nil
 
-// 	return roombyId, nil
+}
 
-// }
+func (s *Promotion) Update(pm Promotion) error {
 
-// func (s *Room) Update(r Room) (Room, error) {
-// 	var room Room
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
 
-// 	return room, nil
-// }
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return err
+	}
 
-// func (s *Room) Delete(id int) error {
+	_, err = dbConn.SQL.QueryContext(ctx, queryUpdateById,
+		pm.Title,
+		pm.Description,
+		pm.Price,
+		pm.Status,
+		time.Now(),
+	)
 
-// 	return nil
-// }
+	return nil
+}
+
+func (s *Promotion) Delete(id int) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return err
+	}
+
+	_, err = dbConn.SQL.ExecContext(ctx, queryDeletePromotionById, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

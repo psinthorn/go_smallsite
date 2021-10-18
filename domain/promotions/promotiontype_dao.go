@@ -1,8 +1,7 @@
-package domain
+package domain_promotions
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
@@ -80,8 +79,6 @@ func (pm *PromotionType) Get(status string) ([]PromotionType, error) {
 	if err = rows.Err(); err != nil {
 		return pts, err
 	}
-
-	fmt.Println(pts)
 
 	return pts, nil
 }
