@@ -308,10 +308,19 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	// Send mail confirmation to guest
 	mailToGuest := fmt.Sprintf(`
-		<strong>Reservation Information</strong><br/>
-		Dear %s <br/>
-		This is reservation confirmation from %s to %s 
-`, reservation.FirstName, reservation.StartDate.Format("2006-02-01"), reservation.EndDate.Format("2006-02-01"))
+		<strong>Reservation Information</strong><br/><br/>
+		Dear %s %s<br/>
+		Thank you for your reservationwith us <br/> 
+		the below is your reservation conformation <br/>
+		<br/>
+		<strong>Room type:</strong> %s <br/>
+		<strong>Arrival:</strong> %s <br/>
+		<strong>Departure:</strong> %s <br/>
+		 <br/>
+`, reservation.FirstName, reservation.LastName, roomTypeTitle,
+		reservation.StartDate.Format("2006-02-01"),
+		reservation.EndDate.Format("2006-02-01"),
+	)
 
 	mailMsg := domain_mail.MailDataTemplate{
 		To:       reservation.Email,
@@ -325,10 +334,27 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 
 	// Send mail notification to reservation
 	mailToRsvn := fmt.Sprintf(`
-		<strong>Reservation Information</strong><br/>
-		Dear %s <br/>
-		This is reservation notification from %s to %s 
-`, reservation.FirstName, reservation.StartDate.Format("2006-02-01"), reservation.EndDate.Format("2006-02-01"))
+	<strong>Reservation Information</strong><br/>
+	<br/>
+		
+		the below is your reservation information <br/>
+		<br/>
+		<strong>Customer Name:</strong> %s %s <br/>
+		<strong>Email:</strong> %s <br/>
+		<strong>Phone:</strong> %s <br/>
+		<br/>
+		<strong>Room type:</strong> %s <br/>
+		<strong>Arrival:</strong> %s <br/>
+		<strong>Departure:</strong> %s <br/>
+		 <br/>
+`, reservation.FirstName,
+		reservation.LastName,
+		reservation.Email,
+		reservation.Phone,
+		roomTypeTitle,
+		reservation.StartDate.Format("2006-02-01"),
+		reservation.EndDate.Format("2006-02-01"),
+	)
 
 	mailNotificationRsvn := domain_mail.MailDataTemplate{
 		To:       "rsvn@gosmallsitehotel.com",

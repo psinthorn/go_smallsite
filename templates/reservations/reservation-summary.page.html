@@ -9,10 +9,10 @@
             <div class="col">
                 <h2 class="mt-5 mb-3">Thank you for reservation with us.</h2>
                 <h3 class="mt-5 mb-3">Reservation Infomation</h3>
-                <table class="table tabel-stripe">
+                <table class="table tabel-stripe table-sm">
                     <thead> </thead>
                         <tr>
-                            <td>Name</td>
+                            <td>Name:</td>
                             <td>{{$rsvn.FirstName}} {{$rsvn.LastName}}</td>
                         </tr>
                         <tr>
@@ -28,14 +28,15 @@
                             <td>{{index .StringMap "end_date"}}</td>
                         </tr>
                         <tr>
-                            <td>Email</td>
+                            <td>Email:</td>
                             <td>{{$rsvn.Email}}</td>
                         </tr>
                         <tr>
-                            <td>Phone</td>
+                            <td>Phone:</td>
                             <td>{{$rsvn.Phone}}</td>
                         </tr>
                     </table>
+                    <p class="small text-center">*please check your email for information confirmation</p>
             </div>
         </div>
     </div>

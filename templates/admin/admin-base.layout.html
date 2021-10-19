@@ -173,12 +173,14 @@
                 <i class="ti-power-off text-primary"></i>
                 Logout
               </a>
+
               {{else}}
               <a href="/users/login" class="dropdown-item">
                 <i class="ti-power-off text-primary"></i>
                 Login
               </a>
               {{end}}
+
             </div>
           </li>
         </ul>
@@ -356,8 +358,8 @@
         <!-- partial:partials/_footer.html -->
         <footer class="footer">
           <div class="d-sm-flex justify-content-center justify-content-sm-between">
-            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block">Copyright © f2connect.com 2020</span>
-            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center"> Free <a href="https://www.f2connect.com/" target="_blank">Unique Hotel Websit templates</a> from F2 Co.,Ltd.</span>
+            <span class="text-muted d-block text-center text-sm-left d-sm-inline-block small">Copyright © f2.co.th 2020</span>
+            <span class="float-none float-sm-right d-block mt-1 mt-sm-0 text-center small"> Free <a href="https://www.f2.co.th" target="_blank">powered by F2xHotel Websit templates</a></span>
           </div>
         </footer>
         <!-- partial -->
@@ -367,6 +369,20 @@
     <!-- page-body-wrapper ends -->
   </div>
   <!-- container-scroller -->
+
+  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+          integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+          crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns"
+          crossorigin="anonymous"></script> -->
+
+    <!-- <script src="/static/css/bootstrap-5x0/js/bootstrap.bundle.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/js/datepicker-full.min.js"></script>
+  <script src="https://unpkg.com/notie"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.15.5/dist/sweetalert2.min.js"></script>
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="/static/js/app.js"></script>
 
   <!-- plugins:js -->
   <script src="/static/admin/vendors/base/vendor.bundle.base.js"></script>
@@ -388,6 +404,55 @@
   {{block "js" .}}
   {{end}}
   <!-- block per page javascript end -->
+  <script>
+    let attention = Prompt();
+
+    (function () {
+        'use strict';
+        window.addEventListener('load', function () {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            let forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            Array.prototype.filter.call(forms, function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();     
+    function notify(msg, msgType) {
+        notie.alert({
+            type: msgType,
+            text: msg,
+        })
+    } 
+    function notifyModal(title, text, icon, confirmationButtonText) {
+        Swal.fire({
+            title: title,
+            html: text,
+            icon: icon,
+            confirmButtonText: confirmationButtonText
+        })
+    }
+
+  //   this notify get from seesion that we has add from default template data
+    {{with .Flash}}
+      notify("{{.}},", "success")
+    {{end}}
+
+    {{with .Error}}
+      notify("{{.}},", "error")
+    {{end}}
+
+    {{with .Warning}}
+      notify("{{.}},", "warning")
+    {{end}}
+
+</script>
 
 </body>
 

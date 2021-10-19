@@ -15,7 +15,6 @@ func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "login.page.html", &templates.TemplateData{
 		Form: forms.New(nil),
 	})
-	//rp.App.Session.Put(r.Context(), "success", "Log in success :)")
 }
 
 // Authenticate
@@ -59,10 +58,7 @@ func (rp *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rp.App.Session.Put(r.Context(), "user_id", user.ID)
-	// fmt.Println("Print r_contxt", r.Context(), "user_id")
-	// fmt.Println("Print user_id from session", rp.App.Session.Get(r.Context(), "user_id"))
 	rp.App.Session.Put(r.Context(), "success", "Logged in sucessfully")
-	// render.Template(w, r, "admin-dashboard-summary.page.html", &templates.TemplateData{})
 	http.Redirect(w, r, "/admin/dashboard", http.StatusSeeOther)
 
 }
@@ -71,6 +67,6 @@ func (rp *Repository) PostLogin(w http.ResponseWriter, r *http.Request) {
 func (rp *Repository) Logout(w http.ResponseWriter, r *http.Request) {
 	_ = rp.App.Session.Destroy(r.Context())
 	_ = rp.App.Session.RenewToken(r.Context())
+	rp.App.Session.Put(r.Context(), "warning", "Logged Out :)")
 	http.Redirect(w, r, "/users/login", http.StatusSeeOther)
-	//render.Template(w, r, "login.page.html", &models.TemplateData{})
 }

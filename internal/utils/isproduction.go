@@ -25,9 +25,7 @@ func (u *Utils) IsProduction(appConfig *configs.AppConfig) {
 	fmt.Println("------------------------------------------------------------------------")
 
 	if hostName != "psinthorn-macbook.local" {
-		// if hostName != "" {
 		isProduction = true
 	}
 	appConfig.IsProduction = isProduction
-	return
 }
