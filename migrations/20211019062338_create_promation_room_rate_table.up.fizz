@@ -1,0 +1,12 @@
+create_table("promotions_room_rate") {
+    t.Column("id", "integer", {primary: true})
+    t.Column("title", "string", {"default": ""})
+    t.Column("room_type_id", "string", {"default": 999})
+    t.Column("promotion_id", "integer", {"default": 999})
+    t.Column("rate", "integer", {"default": 000})
+    t.Column("status", "string", {"default": "enable"})
+    t.Column("start_date", "date", {})
+    t.Column("end_date", "date", {})
+    
+   
+}

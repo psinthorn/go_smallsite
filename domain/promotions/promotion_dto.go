@@ -8,7 +8,7 @@ type promotion struct {
 	ID              int           `json:"id"`
 	Title           string        `json:"title"`
 	Description     string        `json:"description"`
-	Price           int           `json:"price"`
+	Price           int           `json:"price"` //start from price
 	StartDate       time.Time     `json:"start_date"`
 	EndDate         time.Time     `json:"end_date"`
 	PromotionTypeId int           `json:"promotion_type_id"`

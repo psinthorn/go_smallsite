@@ -317,6 +317,7 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		<strong>Arrival:</strong> %s <br/>
 		<strong>Departure:</strong> %s <br/>
 		 <br/>
+		 <strong>Promotion type:</strong> %s <br/>
 `, reservation.FirstName, reservation.LastName, roomTypeTitle,
 		reservation.StartDate.Format("2006-02-01"),
 		reservation.EndDate.Format("2006-02-01"),
@@ -347,6 +348,8 @@ func (rp *Repository) PostReservation(w http.ResponseWriter, r *http.Request) {
 		<strong>Arrival:</strong> %s <br/>
 		<strong>Departure:</strong> %s <br/>
 		 <br/>
+		 <strong>Promotion type:</strong> %s <br/>
+
 `, reservation.FirstName,
 		reservation.LastName,
 		reservation.Email,

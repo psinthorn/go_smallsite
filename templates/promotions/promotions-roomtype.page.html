@@ -4,9 +4,10 @@
         <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
 {{end}}
 {{define "content"}}
-    <div class="container mt-5">   
-        <h3 class="mb-5 text-center text-grey">Special Deal Promotions Room Available</h1> 
-
+    <div class="container mt-5">
+        {{$pm := index .Data "promotion"}}
+        <!-- <h3 class="mb-5 text-center text-grey">Special Deal Promotions</h3>  -->
+            <h4 class="mb-5 text-center text-grey">{{$pm.Title}} <span class="lead">Room Available</span></h4> 
             <div class="card mb-3">
                     <div class="card-body">
                         <div class="row">

@@ -48,11 +48,11 @@ func (rp *Repository) PromotionTypesList(w http.ResponseWriter, r *http.Request)
 	})
 }
 
-// GetRoomForm form for create new room
+// PromotionForm form for create new promotion
 func (rp *Repository) PromotionForm(w http.ResponseWriter, r *http.Request) {
 	var emptyPromotion domain.Promotion
 	data := make(map[string]interface{})
-	data["room"] = emptyPromotion
+	data["promotion"] = emptyPromotion
 
 	render.Template(w, r, "admin-promotion-add-form.page.html", &templates.TemplateData{
 		Form: forms.New(nil),
@@ -94,18 +94,3 @@ func (rp *Repository) Promotion(w http.ResponseWriter, r *http.Request) {
 	})
 
 }
-
-// 	rp.App.Session.Remove(r.Context(), "reservation")
-
-// 	data := make(map[string]interface{})
-// 	data["reservation"] = reservation
-// 	render.Template(w, r, "reservation-summary.page.html", &templates.TemplateData{
-// 		Data: data,
-// 	})
-// }
-
-// // RoomsAll show all rooms
-// func (rp *Repository) RoomsAll() (domain.Room, error) {
-// 	var roomsAll = domain.Room{}
-// 	return roomsAll, nil
-// }

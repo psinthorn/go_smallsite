@@ -3,7 +3,6 @@
 package controllers
 
 import (
-	"fmt"
 	"net/http"
 	"strconv"
 
@@ -58,19 +57,16 @@ func (rp *Repository) PromotionRoomType(w http.ResponseWriter, r *http.Request) 
 		helpers.ServerError(w, err)
 		return
 	}
+
+	pm, err := domain.PromotionService.GetByID(proId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	data := make(map[string]interface{})
+	data["promotion"] = pm
+
 	stringMap := make(map[string]string)
-	// // promotion id have promotion type
-	// proId := chi.URLParam(r, "id")
-	// // promotion type ex. Special package
-	// proType := chi.URLParam(r, "type")
-	// //roomType := chi.URLParam(r, "room")
-
-	// rsvn, ok := rp.App.Session.Get(r.Context(), "reservation").(domain_reservation.Reservation)
-	// if !ok {
-	// 	helpers.ServerError(w, err)
-	// 	return
-	// }
-
 	rsvn := domain_reservation.Reservation{
 		IsPromotion:     true,
 		PromotionId:     proId,
@@ -78,15 +74,12 @@ func (rp *Repository) PromotionRoomType(w http.ResponseWriter, r *http.Request) 
 		// StartDate: ,
 		// EndDate:   ,
 	}
-
-	fmt.Println(rsvn.PromotionId)
 	rsvn.PromotionId = proId
-	fmt.Println(rsvn.IsPromotion)
-	fmt.Println(rsvn.PromotionId)
 	//rsvn.Room.Pro = proId
-
+	rp.App.Session.Put(r.Context(), "promotion", pm)
 	rp.App.Session.Put(r.Context(), "reservation", rsvn)
 	render.Template(w, r, "promotions-roomtype.page.html", &templates.TemplateData{
+		Data:      data,
 		StringMap: stringMap,
 	})
 
