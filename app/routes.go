@@ -95,8 +95,8 @@ func routes(app *configs.AppConfig) http.Handler {
 
 	mux.Route("/admin", func(mux chi.Router) {
 
-		// Authentication middleware
-		// all to below routes is need to authorize by this middleware
+		// // Authentication middleware
+		// // all to below routes is need to authorize by this middleware
 		// mux.Use(utils.Middleware.Auth)
 
 		// Dasboard Section
