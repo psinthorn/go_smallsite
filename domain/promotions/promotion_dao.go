@@ -163,6 +163,7 @@ func (s *Promotion) Update(pm Promotion) error {
 	return nil
 }
 
+// Delete
 func (s *Promotion) Delete(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()

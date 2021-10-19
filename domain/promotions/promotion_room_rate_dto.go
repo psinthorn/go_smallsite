@@ -2,12 +2,13 @@ package domain_promotions
 
 import "time"
 
-type PromotionRoomRate struct {
-	Id           int       `json:"id"`
-	RoomId       int       `json:"room_id"`
-	Promotion_id int       `json:"promotion_id"`
-	RateId       float32   `json:"rate_id"`
-	Status       string    `json:"status"`
-	CreatedAt    time.Time `json:"created_at"`
-	UpdatedAt    time.Time `json:"updatedAt"`
+type promotionRoomRate struct {
+	Id          int       `json:"id"`
+	Title       string    `json:"title"`
+	RoomTypeId  int       `json:"room_type_id"`
+	PromotionId int       `json:"promotion_id"`
+	Rate        float32   `json:"rate"`
+	Status      string    `json:"status"`
+	CreatedAt   time.Time `json:"created_at"`
+	UpdatedAt   time.Time `json:"updatedAt"`
 }

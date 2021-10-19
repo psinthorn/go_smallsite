@@ -6,10 +6,10 @@ type Rate struct {
 	Id              int       `json:"id"`
 	Title           string    `json:"title"`
 	Description     string    `json:"description"`
-	RateType        int       `json:"rate_type"`
+	RateTypeId      int       `json:"rate_type_id"`
 	RoomTypeId      int       `json:"room_type_id"`
-	Rate            float32   `json:"rate"`
 	PromotionTypeId int       `json:"promotion_type-id"`
+	Rate            float32   `json:"rate"`
 	StartDate       time.Time `json:"start_date"`
 	EndDate         time.Time `json:"end_date"`
 	Status          string    `json:"status"`
