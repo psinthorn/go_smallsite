@@ -63,7 +63,7 @@ function Prompt() {
             msg = "",
             title = "",
             showConfirmButton = true,
-            showCloseButton = true,
+            showCloseButton = false,
             showCancelButton =  true,
             cancelButtonText = "Cancel",
         } = c;
