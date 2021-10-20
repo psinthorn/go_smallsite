@@ -1,0 +1,101 @@
+{{template "admin-base" .}}
+<!-- {{define "banner"}}
+        <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
+{{end}} -->
+{{define  "admin-page-title" }}
+    Promotion Details
+{{end}}
+
+{{define "content"}}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col">
+                <!-- {{$IsReadOnly := index .StringMap "is_read"}}
+                {{$isEdit := index .StringMap "is_edit"}}
+                {{$isView := index .StringMap "is_view"}} -->
+                
+                {{$pm := index .Data "promotion" }}
+                <form method="post" action="/admin/promotions/update" class="" novalidate>
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label class="small" for="room_type">Promotion Type: </label>
+                                        <input class="form-control" id="room_type" autocomplete="off" type='text'
+                                            name='room_type'  value="{{$pm.PromotionType.Title}}" {{$IsReadOnly}} required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="small" for="description">Description:</label>
+                                        <textarea class="form-control" id="description" autocomplete="off"
+                                        name='description'  value="{{$pm.Description}}" {{$IsReadOnly}} rows="4" required>{{$pm.Description}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                                                 
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="small" for="start_date">Start Date:</label>
+                                        <input class="form-control" id="start_date" autocomplete="off" type='text'
+                                                name='start_date'  value="{{humanDate $pm.StartDate}}" {{$IsReadOnly}} required>
+                                    </div>
+                                </div>
+            
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="small" for="end_date">End Date:</label>
+                                        <input class="form-control" id="end_date" autocomplete="off" type='text' name='end_date'  value="{{humanDate $pm.EndDate}}" {{$IsReadOnly}} required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">  
+                                    
+                                <div class="form-group">
+                                    <label class="small" for="status">Status:</label>
+                                    <input class="form-control" id="status" autocomplete="off"
+                                    name='status' {{$IsReadOnly}} rows="6" value="{{$pm.Status}}" required>
+                                </div> 
+                          
+                            <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <div class="form-group">
+                                            <label class="small" for="created_at">Created At:</label>
+                                            <input class="form-control" id="created_at" autocomplete="off" type='text'
+                                                    name='created_at'  value="{{humanDate $pm.CreatedAt}}" {{$IsReadOnly}} required>
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <div class="form-group">
+                                            <label class="small" for="updated_at">Latest Update:</label>
+                                            <input class="form-control" id="updated_at" autocomplete="off" type='text' name='updated_at'  value="{{humanDate $pm.UpdatedAt}}" {{$IsReadOnly}} required>
+                                        </div>
+                                    </div>
+                            </div>                            
+                        </div>
+                    </div>
+                    <a href="/admin/promotions" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
+                    {{if $isEdit }}
+                        <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" >
+                        <input type="submit" class="btn btn-sm btn-warning mt-3" value="Edit" hidden>
+                    {{else}}
+                        <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" hidden>
+                        <a href="/admin/promotions/{{$pm.ID}}?edit=true" class="btn btn-sm btn-warning mt-3">Edit</a>
+                    {{end}}
+                </form>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+    <script>
+    </script>
+{{end}}
+    

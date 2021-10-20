@@ -8,7 +8,10 @@ import (
 )
 
 // Middleware variable as middleware type
-var Middleware middleware
+var (
+	Middleware middleware
+	//appConfig  configs.AppConfig
+)
 
 type middleware struct{}
 
@@ -31,6 +34,16 @@ func (mdw *middleware) NoSurf(next http.Handler) http.Handler {
 		SameSite: http.SameSiteLaxMode,
 	})
 	return csrfHandler
+}
+
+func (mdw *middleware) Auth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if !UtilsService.IsAuthenticated(r) {
+			http.Redirect(w, r, "/users/login", http.StatusSeeOther)
+			return
+		}
+		next.ServeHTTP(w, r)
+	})
 }
 
 // // SessionLoad middleware adds and save session on every requests

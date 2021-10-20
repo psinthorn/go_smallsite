@@ -16,7 +16,16 @@ import (
 
 // GetRoomForm form for create new room
 func (rp *Repository) RoomGetAll(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "admin-room-list.page.html", &templates.TemplateData{})
+	rooms, err := domain.RoomService.Get()
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	data := make(map[string]interface{})
+	data["rooms"] = rooms
+	render.Template(w, r, "room-list.page.html", &templates.TemplateData{
+		Data: data,
+	})
 }
 
 // GetRoomForm form for create new room

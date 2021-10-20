@@ -1,0 +1,2 @@
+drop_index("promotions", "promotions_id_idx")
+drop_index("promotions", "promotions_start_date_end_date_idx")

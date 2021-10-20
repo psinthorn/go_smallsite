@@ -27,8 +27,8 @@ var (
 
 type Content content
 type contentDomainInterface interface {
-	Create(ct Content) (int, error)
-	GetAll() (Content, error)
+	Create(Content) (int, error)
+	GetAll() ([]Content, error)
 }
 
 var (
@@ -38,107 +38,89 @@ var (
 // ------------------------------------
 // Create new content
 func (c *Content) Create(ct Content) (int, error) {
-	return 0, nil
+	// Create new variable
+	// create context with time out and defer cancle
+	// create database connection and close database connection
+	// return result
+
+	var newContentId int
+	ctx, cancle := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancle()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return 0, err
+	}
+
+	err = dbConn.SQL.QueryRowContext(ctx, queryInsertContent,
+		ct.Id,
+		ct.Title,
+		ct.SubTitle,
+		ct.Content,
+		ct.ContentType,
+		ct.Section,
+		ct.Category,
+		ct.Image,
+		ct.Tags,
+		ct.Author,
+		ct.Status,
+		ct.CreatedAt,
+		ct.UpdatedAt).Scan(&newContentId)
+
+	if err != nil {
+		return 0, err
+	}
+	defer dbConn.SQL.Close()
+
+	return newContentId, nil
 }
 
 // ------------------------------------
-// Get All content by ID
-func (c *Content) GetAll() (Content, error) {
+// GetAll contents
+func (c *Content) GetAll() ([]Content, error) {
+	// prepare contents array
+	var Contents []Content
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	db, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
 	if err != nil {
-		panic(err)
+		return Contents, err
 	}
-	results, err := db.SQL.ExecContext(ctx, queryGetAllContents)
+	results, err := dbConn.SQL.QueryContext(ctx, queryGetAllContents)
 	if err != nil {
-		panic(err)
+		return Contents, err
+	}
+	defer results.Close()
+
+	// Read each row of data from resutls and append content to contents array
+	for results.Next() {
+		var ct Content
+		err := results.Scan(
+			&ct.Id,
+			&ct.Title,
+			&ct.SubTitle,
+			&ct.Content,
+			&ct.ContentType,
+			&ct.Category,
+			&ct.Image,
+			&ct.Tags,
+			&ct.Author,
+			&ct.Status,
+			&ct.CreatedAt,
+			&ct.UpdatedAt,
+		)
+
+		if err != nil {
+			return Contents, err
+		}
+		Contents = append(Contents, ct)
 	}
 
-	results.LastInsertId()
-	defer db.SQL.Close()
-
-	// allContents := make([]Content, 0)
-	// for results.Next(){
-	// 	var content Content
-	// 	err := results.SQL.Scan(&content.Id, &content.Title, &content.SubTitle, &content.Content, &content.ContentType, &content.Category, &content.Image, &content.Tags, &content.Author, &content.Status, &content.DateCreated)
-	// 	if err != nil {
-	// 		return nil, err
-	// 	}
-	// 	allContents = append(allContents, content)
-	// }
-
-	// if len(results) == 0 {
-	// 	return nil, errors.NewNotFoundError("No content found")
-	// }
-	return Content{}, nil
+	if len(Contents) == 0 {
+		return nil, err
+	}
+	return Contents, nil
 
 }
-
-// //
-// // Get content by ID
-// //
-// func (content *Content) Get() error {
-
-// 	// prepare statment
-// 	stmt, err := mysql_db.Client.Prepare(queryGetContentById)
-// 	// if error handle it
-// 	if err != nil {
-// 		return mysql_utils.PareError(err)
-// 	}
-
-// 	// Close statment protect run out connection
-// 	defer stmt.Close()
-
-// 	result := stmt.QueryRow(content.Id)
-// 	if err := result.Scan(&content.Id, &content.Title, &content.SubTitle, &content.Content, &content.ContentType, &content.Category, &content.Image, &content.Tags, &content.Author, &content.Status, &content.DateCreated); err != nil {
-// 		return mysql_utils.PareError(err)
-// 	}
-
-// 	return nil
-// }
-
-// //
-// // Create new content
-// //
-
-// func (content *Content) Save() error {
-// 	stmt, err := mysql_db.Client.Prepare(queryInsertContent)
-// 	if err != nil {
-// 		mysql_utils.PareError(err)
-// 	}
-
-// 	// Close statment protect run out connection
-// 	defer stmt.Close()
-
-// 	content.DateCreated = date_utils.GetNowString()
-// 	result, err := stmt.Exec(content.Title, content.SubTitle, content.Content, content.ContentType, content.Category, content.Image, content.Tags, content.Author, content.Status, content.DateCreated)
-// 	if err != nil {
-// 		mysql_utils.PareError(err)
-// 	}
-
-// 	contentId, err := result.LastInsertId()
-// 	if err != nil {
-// 		mysql_utils.PareError(err)
-// 	}
-// 	content.Id = contentId
-// 	return nil
-// }
-
-// func (content *Content) Delete() error {
-// 	stmt, err := mysql_db.Client.Prepare(queryDeleteContentById)
-// 	if err != nil {
-// 		mysql_utils.PareError(err)
-// 	}
-// 	defer stmt.Close()
-
-// 	_, err = stmt.Exec(content.Id)
-// 	if err != nil {
-// 		return mysql_utils.PareError(err)
-// 	}
-
-// 	return nil
-
-// }

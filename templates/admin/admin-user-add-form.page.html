@@ -6,12 +6,12 @@
 
 {{define "content"}}
 <div class="container"> 
-    <a href="/admin/users/user" type="button" class="btn btn-warning">Back</a>
+    <a href="/admin/users" type="button" class="btn btn-warning">Back</a>
     <div class="row">
         <div class="col">
             <h4 class="mt-5 mb-3">Add New User</h4>
             {{$r := index .Data "users" }}
-            <form method="post" action="/admin/users/user/new" class="" novalidate>
+            <form method="post" action="/admin/users" class="" novalidate>
                 <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
@@ -69,8 +69,7 @@
                                 <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get "access_level"}} is-invalid {{end}}" 
-                                id="access_level"
-                                autocomplete="off" type='text'
+                                id="access_level"autocomplete="off" type='text'
                                 name='access_level' value="{{$r.AccessLevel}}" required>
                         </div>
                     </div>
@@ -82,8 +81,7 @@
                                 <label class="text-danger">{{.}}</label>
                             {{end}}
                             <input class="form-control {{with .Form.Errors.Get "status"}} is-invalid {{end}}" 
-                                id="status"
-                                autocomplete="off" type='text'
+                                id="status" autocomplete="off" type='text'
                                 name='status' value="{{$r.Status}}" required>
                         </div>
                     </div>
@@ -95,6 +93,9 @@
             </form>
         </div>
     </div>
+
+    
+    
 </div>
 
 {{end}}

@@ -1,0 +1,2 @@
+add_column("promotion_types","start_date", "date", {"null": true})
+add_column("promotion_types","end_date", "date", {"null": true})

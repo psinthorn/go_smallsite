@@ -10,6 +10,7 @@ import (
 
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	domain "github.com/psinthorn/go_smallsite/domain/users"
+	"golang.org/x/crypto/bcrypt"
 
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -51,15 +52,23 @@ func (rp *Repository) AddNewUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	accessLevel, err := strconv.Atoi(r.Form.Get("access_level"))
+	acl := r.Form.Get("access_level")
+	if acl == "" {
+		acl = "0"
+	}
+	accessLevel, err := strconv.Atoi(acl)
 	if err != nil {
 		panic(err)
 	}
+
+	password := r.Form.Get("password")
+	hashedPassword, _ := bcrypt.GenerateFromPassword([]byte(password), 12)
 	newUser := domain.User{
-		FirstName:   r.Form.Get("first_name"),
-		LastName:    r.Form.Get("last_name"),
-		Email:       r.Form.Get("email"),
-		Password:    r.Form.Get("password"),
+		FirstName: r.Form.Get("first_name"),
+		LastName:  r.Form.Get("last_name"),
+		Email:     r.Form.Get("email"),
+		Password:  string(hashedPassword),
+		// Password:    r.Form.Get("password"),
 		AccessLevel: accessLevel,
 		Status:      r.Form.Get("status"),
 		CreatedAt:   time.Now(),
@@ -84,25 +93,28 @@ func (rp *Repository) AddNewUser(w http.ResponseWriter, r *http.Request) {
 	}
 
 	rp.App.Session.Put(r.Context(), "user", newUser)
-	rp.App.Session.Put(r.Context(), "success", "New user is added :)")
+	rp.App.Session.Put(r.Context(), "flash", "New user is added :)")
 	http.Redirect(w, r, "/admin/users/register", http.StatusSeeOther)
+}
+
+// UpdateUser
+func (rp *Repository) UpdateUser(u domain.User) (domain.User, error) {
+	var user = domain.User{}
+	return user, nil
 }
 
 //  GetAllUsers
 func (rp *Repository) GetAllUsers(w http.ResponseWriter, r *http.Request) {
+	users, err := domain.UserService.GetAllUsers()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 
-}
+	data := make(map[string]interface{})
+	data["users"] = users
 
-// Login user login page
-func (rp *Repository) Login(w http.ResponseWriter, r *http.Request) {
-	render.Template(w, r, "login.page.html", &templates.TemplateData{
-		Form: forms.New(nil),
+	render.Template(w, r, "admin-users-list.page.html", &templates.TemplateData{
+		Data: data,
 	})
-	rp.App.Session.Put(r.Context(), "success", "Log in success :)")
-}
-
-// Login user login page
-func (rp *Repository) Logout(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, "/login", http.StatusSeeOther)
-	//render.Template(w, r, "login.page.html", &models.TemplateData{})
 }

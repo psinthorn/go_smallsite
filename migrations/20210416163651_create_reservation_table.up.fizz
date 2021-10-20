@@ -8,5 +8,5 @@ create_table("reservations") {
     t.Column("status", "string", {"default": "available"})
     t.Column("start_date", "date", {})
     t.Column("end_date", "date", {})
-    
+    t.Column("processed", "integer", {"default": 0})
 }

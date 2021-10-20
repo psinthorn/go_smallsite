@@ -1,0 +1,2 @@
+add_index("promotions","id", {})
+add_index("promotions", ["start_date", "end_date"], {})

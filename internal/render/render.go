@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"time"
 
 	"github.com/justinas/nosurf"
 	"github.com/psinthorn/go_smallsite/configs"
@@ -14,7 +15,9 @@ import (
 )
 
 var (
-	functions = template.FuncMap{}
+	functions = template.FuncMap{
+		"humanDate": HumanDate,
+	}
 	tmplCache = map[string]*template.Template{}
 	app       *configs.AppConfig
 )
@@ -28,6 +31,9 @@ func AddDefaultData(td *templates.TemplateData, r *http.Request) *templates.Temp
 	td.Error = app.Session.PopString(r.Context(), "error")
 	td.Warning = app.Session.PopString(r.Context(), "warning")
 	td.CSRFToken = nosurf.Token(r)
+	if app.Session.Exists(r.Context(), "user_id") {
+		td.IsAuthenticate = 1
+	}
 	return td
 }
 
@@ -151,4 +157,11 @@ func CreateSingleTemplateCache(tmpl string) (map[string]*template.Template, erro
 
 	// คืนค่า tmplCahe ให้ฟังซ์ชั่น
 	return tmplCache, nil
+}
+
+// Humandate is return time format as YYYY-MM-DD
+func HumanDate(t time.Time) string {
+	layoutUS := "January 2, 2006"
+	// layoutISO = "2006-01-02"
+	return t.Format(layoutUS)
 }

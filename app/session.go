@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/alexedwards/scs/v2"
+	domain_promotions "github.com/psinthorn/go_smallsite/domain/promotions"
 	domain_reservation "github.com/psinthorn/go_smallsite/domain/reservations"
 	domain "github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/users"
@@ -21,6 +22,9 @@ func CreateSession() {
 	gob.Register(domain.RoomStatus{})
 	gob.Register(domain.RoomAllotmentStatus{})
 	gob.Register(domain_reservation.Reservation{})
+	gob.Register(domain_promotions.Promotion{})
+	gob.Register(domain_promotions.Promotion{})
+	gob.Register(map[string]int{})
 
 	// set up the session
 	session = scs.New()

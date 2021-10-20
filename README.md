@@ -118,4 +118,21 @@ if err != nil {
 }
 ```
 
+## Database designing and structure
+### Create database table using migration
+create migration
+```
+    soda generate fizz CreateUserTable
+
+```
+user command below define table column
+```
+    
+
+```
+
+## Data Tables and pagination library
+https://github.com/fiduswriter/Simple-DataTables
+
+
 

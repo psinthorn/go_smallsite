@@ -1,0 +1,4 @@
+add_foreign_key("promotions", "promotion_type_id", {"promotion_types": ["id"]}, {
+    "on_delete": "cascade",
+    "on_update": "cascade",
+})
