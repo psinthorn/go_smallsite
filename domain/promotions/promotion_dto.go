@@ -5,7 +5,7 @@ import (
 )
 
 type promotion struct {
-	ID              int           `json:"id"`
+	Id              int           `json:"id"`
 	Title           string        `json:"title"`
 	Description     string        `json:"description"`
 	Price           int           `json:"price"` //start from price
