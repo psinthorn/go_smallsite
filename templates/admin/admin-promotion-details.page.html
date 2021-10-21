@@ -54,11 +54,22 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">  
-                                <div class="form-group">
-                                    <label class="small" for="promotion_type">Promotion Type: </label>
-                                    <input class="form-control" id="promotion_type" autocomplete="off" type='text'
-                                        name='promotion_type'  value="{{$pm.PromotionType.Title}}" {{$IsReadOnly}} required>
-                                </div>
+
+                                    {{if $isEdit }}
+                                    <div class="form-group">
+                                        <label for="promotion_type" class="form-label">Promotion Type:</label>
+                                        <input class="form-control" list="datalistOptions" id="promotion_type" placeholder="select promotion type">
+                                        <datalist id="datalistOptions">
+                                        <option selected value="{{$pm.PromotionType.Title}}">
+                                        </datalist>
+                                    </div>
+                                    {{else}}
+                                    <div class="form-group">
+                                        <label class="small" for="promotion_type">Promotion Type: </label>
+                                        <input class="form-control" id="promotion_type" autocomplete="off" type='text'
+                                            name='promotion_type'  value="{{$pm.PromotionType.Title}}" {{$IsReadOnly}} required>
+                                    </div>
+                                    {{end}}
                                         
                                 <div class="form-group">
                                     <label class="small" for="status">Status:</label>

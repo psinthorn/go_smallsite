@@ -9,43 +9,37 @@
 
 {{define "content"}}
 <div class="col-sm-12 col-md-12 col-lg-12">
+
     {{$pms := index .Data "promotions"}}
+
         <div class="table-responsive">
             <table class="table table-hover table-sm" id="all-promotions">
                 <thead>
                     <tr>
                         <th></th>
                         <th>Name</th>
-                        <!-- <th>Description</th> -->
                         <th>Rate</th>
                         <th>Start Date</th>
                         <th>End Date</th>
                         <th>Promotion Type</th>
                         <th>Status</th>
-                        <!-- <th>Create</th>
-                        <th>Last Update</th> -->
-                        <th>Actions</th>
+                        <th></th>
                     </tr>
                     <tbody>
-                    {{range $pms }}       
+                    {{range $pms }}     
+                   
                         <tr>
-                        
                             <td></td>
                             <td>{{.Title}}</td>
-                            <!-- <td>{{.Description}}</td> -->
                             <td>{{.Price}}</td> 
                             <td>{{humanDate .StartDate}}</td>
                             <td>{{humanDate .EndDate}}</td>
                             <td>{{.PromotionType.Title}}</td>
                             <td>{{.Status}}</td>
-                            <!-- <td>{{humanDate .CreatedAt}}</td>
-                            <td>{{humanDate .UpdatedAt}}</td> -->
                             <td>                               
-                                <!-- <div class="btn-group btn-group-sm" role="group" aria-label="Small button group"> -->
-                                    <a href="/admin/promotions/{{.ID}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
-                                    <a href="/admin/promotions/{{.ID}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="/admin/promotions/{{.ID}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a>
-                                <!-- </div> -->
+                                    <a href="/admin/promotions/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
+                                    <a href="/admin/promotions/{{.Id}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="/admin/promotions/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a>                            
                             </td>
                         </tr>                 
                     {{end}}

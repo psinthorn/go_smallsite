@@ -58,7 +58,7 @@ func (rp *Repository) PromotionRoomType(w http.ResponseWriter, r *http.Request) 
 		return
 	}
 
-	pm, err := domain.PromotionService.GetByID(proId)
+	pm, err := domain.PromotionService.GetById(proId)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return

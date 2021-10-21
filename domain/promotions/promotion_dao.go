@@ -34,7 +34,7 @@ type Promotion promotion
 type promotionDomainInterface interface {
 	Create(Promotion) (int, error)
 	Get(string) ([]Promotion, error)
-	GetByID(int) (Promotion, error)
+	GetById(int) (Promotion, error)
 	Update(Promotion) error
 	Delete(int) error
 }
@@ -59,7 +59,7 @@ func (s *Promotion) Create(p Promotion) (int, error) {
 	return newProId, err
 }
 
-// Get Return all rooms slice
+// Get select all rooms  data from table and return all rooms slice to request
 func (s *Promotion) Get(st string) ([]Promotion, error) {
 	var promotions []Promotion
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -79,7 +79,7 @@ func (s *Promotion) Get(st string) ([]Promotion, error) {
 	for rows.Next() {
 		var p Promotion
 		err := rows.Scan(
-			&p.ID,
+			&p.Id,
 			&p.Title,
 			&p.Description,
 			&p.Price,
@@ -108,8 +108,8 @@ func (s *Promotion) Get(st string) ([]Promotion, error) {
 
 }
 
-// GetRoomByID return room details
-func (s *Promotion) GetByID(id int) (Promotion, error) {
+// GetRoomByID select room by id and return to request
+func (s *Promotion) GetById(id int) (Promotion, error) {
 	var pm Promotion
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -120,7 +120,7 @@ func (s *Promotion) GetByID(id int) (Promotion, error) {
 	}
 
 	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionByID, id).Scan(
-		&pm.ID,
+		&pm.Id,
 		&pm.Title,
 		&pm.Description,
 		&pm.Price,
@@ -142,6 +142,7 @@ func (s *Promotion) GetByID(id int) (Promotion, error) {
 
 }
 
+// Update update room data
 func (s *Promotion) Update(pm Promotion) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -163,7 +164,7 @@ func (s *Promotion) Update(pm Promotion) error {
 	return nil
 }
 
-// Delete
+// Delete is delete room by id
 func (s *Promotion) Delete(id int) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
