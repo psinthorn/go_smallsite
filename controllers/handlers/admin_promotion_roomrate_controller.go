@@ -63,7 +63,7 @@ func (rp *Repository) PromotionRoomrate(w http.ResponseWriter, r *http.Request) 
 	stringMap["is_edit"] = isEdit
 	stringMap["is_view"] = isView
 
-	pm, err := domain.PromotionService.GetByID(id)
+	pm, err := domain.PromotionService.GetById(id)
 	if err != nil {
 		helpers.ServerError(w, err)
 	}
