@@ -1,6 +1,6 @@
 module github.com/psinthorn/go_smallsite
 
-go 1.17
+go 1.16
 
 require (
 	github.com/alexedwards/scs/v2 v2.4.0

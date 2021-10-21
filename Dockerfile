@@ -1,4 +1,4 @@
-FROM golang:1.17
+FROM golang:1.16
 
 # กำหนดโฟลเดอร์ที่เก็บไฟล์งานบน docker
 WORKDIR /app
@@ -7,6 +7,7 @@ WORKDIR /app
 COPY go.mod .
 COPY go.sum .
 RUN go mod download
+RUN go mod tidy
 
 # ทำสำเนาทุกไฟล์ในโฟลเดอร์จากเครื่องคอมพิวเตอร์ไปที่ docker /app 
 COPY . . 
