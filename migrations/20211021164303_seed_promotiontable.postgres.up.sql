@@ -1,0 +1,2 @@
+INSERT INTO public.promotions (title,description,price,start_date,end_date,promotion_type_id,status,created_at,updated_at) VALUES
+	 ('Stay 4 Nights Pay 3 Nights','Special Deal Package only 3300 per room night','13200','2021-05-11 18:41:00.944','2021-05-11 18:41:00.944','1','enable','2021-05-11 18:41:00.944','2021-05-11 18:41:00.944');

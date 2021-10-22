@@ -14,7 +14,8 @@ services:
 
   # Database service 
 
-  # # Mysql
+  # # Mysql with phpmyadmin 
+  # # uncomment from line 18 - 44 to use mysql
   # db_mysql:
   #   image: mysql:5.7.22
   #   restart: always
@@ -27,9 +28,23 @@ services:
   #     - .db_data:/var/lib/mysql
   #   ports:
   #     - 33306:3306
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   container_name: pma
+  #   links:
+  #     - db
+  #   environment:
+  #     PMA_HOST: db
+  #     PMA_PORT: 3306
+  #     PMA_ARBITRARY: 1
+  #   restart: always
+  #   ports:
+  #     - 8081:80
+  # volumes:
+  #   .db_data:
     
 
-  # Postgres
+  # Postgres with PgAdmin
   db_postgres:
     image: postgres:latest
     restart: always
@@ -37,7 +52,7 @@ services:
       POSTGRES_DATABSE: f2xhotel
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGTRES_ROOT_PASSWORD: 
+      POSTGTRES_ROOT_PASSWORD:  
     volumes:
       - .db_data:/var/lib/postgres
     ports:
