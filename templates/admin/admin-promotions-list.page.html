@@ -79,7 +79,7 @@
         function deleteRes(id) {
             attention.custom({
                 icon: "warning",
-                msg: "are you sure?",
+                msg: "are you sure to delete?",
                 callback: function(result){
                     if(result !== false){
                         window.location.href = "/admin/promotions/" + id + "/delete";

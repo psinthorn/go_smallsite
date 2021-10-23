@@ -135,11 +135,11 @@
                     </div>
                     <a href="/admin/promotions" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
                     {{if $isEdit }}
-                        <input type="submit"  class="btn btn-sm btn-warning mt-3" value="Update" >
+                        <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" >
                         <input type="submit" class="btn btn-sm btn-warning mt-3" value="Edit" hidden>
                     {{else}}
                         <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" hidden>
-                        <a href="/admin/promotions/{{$pm.ID}}?edit=true" class="btn btn-sm btn-warning mt-3">Edit</a>
+                        <a href="/admin/promotions/{{$pm.Id}}?edit=true" class="btn btn-sm btn-warning mt-3">Edit</a>
                     {{end}}
                 </form>
             </div>
@@ -149,26 +149,14 @@
 
 {{define "js"}}
     <!-- if you have specific javascript for this page put it here -->
-    <script>
-        //  function updateRes(id) {
-        //     attention.custom({
-        //         icon: "warning",
-        //         msg: "please recheck data and press ok to update",
-        //         callback: function(result){
-        //             if(result !== false){
-        //                 window.location.href = "/admin/promotions/" + id;
-        //             }
-        //         }
-        //     })
-        // }
-    </script>
-
 <script>
     const elem = document.getElementById('promotion-dates');
     const rangePicker = new DateRangePicker(elem, {
         format: "yyyy-mm-dd",
         minDate: new Date(),
     });
+</script>
+
 </script>
 {{end}}
     
