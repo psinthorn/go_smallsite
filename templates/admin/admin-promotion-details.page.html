@@ -2,6 +2,10 @@
 <!-- {{define "banner"}}
         <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
 {{end}} -->
+{{define "css"}}
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css">
+{{end}}
 {{define  "admin-page-title" }}
     Promotion Details
 {{end}}
@@ -34,20 +38,20 @@
                                     </div>
                                 </div>
                             </div>
-                                                 
-                            <div class="row">
+                           
+                            <div class="row" id="promotion-dates">
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        <label class="small" for="start_date">Start Date:</label>
+                                        <label class="small" for="start_date">Start Date: <span class="small">{{humanDate $pm.StartDate}}</span></label>
                                         <input class="form-control" id="start_date" autocomplete="off" type='text'
-                                                name='start_date'  value="{{humanDate $pm.StartDate}}" {{$IsReadOnly}} required>
+                                                name='start_date'  value="{{humanISODate $pm.StartDate}}" {{$IsReadOnly}} required>
                                     </div>
                                 </div>
             
                                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                     <div class="form-group">
-                                        <label class="small" for="end_date">End Date:</label>
-                                        <input class="form-control" id="end_date" autocomplete="off" type='text' name='end_date'  value="{{humanDate $pm.EndDate}}" {{$IsReadOnly}} required>
+                                        <label class="small" for="end_date">End Date: <span class="small">{{humanDate $pm.EndDate}}</span></label>
+                                        <input class="form-control" id="end_date" autocomplete="off" type='text' name='end_date'  value="{{humanISODate $pm.EndDate}}" {{$IsReadOnly}} required>
                                     </div>
                                 </div>
                             </div>
@@ -60,7 +64,7 @@
                                         <label for="promotion_type" class="form-label">Promotion Type:</label>
                                         <input class="form-control" list="datalistOptions" id="promotion_type" placeholder="select promotion type">
                                         <datalist id="datalistOptions">
-                                        <option selected value="{{$pm.PromotionType.Title}}">
+                                            <option selected value="{{$pm.PromotionType.Title}}">
                                         </datalist>
                                     </div>
                                     {{else}}
@@ -80,16 +84,16 @@
                             <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                         <div class="form-group">
-                                            <label class="small" for="created_at">Created At:</label>
+                                            <label class="small" for="created_at">Created At: <span class="small">{{humanDate $pm.CreatedAt}}</span></label>
                                             <input class="form-control" id="created_at" autocomplete="off" type='text'
-                                                    name='created_at'  value="{{humanDate $pm.CreatedAt}}" {{$IsReadOnly}} required>
+                                                    name='created_at'  value="{{humanISODate $pm.CreatedAt}}" {{$IsReadOnly}} required>
                                         </div>
                                     </div>
                 
                                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                         <div class="form-group">
-                                            <label class="small" for="updated_at">Latest Update:</label>
-                                            <input class="form-control" id="updated_at" autocomplete="off" type='text' name='updated_at'  value="{{humanDate $pm.UpdatedAt}}" {{$IsReadOnly}} required>
+                                            <label class="small" for="updated_at">Latest Update: <span class="small">{{humanDate $pm.UpdatedAt}}</span></label>
+                                            <input class="form-control" id="updated_at" autocomplete="off" type='text' name='updated_at'  value="{{humanISODate $pm.UpdatedAt}}" {{$IsReadOnly}} required>
                                         </div>
                                     </div>
                             </div>                            
@@ -124,5 +128,13 @@
         //     })
         // }
     </script>
+
+<script>
+    const elem = document.getElementById('promotion-dates');
+    const rangePicker = new DateRangePicker(elem, {
+        format: "yyyy-mm-dd",
+        minDate: new Date(),
+    });
+</script>
 {{end}}
     

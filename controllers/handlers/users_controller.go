@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/go-chi/chi"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	domain "github.com/psinthorn/go_smallsite/domain/users"
 	"golang.org/x/crypto/bcrypt"
@@ -94,7 +95,7 @@ func (rp *Repository) AddNewUser(w http.ResponseWriter, r *http.Request) {
 
 	rp.App.Session.Put(r.Context(), "user", newUser)
 	rp.App.Session.Put(r.Context(), "flash", "New user is added :)")
-	http.Redirect(w, r, "/admin/users/register", http.StatusSeeOther)
+	http.Redirect(w, r, "/admin/users", http.StatusSeeOther)
 }
 
 // UpdateUser
@@ -117,4 +118,22 @@ func (rp *Repository) GetAllUsers(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "admin-users-list.page.html", &templates.TemplateData{
 		Data: data,
 	})
+}
+
+func (rp *Repository) DeleteUser(w http.ResponseWriter, r *http.Request) error {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return err
+	}
+
+	_, err = domain.UserService.Delete(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return err
+	}
+
+	rp.App.Session.Put(r.Context(), "success", "user is deleted")
+	http.Redirect(w, r, "/admin/users", http.StatusSeeOther)
+	return nil
 }
