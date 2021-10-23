@@ -15,8 +15,14 @@ const (
 							from promotions pms
 							left join promotion_types pt 
 							on (pms.promotion_type_id = pt.id) 
-							where pms.status = $1  
-							order by pms.id asc`
+							where pms.status = $1   
+							order by pms.id desc`
+
+	queryAdminGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
+							from promotions pms
+							left join promotion_types pt 
+							on (pms.promotion_type_id = pt.id)   
+							order by pms.id desc`
 
 	queryGetPromotionByID = `SELECT pm.id, pm.title, pm.description, pm.price, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
 							from promotions pm 
@@ -24,7 +30,7 @@ const (
 							on (pm.promotion_type_id = pt.id) 
 							where pm.id = $1`
 
-	queryUpdateById = `update promotions set title= $1, description = $2, promotion_type_id = $3, start_date = $4, end_date = $5, price = $6, status = $7, updated_at = $8`
+	queryUpdateById = `update promotions set title= $1, description = $2, promotion_type_id = $3, start_date = $4, end_date = $5, price = $6, status = $7, updated_at = $8 where id = $9`
 
 	queryDeletePromotionById = `delete from promotions where id = $1`
 )
@@ -38,6 +44,8 @@ type promotionDomainInterface interface {
 	GetById(int) (Promotion, error)
 	Update(Promotion) error
 	Delete(int) error
+
+	AdminGet() ([]Promotion, error)
 }
 
 // Create insert and return room data
@@ -72,6 +80,55 @@ func (s *Promotion) Get(st string) ([]Promotion, error) {
 	}
 
 	rows, err := dbConn.SQL.QueryContext(ctx, queryGetAllPromotions, st)
+	if err != nil {
+		return promotions, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var p Promotion
+		err := rows.Scan(
+			&p.Id,
+			&p.Title,
+			&p.Description,
+			&p.Price,
+			&p.PromotionTypeId,
+			&p.StartDate,
+			&p.EndDate,
+			&p.Status,
+			&p.CreatedAt,
+			&p.UpdatedAt,
+			&p.PromotionType.ID,
+			&p.PromotionType.Title,
+		)
+
+		if err != nil {
+			return promotions, err
+		}
+
+		promotions = append(promotions, p)
+	}
+
+	if err = rows.Err(); err != nil {
+		return promotions, err
+	}
+
+	return promotions, nil
+
+}
+
+// Get select all rooms  data from table and return all rooms slice to request
+func (s *Promotion) AdminGet() ([]Promotion, error) {
+	var promotions []Promotion
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return promotions, err
+	}
+
+	rows, err := dbConn.SQL.QueryContext(ctx, queryAdminGetAllPromotions)
 	if err != nil {
 		return promotions, err
 	}
@@ -153,7 +210,6 @@ func (s *Promotion) Update(pm Promotion) error {
 	if err != nil {
 		return err
 	}
-
 	_, err = dbConn.SQL.QueryContext(ctx, queryUpdateById,
 		pm.Title,
 		pm.Description,
@@ -163,6 +219,7 @@ func (s *Promotion) Update(pm Promotion) error {
 		pm.Price,
 		pm.Status,
 		time.Now(),
+		pm.Id,
 	)
 
 	return nil

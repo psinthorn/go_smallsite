@@ -17,9 +17,10 @@
                 {{$IsReadOnly := index .StringMap "is_read"}}
                 {{$isEdit := index .StringMap "is_edit"}}
                 {{$isView := index .StringMap "is_view"}}
-                
+             
                 {{$pm := index .Data "promotion" }}
-                <form method="post" action="/admin/promotions/update" class="" novalidate>
+                {{$pmts := index .Data "promotion_types" }}
+                <form method="post" action="/admin/promotions/{{$pm.Id}}/update" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
 
                     <div class="row">
@@ -31,6 +32,36 @@
                                         <input class="form-control" id="title" autocomplete="off" type='text'
                                             name='title'  value="{{$pm.Title}}" {{$IsReadOnly}} required>
                                     </div>
+
+                                    {{if $isEdit }}
+                                    <div class="form-group">
+                                        <label class="small" for="promotion_type_id">Promotion Type: </label>                           
+                                        <select class="form-control form-select form-select-lg mb-3 "
+                                        aria-label="select promotion type" 
+                                        id="promotion_type_id"
+                                        name="promotion_type_id" 
+                                        required>                                           
+                                            {{range $pmts}}
+                                            <option value="{{.ID}}">{{.Title}}</option>
+                                            {{end}}                                        
+                                        </select>                                    
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label for="promotion_type" class="form-label">Promotion Type:</label>
+                                        <input class="form-control" list="datalistOptions" id="promotion_type_id" placeholder="select promotion type">
+                                        <datalist id="datalistOptions">
+                                            <option selected value="{{$pm.PromotionType.Title}}">
+                                        </datalist>
+                                    </div> -->
+                                    {{else}}
+                                    <div class="form-group">
+                                        <label class="small" for="promotion_type_id">Promotion Type: </label>
+                                        <input class="form-control" id="promotion_type_id" autocomplete="off" type='text'
+                                            name='promotion_type_id'  value="{{$pm.PromotionType.Title}}" {{$IsReadOnly}} required>
+                                    </div>
+                                    {{end}}
+
+
                                     <div class="form-group">
                                         <label class="small" for="description">Description:</label>
                                         <textarea class="form-control" id="description" autocomplete="off"
@@ -58,29 +89,32 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">  
-
-                                    {{if $isEdit }}
-                                    <div class="form-group">
-                                        <label for="promotion_type" class="form-label">Promotion Type:</label>
-                                        <input class="form-control" list="datalistOptions" id="promotion_type" placeholder="select promotion type">
-                                        <datalist id="datalistOptions">
-                                            <option selected value="{{$pm.PromotionType.Title}}">
-                                        </datalist>
-                                    </div>
-                                    {{else}}
-                                    <div class="form-group">
-                                        <label class="small" for="promotion_type">Promotion Type: </label>
-                                        <input class="form-control" id="promotion_type" autocomplete="off" type='text'
-                                            name='promotion_type'  value="{{$pm.PromotionType.Title}}" {{$IsReadOnly}} required>
-                                    </div>
-                                    {{end}}
-                                        
+                            
                                 <div class="form-group">
-                                    <label class="small" for="status">Status:</label>
-                                    <input class="form-control" id="status" autocomplete="off"
-                                    name='status' {{$IsReadOnly}} rows="6" value="{{$pm.Status}}" required>
-                                </div> 
-                          
+                                    <label for="price">Start rate:</label>
+                                    
+                                    <input class="form-control" 
+                                    type="text" 
+                                    id="price" 
+                                    name='price' 
+                                    placeholder="start from rate" 
+                                    autocomplete="off"
+                                    value="{{$pm.Price}}" 
+                                    required {{$IsReadOnly}}>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="small" for="promotion_type_id">Status: </label>                           
+                                    <select class="form-control form-select form-select-lg mb-3 "
+                                    aria-label="select status" 
+                                    id="status"
+                                    name="status" 
+                                    required>                                           
+                                        <option {{if eq $pm.Status "enable" }}selected{{end}} value="enable">enable</option>
+                                        <option {{if eq $pm.Status "disable" }}selected{{end}} value="disable">disable</option>                                      
+                                    </select>                                    
+                                </div>
+                                                    
                             <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                                         <div class="form-group">

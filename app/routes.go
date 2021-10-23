@@ -161,10 +161,10 @@ func routes(app *configs.AppConfig) http.Handler {
 
 		// Section: Promotion
 		mux.Post("/promotions", controllers.HandlerRepo.AddPromotion)
-		mux.Get("/promotions", controllers.HandlerRepo.PromotionsList)
+		mux.Get("/promotions", controllers.HandlerRepo.AdminPromotionsList)
 		mux.Get("/promotions/new", controllers.HandlerRepo.PromotionForm)
 		mux.Get("/promotions/{id}", controllers.HandlerRepo.Promotion)
-		mux.Put("/promotions/{id}", controllers.HandlerRepo.UpdatePromotion)
+		mux.Post("/promotions/{id}/update", controllers.HandlerRepo.UpdatePromotion)
 		mux.Get("/promotions/{id}/delete", controllers.HandlerRepo.DeletePromotion)
 
 		// Section: Promotion-Types
