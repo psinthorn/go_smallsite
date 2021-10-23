@@ -2,6 +2,7 @@ package domain_promotions
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
@@ -23,9 +24,9 @@ const (
 							on (pm.promotion_type_id = pt.id) 
 							where pm.id = $1`
 
-	queryUpdateById = `update promotions set title= $1, description = $2, price = $3, status = $4, updated_at = $5`
+	queryUpdateById = `update promotions set title= $1, description = $2, promotion_type_id = $3, start_date = $4, end_date = $5, price = $6, status = $7, updated_at = $8`
 
-	queryDeletePromotionById = `delete promotions where id = $1`
+	queryDeletePromotionById = `delete from promotions where id = $1`
 )
 
 var PromotionService promotionDomainInterface = &Promotion{}
@@ -156,6 +157,9 @@ func (s *Promotion) Update(pm Promotion) error {
 	_, err = dbConn.SQL.QueryContext(ctx, queryUpdateById,
 		pm.Title,
 		pm.Description,
+		pm.PromotionTypeId,
+		pm.StartDate,
+		pm.EndDate,
 		pm.Price,
 		pm.Status,
 		time.Now(),
@@ -173,6 +177,8 @@ func (s *Promotion) Delete(id int) error {
 	if err != nil {
 		return err
 	}
+
+	fmt.Println(id)
 
 	_, err = dbConn.SQL.ExecContext(ctx, queryDeletePromotionById, id)
 	if err != nil {

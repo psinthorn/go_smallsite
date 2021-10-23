@@ -89,30 +89,21 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 
 	sd := r.Form.Get("start_date")
 	ed := r.Form.Get("end_date")
-
 	title := r.Form.Get("title")
 	description := r.Form.Get("description")
-
-	fmt.Println(title)
-	fmt.Println(description)
-
-	pmtTitle := r.Form.Get("promotion_type_title")
-	fmt.Println(pmtTitle)
+	// pmtTitle := r.Form.Get("promotion_type_title")
 	pmtTypeId := r.Form.Get("promotion_type_id")
-	fmt.Println(pmtTypeId)
 	pmtTypeIdInt, err := strconv.Atoi(pmtTypeId)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-
 	price := r.Form.Get("price")
 	priceInt, err := strconv.Atoi(price)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-
 	status := r.Form.Get("status")
 
 	// form.Has("first_name", r)
@@ -143,9 +134,6 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}
-
-	fmt.Println("data from pm add form")
-	fmt.Println(pm)
 
 	// if data not valid then return current data to form
 	if !form.Valid() {
@@ -213,4 +201,24 @@ func (rp *Repository) Promotion(w http.ResponseWriter, r *http.Request) {
 		StringMap: stringMap,
 	})
 
+}
+
+// Update
+func (rp *Repository) UpdatePromotion(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("implement update data plaese")
+}
+
+// Delete
+func (rp *Repository) DeletePromotion(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	fmt.Println(id)
+
+	_ = domain.PromotionService.Delete(id)
+
+	rp.App.Session.Put(r.Context(), "success", "promotion package is deleted")
+	http.Redirect(w, r, "/admin/promotions", http.StatusSeeOther)
 }

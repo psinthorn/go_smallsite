@@ -88,13 +88,13 @@ function Prompt() {
                 if(c.didOpen !== undefined){
                     c.didOpen();
                 }
-            },
-            preConfirm: () => {
-                return [
-                    document.getElementById('start_date').value,
-                    document.getElementById('end_date').value
-                ]
             }
+            // preConfirm: () => {
+            //     return [
+            //         document.getElementById('start_date').value,
+            //         document.getElementById('end_date').value
+            //     ]
+            // }
         })
 
         if (results) {

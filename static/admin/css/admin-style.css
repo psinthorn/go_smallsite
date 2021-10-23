@@ -1,3 +1,6 @@
 .content-wrapper {
     background: white;
 }
+.notie-container {
+    z-index: 5000;
+}

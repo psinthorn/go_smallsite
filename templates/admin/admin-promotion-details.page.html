@@ -97,7 +97,7 @@
                     </div>
                     <a href="/admin/promotions" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
                     {{if $isEdit }}
-                        <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" >
+                        <input type="submit"  class="btn btn-sm btn-warning mt-3" value="Update" >
                         <input type="submit" class="btn btn-sm btn-warning mt-3" value="Edit" hidden>
                     {{else}}
                         <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" hidden>
@@ -112,6 +112,17 @@
 {{define "js"}}
     <!-- if you have specific javascript for this page put it here -->
     <script>
+        //  function updateRes(id) {
+        //     attention.custom({
+        //         icon: "warning",
+        //         msg: "please recheck data and press ok to update",
+        //         callback: function(result){
+        //             if(result !== false){
+        //                 window.location.href = "/admin/promotions/" + id;
+        //             }
+        //         }
+        //     })
+        // }
     </script>
 {{end}}
     
