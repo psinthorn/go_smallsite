@@ -32,9 +32,9 @@ services:
   #   image: phpmyadmin/phpmyadmin
   #   container_name: pma
   #   links:
-  #     - db
+  #     - db_mysql
   #   environment:
-  #     PMA_HOST: db
+  #     PMA_HOST: db_mysql
   #     PMA_PORT: 3306
   #     PMA_ARBITRARY: 1
   #   restart: always

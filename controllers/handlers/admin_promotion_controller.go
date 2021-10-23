@@ -100,11 +100,11 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(pmtTitle)
 	pmtTypeId := r.Form.Get("promotion_type_id")
 	fmt.Println(pmtTypeId)
-	// pmtTypeIdInt, err := strconv.Atoi(pmtTypeId)
-	// if err != nil {
-	// 	helpers.ServerError(w, err)
-	// 	return
-	// }
+	pmtTypeIdInt, err := strconv.Atoi(pmtTypeId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 
 	price := r.Form.Get("price")
 	priceInt, err := strconv.Atoi(price)
@@ -116,7 +116,7 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 	status := r.Form.Get("status")
 
 	// form.Has("first_name", r)
-	form.Required("title", "description", "promotion_type_id", "start_date", "end_date")
+	form.Required("title", "description", "promotion_type_id", "start_date", "end_date", "price", "status")
 	// minimum require on input field
 	form.MinLength("title", 12, r)
 
@@ -137,7 +137,7 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 		Description:     description,
 		Price:           priceInt,
 		Status:          status,
-		PromotionTypeId: 1,
+		PromotionTypeId: pmtTypeIdInt,
 		StartDate:       startDate,
 		EndDate:         endDate,
 		CreatedAt:       time.Now(),
@@ -155,6 +155,8 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 		stringMap["title"] = title
 		stringMap["description"] = description
 		stringMap["price"] = price
+		stringMap["promotion_type_id"] = pmtTypeId
+		stringMap["status"] = status
 
 		data := make(map[string]interface{})
 		data["promotion"] = pm
@@ -163,6 +165,12 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 			Data:      data,
 			StringMap: stringMap,
 		})
+		return
+	}
+
+	_, err = domain.PromotionService.Create(pm)
+	if err != nil {
+		helpers.ServerError(w, err)
 		return
 	}
 

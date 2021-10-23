@@ -2,6 +2,10 @@
 <!-- {{define "banner"}}
         <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
 {{end}} -->
+{{define "css"}}
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css">
+{{end}}
 {{define  "admin-page-title" }}
     Add New Promotion
 {{end}}
@@ -12,64 +16,91 @@
             <div class="col">
                 {{$pm := index .Data "promotion" }}
                 {{$pmts := index .Data "promotion_types" }}
-                <form method="post" action="/admin/promotions" class="" novalidate>
+                <form method="post" action="/admin/promotions" class="" novalidate class="needs-validation">
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
-                                        <label class="small" for="title">Promotion: </label>
+                                        <label class="small" for="title">Promotion Title: </label>
                                         {{with .Form.Errors.Get "title"}}
                                         <label class="text-danger">{{.}}</label>
                                         {{end}}
-                                        <input class="form-control {{with .Form.Errors.Get "start_date"}} is-invalid {{end}}" id="title" autocomplete="off" type='text'
-                                            name='title'  value="{{$pm.Title}}"  required>
+                                        <input class="form-control {{with .Form.Errors.Get "start_date"}} is-invalid {{end}}" 
+                                        type='text'
+                                        id="title" 
+                                        name='title'
+                                        autocomplete="off" 
+                                        value="{{$pm.Title}}"
+                                        required>
                                     </div>
 
-                                    <input class="form-control" id="price" name='price' value="9999" hidden>
-                                    {{range $pmts}}
-                                        <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg" id="promotion_type_id" >
-                                        <option value="{{.ID}}">{{.Title}}</option>
-                                        </select>
-                                      {{end}}
-
+                                     <!-- <input class="form-control" id="price" name='price' value="9999" hidden> --> 
+                                    <div class="form-group">
+                                        <label class="small" for="promotion_type_id">Promotion Type: </label>
+                                        {{with .Form.Errors.Get "promotion_type_id"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}                               
+                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "promotion_type_id"}} is-invalid {{end}}"
+                                        aria-label="select promotion type" 
+                                        id="promotion_type_id"
+                                        name="promotion_type_id" 
+                                        required>
+                                            {{range $pmts}}
+                                            <option value="{{.ID}}">{{.Title}}</option>
+                                            {{end}}
+                                        </select>                                    
+                                    </div>
                                     
                                     <div class="form-group">
-                                        <label class="small" for="description">Description:</label>
-                                        <textarea class="form-control" id="description" autocomplete="off"
-                                        name='description'  value="{{$pm.Description}}"  rows="4" required>{{$pm.Description}}</textarea>
+                                        <label class="small" for="description:">Description: </label>
+                                        {{with .Form.Errors.Get "description"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}   
+                                        <textarea class="form-control {{with .Form.Errors.Get "description"}} is-invalid {{end}}" 
+                                        id="description" 
+                                        name='description'  
+                                        autocomplete="off"
+                                        value="{{$pm.Description}}"  
+                                        rows="4" 
+                                        required>{{$pm.Description}}</textarea>
                                     </div>
                                 </div>
                             </div>
                                                  
                            
-                            <div class="row" id="promotion-dates">                                            
+                            <div class="row" id="promotion-dates"> 
                                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
                                             <div class="form-group">
-                                                <label for="start_date">Arrival Date:</label>
+                                                <label for="start_date">Start Date:</label>
                                                 {{with .Form.Errors.Get "start_date"}}
                                                 <label class="text-danger">{{.}}</label>
                                                 {{end}}
-                                                <input class="form-control {{with .Form.Errors.Get "start_date"}} is-invalid {{end}}" 
+                                                <input required class="form-control {{with .Form.Errors.Get "start_date"}} is-invalid {{end}}"  
                                                 type="text" 
-                                                id="start_date" name='start_date' 
-                                                placeholder="Arrival" autocomplete="off"
-                                                value="{{$pm.StartDate}}" required>
+                                                id="start_date" 
+                                                name='start_date' 
+                                                placeholder="Start date" 
+                                                autocomplete="off"
+                                                value="{{$pm.StartDate}}"
+                                                >
                                             </div>
                                         </div>
                                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 p-3">
                                             <div class="form-group">
-                                                <label for="end_date">Departure Date:</label>
+                                                <label for="end_date">End Date:</label>
                                                 {{with .Form.Errors.Get "end_date"}}
                                                 <label class="text-danger">{{.}}</label>
                                                 {{end}}
-                                                <input class="form-control {{with .Form.Errors.Get "end_date"}} is-invalid {{end}}" 
+                                                <input required class="form-control {{with .Form.Errors.Get "end_date"}} is-invalid {{end}}" 
                                                 type="text" 
-                                                id="end_date" name='end_date' 
-                                                placeholder="Departure" 
+                                                id="end_date" 
+                                                name='end_date' 
+                                                placeholder="End Date" 
                                                 autocomplete="off"
-                                                value="{{$pm.EndDate}}" required>
+                                                value="{{$pm.EndDate}}" 
+                                                >
                                             </div>
                                         </div>       
                             </div>
@@ -77,14 +108,45 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">  
-                            <div class="form-group">
-                                <label for="status" class="form-label">Status:</label>
-                                <input class="form-control" list="statusOptions" id="status" placeholder="select status">
-                                <datalist id="statusOptions">
-                                    <option value="enable">
-                                    <option value="disable">                        
-                                </datalist>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label for="price">Start rate:</label>
+                                        {{with .Form.Errors.Get "price"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}
+                                        <input class="form-control {{with .Form.Errors.Get "price"}} is-invalid {{end}}" 
+                                        type="text" 
+                                        id="price" 
+                                        name='price' 
+                                        placeholder="start from rate" 
+                                        autocomplete="off"
+                                        value="{{$pm.Price}}" 
+                                        required>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label for="status" class="form-label">Status:</label>
+                                        {{with .Form.Errors.Get "status"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}
+                                        <input class="form-control {{with .Form.Errors.Get "status"}} is-invalid {{end}}" 
+                                        list="statusOptions" 
+                                        id="status" 
+                                        name="status"
+                                        autocomplete="off"
+                                        placeholder="select status"
+                                        required>
+                                        <datalist id="statusOptions">
+                                            <option value="enable">
+                                            <option value="disable">                        
+                                        </datalist>
+                                    </div>
+                                </div>
                             </div>
+                            
                         </div>
                     </div>
                     <a href="/admin/promotions" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>

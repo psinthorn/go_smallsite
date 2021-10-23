@@ -1,0 +1,2 @@
+add_column("sections","parent", "int", {"null": true})
+add_column("sections","access_level", "int", {"null": true})

@@ -1,6 +1,7 @@
 create_table("sections") {
     t.Column("id", "integer", {primary: true})
     t.Column("title", "string", {"default": "section title"})
-    t.Column("desc", "string", {"default": "description"})
+    t.Column("description", "string", {"default": "description"})
+    t.Column("parent", "string", "default": "home"})
     t.Column("status", "string", {"default": "draft"})
 }
