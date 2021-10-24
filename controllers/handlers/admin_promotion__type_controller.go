@@ -243,15 +243,15 @@ func (rp *Repository) UpdatePromotionType(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	pm, err := domain.PromotionService.GetById(id)
+	pmt, err := domain.PromotionTypeService.GetById(id)
 
-	pm.Title = r.Form.Get("title")
-	pm.Description = r.Form.Get("description")
-	pm.StartDate = startDate
-	pm.EndDate = endDate
-	pm.Status = r.Form.Get("status")
+	pmt.Title = r.Form.Get("title")
+	pmt.Description = r.Form.Get("description")
+	pmt.StartDate = startDate
+	pmt.EndDate = endDate
+	pmt.Status = r.Form.Get("status")
 
-	_ = domain.PromotionService.Update(pm)
+	_ = domain.PromotionTypeService.Update(pmt)
 
 	rp.App.Session.Put(r.Context(), "success", "promotion type is updated")
 	http.Redirect(w, r, "/admin/promotions-types", http.StatusSeeOther)

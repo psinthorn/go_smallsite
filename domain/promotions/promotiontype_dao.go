@@ -12,8 +12,8 @@ const (
 	queryAdminGetAllPromotionTypes = `select id, title, description, start_date, end_date, status,created_at, updated_at from promotion_types order by id desc`
 	queryInsertPromotionType       = `INSERT INTO promotion_types (title, description, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5, $6, $7) returning id`
 	queryGetPromotionTypeById      = `SELECT pmt.id, pmt.title, pmt.description, pmt.start_date, pmt.end_date, pmt.status, pmt.created_at, pmt.updated_at from promotion_types pmt where pmt.id = $1`
-	queryUpdatePromotionType       = `update set `
-	queryDeletePromotionType       = `select id, title from promotion_types where id = $1`
+	queryUpdatePromotionType       = `update promotion_types set title= $1, description = $2, start_date = $3, end_date = $4, status = $5, updated_at = $6 where id = $7`
+	queryDeletePromotionType       = `delete from promotion_types where id = $1`
 )
 
 var PromotionTypeService promotionTypeInterface = &PromotionType{}
@@ -24,6 +24,7 @@ type promotionTypeInterface interface {
 	Get(string) ([]PromotionType, error)
 	AdminGet() ([]PromotionType, error)
 	GetById(int) (PromotionType, error)
+	Update(PromotionType) error
 	Delete(int) error
 }
 
@@ -161,7 +162,7 @@ func (s *PromotionType) GetById(id int) (PromotionType, error) {
 }
 
 // Update edit and update data by id
-func (s *PromotionType) Update(pm Promotion) error {
+func (s *PromotionType) Update(pmt PromotionType) error {
 
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
@@ -170,16 +171,14 @@ func (s *PromotionType) Update(pm Promotion) error {
 	if err != nil {
 		return err
 	}
-	_, err = dbConn.SQL.QueryContext(ctx, queryUpdateById,
-		pm.Title,
-		pm.Description,
-		pm.PromotionTypeId,
-		pm.StartDate,
-		pm.EndDate,
-		pm.Price,
-		pm.Status,
+	_, err = dbConn.SQL.QueryContext(ctx, queryUpdatePromotionType,
+		pmt.Title,
+		pmt.Description,
+		pmt.StartDate,
+		pmt.EndDate,
+		pmt.Status,
 		time.Now(),
-		pm.Id,
+		pmt.Id,
 	)
 
 	return nil

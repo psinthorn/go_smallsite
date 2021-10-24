@@ -34,7 +34,8 @@
                             <td>
                                 <a href="/admin/promotions-types/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
                                 <a href="/admin/promotions-types/{{.Id}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
-                                <a href="/admin/promotions/types/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a>
+                                <!-- <a href="/admin/promotions-types/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a> -->
+                                <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>   
                             </td>
                         </tr>
                     {{end}}
@@ -66,7 +67,21 @@
         fixedHeight: true,
         })
     })
-    
 </script>
+
+<script>
+    function deleteRes(id) {
+        attention.custom({
+            icon: "warning",
+            msg: "are you sure want to delete?",
+            callback: function(result){
+                if(result !== false){
+                    window.location.href = "/admin/promotions-types/" + id + "/delete";
+                }
+            }
+        })
+    }
+</script>
+
 {{end}}
     
