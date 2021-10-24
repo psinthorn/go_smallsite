@@ -98,7 +98,7 @@ func (s *Promotion) Get(st string) ([]Promotion, error) {
 			&p.Status,
 			&p.CreatedAt,
 			&p.UpdatedAt,
-			&p.PromotionType.ID,
+			&p.PromotionType.Id,
 			&p.PromotionType.Title,
 		)
 
@@ -147,7 +147,7 @@ func (s *Promotion) AdminGet() ([]Promotion, error) {
 			&p.Status,
 			&p.CreatedAt,
 			&p.UpdatedAt,
-			&p.PromotionType.ID,
+			&p.PromotionType.Id,
 			&p.PromotionType.Title,
 		)
 
@@ -188,7 +188,7 @@ func (s *Promotion) GetById(id int) (Promotion, error) {
 		&pm.Status,
 		&pm.CreatedAt,
 		&pm.UpdatedAt,
-		&pm.PromotionType.ID,
+		&pm.PromotionType.Id,
 		&pm.PromotionType.Title,
 	)
 	if err != nil {

@@ -56,24 +56,6 @@ func (rp *Repository) AdminPromotionsList(w http.ResponseWriter, r *http.Request
 	})
 }
 
-// PromotionTypeList
-func (rp *Repository) PromotionTypesList(w http.ResponseWriter, r *http.Request) {
-	st := r.URL.Query().Get("status")
-	if st == "" {
-		st = "enable"
-	}
-	promotion_types, err := domain.PromotionTypeService.Get(st)
-	if err != nil {
-		helpers.ServerError(w, err)
-	}
-
-	data := make(map[string]interface{})
-	data["promotion_types"] = promotion_types
-	render.Template(w, r, "admin-promotion-types.page.html", &templates.TemplateData{
-		Data: data,
-	})
-}
-
 // PromotionForm form for create new promotion
 func (rp *Repository) PromotionForm(w http.ResponseWriter, r *http.Request) {
 	st := r.URL.Query().Get("status")

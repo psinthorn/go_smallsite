@@ -1,0 +1,119 @@
+{{template "admin-base" .}}
+<!-- {{define "banner"}}
+        <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
+{{end}} -->
+{{define "css"}}
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css">
+{{end}}
+{{define  "admin-page-title" }}
+    Promotion Details
+{{end}}
+
+{{define "content"}}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col">
+                {{$IsReadOnly := index .StringMap "is_read"}}
+                {{$isEdit := index .StringMap "is_edit"}}
+                {{$isView := index .StringMap "is_view"}}
+             
+                {{$pmt := index .Data "promotion_type" }}
+                <form method="post" action="/admin/promotions-types/{{$pmt.Id}}/update" class="" novalidate>
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label class="small" for="title">Promotion: </label>
+                                        <input class="form-control" id="title" autocomplete="off" type='text'
+                                            name='title'  value="{{$pmt.Title}}" {{$IsReadOnly}} required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="small" for="description">Description:</label>
+                                        <textarea class="form-control" id="description" autocomplete="off"
+                                        name='description'  value="{{$pmt.Description}}" {{$IsReadOnly}} rows="4" required>{{$pmt.Description}}</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            <div class="row" id="promotion-dates">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="small" for="start_date">Start Date: <span class="small">{{humanDate $pmt.StartDate}}</span></label>
+                                        <input class="form-control" id="start_date" autocomplete="off" type='text'
+                                                name='start_date'  value="{{humanISODate $pmt.StartDate}}" {{$IsReadOnly}} required>
+                                    </div>
+                                </div>
+            
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                    <div class="form-group">
+                                        <label class="small" for="end_date">End Date: <span class="small">{{humanDate $pmt.EndDate}}</span></label>
+                                        <input class="form-control" id="end_date" autocomplete="off" type='text' name='end_date'  value="{{humanISODate $pmt.EndDate}}" {{$IsReadOnly}} required>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">  
+
+                                <div class="form-group">
+                                    <label class="small" for="promotion_type_id">Status: </label>                           
+                                    <select class="form-control form-select form-select-lg mb-3 "
+                                    aria-label="select status" 
+                                    id="status"
+                                    name="status" 
+                                    required>                                           
+                                        <option {{if eq $pmt.Status "enable" }}selected{{end}} value="enable">enable</option>
+                                        <option {{if eq $pmt.Status "disable" }}selected{{end}} value="disable">disable</option>                                      
+                                    </select>                                    
+                                </div>
+                                                    
+                            <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <div class="form-group">
+                                            <label class="small" for="created_at">Created At: <span class="small">{{humanDate $pmt.CreatedAt}}</span></label>
+                                            <input class="form-control" id="created_at" autocomplete="off" type='text'
+                                                    name='created_at'  value="{{humanISODate $pmt.CreatedAt}}" {{$IsReadOnly}} required>
+                                        </div>
+                                    </div>
+                
+                                    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                                        <div class="form-group">
+                                            <label class="small" for="updated_at">Latest Update: <span class="small">{{humanDate $pmt.UpdatedAt}}</span></label>
+                                            <input class="form-control" id="updated_at" autocomplete="off" type='text' name='updated_at'  value="{{humanISODate $pmt.UpdatedAt}}" {{$IsReadOnly}} required>
+                                        </div>
+                                    </div>
+                            </div>                            
+                        </div>
+                    </div>
+                    <a href="/admin/promotions-types" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
+                    {{if $isEdit }}
+                        <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" >
+                        <input type="submit" class="btn btn-sm btn-warning mt-3" value="Edit" hidden>
+                    {{else}}
+                        <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" hidden>
+                        <a href="/admin/promotions-type/{{$pmt.Id}}?edit=true" class="btn btn-sm btn-warning mt-3">Edit</a>
+                    {{end}}
+                </form>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+<script>
+    const elem = document.getElementById('promotion-dates');
+    const rangePicker = new DateRangePicker(elem, {
+        format: "yyyy-mm-dd",
+        minDate: new Date(),
+    });
+</script>
+
+</script>
+{{end}}
+    

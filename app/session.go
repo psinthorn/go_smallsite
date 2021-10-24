@@ -14,7 +14,6 @@ import (
 
 // CreateSession and store session to AppConfig.Session
 func CreateSession() {
-
 	// register all models to session maybe use or not use
 	gob.Register(users.User{})
 	gob.Register(domain.Room{})
@@ -23,7 +22,7 @@ func CreateSession() {
 	gob.Register(domain.RoomAllotmentStatus{})
 	gob.Register(domain_reservation.Reservation{})
 	gob.Register(domain_promotions.Promotion{})
-	gob.Register(domain_promotions.Promotion{})
+	gob.Register(domain_promotions.PromotionType{})
 	gob.Register(map[string]int{})
 
 	// set up the session

@@ -160,7 +160,7 @@ func routes(app *configs.AppConfig) http.Handler {
 		mux.Get("/promotions/new", controllers.HandlerRepo.PromotionForm)
 		mux.Get("/promotions", controllers.HandlerRepo.PromotionsList)
 		mux.Get("/promotions/{id}/edit", controllers.HandlerRepo.PromotionTypes)
-		mux.Get("/promotions/types", controllers.HandlerRepo.PromotionTypesList)
+		mux.Get("/promotions/types", controllers.HandlerRepo.AdminPromotionTypes)
 
 		// Section: User
 		// Control and manage all users
