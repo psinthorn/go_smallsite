@@ -23,6 +23,8 @@ func CreateSession() {
 	gob.Register(domain_reservation.Reservation{})
 	gob.Register(domain_promotions.Promotion{})
 	gob.Register(domain_promotions.PromotionType{})
+	gob.Register(domain.RoomRate{})
+	// gob.Register(domain.RoomRateType{})
 	gob.Register(map[string]int{})
 
 	// set up the session

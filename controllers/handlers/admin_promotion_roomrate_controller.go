@@ -13,7 +13,7 @@ import (
 )
 
 // PromotionList
-func (rp *Repository) PromotionRoomrateList(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) PromotionRoomRateList(w http.ResponseWriter, r *http.Request) {
 	st := r.URL.Query().Get("status")
 	if st == "" {
 		st = "enable"
@@ -31,7 +31,7 @@ func (rp *Repository) PromotionRoomrateList(w http.ResponseWriter, r *http.Reque
 }
 
 // GetRoomForm form for create new room
-func (rp *Repository) PromotionRoomrateForm(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) PromotionRoomRateForm(w http.ResponseWriter, r *http.Request) {
 	var emptyPmr domain.PromotionRoomRate
 	data := make(map[string]interface{})
 	data["room"] = emptyPmr
@@ -43,7 +43,7 @@ func (rp *Repository) PromotionRoomrateForm(w http.ResponseWriter, r *http.Reque
 }
 
 // PromotionRoomrate return a promotion information
-func (rp *Repository) PromotionRoomrate(w http.ResponseWriter, r *http.Request) {
+func (rp *Repository) PromotionRoomRate(w http.ResponseWriter, r *http.Request) {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		helpers.ServerError(w, err)

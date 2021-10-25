@@ -90,7 +90,7 @@ func (s *PromotionRoomRate) GetById(id int) (PromotionRoomRate, error) {
 		return pmr, err
 	}
 
-	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionByID, id).Scan(
+	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionById, id).Scan(
 		&pmr.Id,
 		&pmr.Title,
 		&pmr.RoomTypeId,

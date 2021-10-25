@@ -159,7 +159,7 @@ func (rp *Repository) AddPromotionType(w http.ResponseWriter, r *http.Request) {
 	// form.Has("first_name", r)
 	form.Required("title", "description", "start_date", "end_date", "status")
 	// minimum require on input field
-	form.MinLength("title", 12, r)
+	form.MinLength("title", 8, r)
 
 	// convert from string date to time.Time format
 	startDate, err := utils.UtilsService.StringToTime(sd)

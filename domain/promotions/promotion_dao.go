@@ -9,7 +9,7 @@ import (
 )
 
 const (
-	queryInsertPromotion = "insert into promotions (title, description, price, start_date, end_date, promotion_type_id, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id"
+	queryInsertPromotion = `insert into promotions (title, description, price, start_date, end_date, promotion_type_id, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id`
 
 	queryGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
 							from promotions pms
@@ -24,7 +24,7 @@ const (
 							on (pms.promotion_type_id = pt.id)   
 							order by pms.id desc`
 
-	queryGetPromotionByID = `SELECT pm.id, pm.title, pm.description, pm.price, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
+	queryGetPromotionById = `SELECT pm.id, pm.title, pm.description, pm.price, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
 							from promotions pm 
 							left join promotion_types pt 
 							on (pm.promotion_type_id = pt.id) 
@@ -177,7 +177,7 @@ func (s *Promotion) GetById(id int) (Promotion, error) {
 		return pm, err
 	}
 
-	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionByID, id).Scan(
+	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionById, id).Scan(
 		&pm.Id,
 		&pm.Title,
 		&pm.Description,
@@ -239,6 +239,7 @@ func (s *Promotion) Delete(id int) error {
 
 	_, err = dbConn.SQL.ExecContext(ctx, queryDeletePromotionById, id)
 	if err != nil {
+
 		return err
 	}
 

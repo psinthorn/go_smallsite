@@ -33,8 +33,8 @@
                             <td>{{humanDate .StartDate}}</td>
                             <td>{{humanDate .EndDate}}</td>
                             <td>{{.PromotionType.Title}}</td>
-                            <td>{{.Status}}</td>
-                            <td>                       
+                            <td class="{{if eq .Status "disable" }} text-danger {{else}} text-success {{end}}">{{.Status}}</td>
+                            <td class="text-center">                       
                                 <!-- <div class="float-left"> -->
                                     <a href="/admin/promotions/{{.Id}}?edit=false" type="button" class="btn btn-success btn-sm">View</a>
                                     <a href="/admin/promotions/{{.Id}}?edit=true" type="button" class="btn btn-warning btn-sm">Edit</a>
