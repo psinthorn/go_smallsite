@@ -1,6 +1,6 @@
 version: '3.9'
 services:
-  go_f2hotel:
+  f2xhotel:
     build: .
     ports:
       - 8080:8080
@@ -8,37 +8,68 @@ services:
     volumes:
       - .:/app
     depends_on:
-      -   db_mysql
+      # -   db_mysql
+      -   db_postgres
   
 
   # Database service 
 
-  # Mysql
-  db_mysql:
-    image: mysql:5.7.22
-    restart: always
-    environment: 
-      MYSQL_DATABASE: go_f2hotel
-      MYSQL_USER: root
-      MYSQL_PASSWORD: root
-      MYSQL_ROOT_PASSWORD: root
-    volumes:
-      - .db_data:/var/lib/mysql
-    ports:
-      - 33306:3306
-    
-
-  # Postgres
-  # db_postgres:
-  #   image: 
+  # # Mysql with phpmyadmin 
+  # # uncomment from line 18 - 44 to use mysql
+  # db_mysql:
+  #   image: mysql:5.7.22
   #   restart: always
   #   environment: 
-  #     POSTGRES_DATABSE: go_f2hotel
-  #     POSTGRES_USER: postgres
-  #     POSTGRES_PASSWORD: postgres
-  #     POSTGTRES_ROOT_PASSWORD: postgres
-  #   volumns:
-  #     - .db_data:/var/lib/postgres
+  #     MYSQL_DATABASE: go_f2hotel
+  #     MYSQL_USER: root
+  #     MYSQL_PASSWORD: root
+  #     MYSQL_ROOT_PASSWORD: root
+  #   volumes:
+  #     - .db_data:/var/lib/mysql
   #   ports:
-  #     - 54321:5432
+  #     - 33306:3306
+  # phpmyadmin:
+  #   image: phpmyadmin/phpmyadmin
+  #   container_name: pma
+  #   links:
+  #     - db_mysql
+  #   environment:
+  #     PMA_HOST: db_mysql
+  #     PMA_PORT: 3306
+  #     PMA_ARBITRARY: 1
+  #   restart: always
+  #   ports:
+  #     - 8081:80
+  # volumes:
+  #   .db_data:
+    
+
+  # Postgres with PgAdmin
+  db_postgres:
+    image: postgres:latest
+    restart: always
+    environment: 
+      POSTGRES_DATABSE: f2xhotel
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGTRES_ROOT_PASSWORD:  
+    volumes:
+      - .db_data:/var/lib/postgres
+    ports:
+      - 5432:5432
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=psinthorn@gmail.com
+      - PGADMIN_DEFAULT_PASSWORD=adminx
+    ports:
+      - 5050:80
+    restart: always
+    volumes:
+      - pgadmin:/root/.pgadmin
+volumes:
+  .db_data:
+  pgadmin:
+      
     

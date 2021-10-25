@@ -22,4 +22,4 @@ docker:
 #  - every time we edit or update Dockerfile we need to re-build docker image by running 
 #  - docker-compose up --build 
 docker-rebuild:
-	docker-compose up --build
+	docker-compose up --build --remove-orphans

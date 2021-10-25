@@ -1,0 +1,2 @@
+INSERT INTO public.promotion_types (title,description,start_date, end_date,status,created_at,updated_at) VALUES
+	 ('Special Deal Package','Special Deal Package Book now Include breakfast, Food and beverage discount 20%, Free transfer Air port to Hotel','2021-12-01 18:41:00.944','2022-04-15 18:41:00.944','enable','2021-05-11 18:41:00.944','2021-05-11 18:41:00.944');

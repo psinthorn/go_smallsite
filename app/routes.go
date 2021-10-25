@@ -161,14 +161,36 @@ func routes(app *configs.AppConfig) http.Handler {
 
 		// Section: Promotion
 		mux.Post("/promotions", controllers.HandlerRepo.AddPromotion)
-		mux.Get("/promotions", controllers.HandlerRepo.PromotionsList)
+		mux.Get("/promotions", controllers.HandlerRepo.AdminPromotionsList)
 		mux.Get("/promotions/new", controllers.HandlerRepo.PromotionForm)
 		mux.Get("/promotions/{id}", controllers.HandlerRepo.Promotion)
+		mux.Post("/promotions/{id}/update", controllers.HandlerRepo.UpdatePromotion)
+		mux.Get("/promotions/{id}/delete", controllers.HandlerRepo.DeletePromotion)
 
 		// Section: Promotion-Types
-		mux.Get("/promotions-types", controllers.HandlerRepo.PromotionTypesList)
-		mux.Delete("/promotions-types/{id}", controllers.HandlerRepo.PromotionTypesList)
-		mux.Get("/promotions-types/{id}/edit", controllers.HandlerRepo.PromotionTypes)
+		mux.Post("/promotions-types", controllers.HandlerRepo.AddPromotionType)
+		mux.Get("/promotions-types", controllers.HandlerRepo.AdminPromotionTypes)
+		mux.Get("/promotions-types/new", controllers.HandlerRepo.PromotionTypeForm)
+		mux.Get("/promotions-types/{id}", controllers.HandlerRepo.PromotionType)
+		mux.Post("/promotions-types/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
+		mux.Get("/promotions-types/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
+
+		// Section: Room Rate
+		mux.Post("/roomrates", controllers.HandlerRepo.AddPromotionType)
+		mux.Get("/roomrate", controllers.HandlerRepo.AdminPromotionTypes)
+		mux.Get("/roomrates/new", controllers.HandlerRepo.PromotionTypeForm)
+		mux.Get("/roomrates/{id}", controllers.HandlerRepo.PromotionType)
+		mux.Post("/roomrate/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
+		mux.Get("/roomrate/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
+
+		// Section: Room Rate Type
+		// desc: type of room rate like rackrate, wholesale, ota, member, promotion
+		mux.Post("/roomrate-types", controllers.HandlerRepo.AddPromotionType)
+		mux.Get("/roomrate-type", controllers.HandlerRepo.AdminPromotionTypes)
+		mux.Get("/roomrates-types/new", controllers.HandlerRepo.PromotionTypeForm)
+		mux.Get("/roomrates-types/{id}", controllers.HandlerRepo.PromotionType)
+		mux.Post("/room-types/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
+		mux.Get("/roomrate-types/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
 
 		// Section: User
 		// Control and manage all users

@@ -3,7 +3,7 @@ package domain_promotions
 import "time"
 
 type promotionType struct {
-	ID          int       `json:"id"`
+	Id          int       `json:"id"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
 	StartDate   time.Time `json:"start_date"`

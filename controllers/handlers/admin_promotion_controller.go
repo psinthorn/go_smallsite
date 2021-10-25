@@ -36,20 +36,22 @@ func (rp *Repository) PromotionsList(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
-// PromotionTypeList
-func (rp *Repository) PromotionTypesList(w http.ResponseWriter, r *http.Request) {
+// PromotionList
+func (rp *Repository) AdminPromotionsList(w http.ResponseWriter, r *http.Request) {
 	st := r.URL.Query().Get("status")
 	if st == "" {
 		st = "enable"
 	}
-	promotion_types, err := domain.PromotionTypeService.Get(st)
+	promotions, err := domain.PromotionService.AdminGet()
 	if err != nil {
 		helpers.ServerError(w, err)
 	}
 
+	//fmt.Println(promotions)
+
 	data := make(map[string]interface{})
-	data["promotion_types"] = promotion_types
-	render.Template(w, r, "admin-promotion-types.page.html", &templates.TemplateData{
+	data["promotions"] = promotions
+	render.Template(w, r, "admin-promotions-list.page.html", &templates.TemplateData{
 		Data: data,
 	})
 }
@@ -65,7 +67,7 @@ func (rp *Repository) PromotionForm(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 	}
 
-	fmt.Println(promotionTypes)
+	//fmt.Println(promotionTypes)
 
 	var emptyPromotion domain.Promotion
 	data := make(map[string]interface{})
@@ -89,34 +91,25 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 
 	sd := r.Form.Get("start_date")
 	ed := r.Form.Get("end_date")
-
 	title := r.Form.Get("title")
 	description := r.Form.Get("description")
-
-	fmt.Println(title)
-	fmt.Println(description)
-
-	pmtTitle := r.Form.Get("promotion_type_title")
-	fmt.Println(pmtTitle)
+	// pmtTitle := r.Form.Get("promotion_type_title")
 	pmtTypeId := r.Form.Get("promotion_type_id")
-	fmt.Println(pmtTypeId)
-	// pmtTypeIdInt, err := strconv.Atoi(pmtTypeId)
-	// if err != nil {
-	// 	helpers.ServerError(w, err)
-	// 	return
-	// }
-
+	pmtTypeIdInt, err := strconv.Atoi(pmtTypeId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 	price := r.Form.Get("price")
 	priceInt, err := strconv.Atoi(price)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-
 	status := r.Form.Get("status")
 
 	// form.Has("first_name", r)
-	form.Required("title", "description", "promotion_type_id", "start_date", "end_date")
+	form.Required("title", "description", "promotion_type_id", "start_date", "end_date", "price", "status")
 	// minimum require on input field
 	form.MinLength("title", 12, r)
 
@@ -137,15 +130,12 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 		Description:     description,
 		Price:           priceInt,
 		Status:          status,
-		PromotionTypeId: 1,
+		PromotionTypeId: pmtTypeIdInt,
 		StartDate:       startDate,
 		EndDate:         endDate,
 		CreatedAt:       time.Now(),
 		UpdatedAt:       time.Now(),
 	}
-
-	fmt.Println("data from pm add form")
-	fmt.Println(pm)
 
 	// if data not valid then return current data to form
 	if !form.Valid() {
@@ -155,6 +145,8 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 		stringMap["title"] = title
 		stringMap["description"] = description
 		stringMap["price"] = price
+		stringMap["promotion_type_id"] = pmtTypeId
+		stringMap["status"] = status
 
 		data := make(map[string]interface{})
 		data["promotion"] = pm
@@ -163,6 +155,12 @@ func (rp *Repository) AddPromotion(w http.ResponseWriter, r *http.Request) {
 			Data:      data,
 			StringMap: stringMap,
 		})
+		return
+	}
+
+	_, err = domain.PromotionService.Create(pm)
+	if err != nil {
+		helpers.ServerError(w, err)
 		return
 	}
 
@@ -198,11 +196,92 @@ func (rp *Repository) Promotion(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 	}
 
+	st := r.URL.Query().Get("status")
+	if st == "" {
+		st = "enable"
+	}
+	promotionTypes, err := domain.PromotionTypeService.Get(st)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
 	data := make(map[string]interface{})
 	data["promotion"] = pm
+	data["promotion_types"] = promotionTypes
 	render.Template(w, r, "admin-promotion-details.page.html", &templates.TemplateData{
 		Data:      data,
 		StringMap: stringMap,
 	})
 
+}
+
+// Update promotion
+func (rp *Repository) UpdatePromotion(w http.ResponseWriter, r *http.Request) {
+	//form := forms.New(r.PostForm)
+	err := r.ParseForm()
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	price, err := strconv.Atoi(r.Form.Get("price"))
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	pmtId, err := strconv.Atoi(r.Form.Get("promotion_type_id"))
+	fmt.Println(pmtId)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	sd := r.Form.Get("start_date")
+	ed := r.Form.Get("end_date")
+	// convert from string date to time.Time format
+	startDate, err := utils.UtilsService.StringToTime(sd)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+	endDate, err := utils.UtilsService.StringToTime(ed)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	pm, err := domain.PromotionService.GetById(id)
+
+	pm.Title = r.Form.Get("title")
+	pm.Description = r.Form.Get("description")
+	pm.Price = price
+	pm.PromotionTypeId = pmtId
+	pm.StartDate = startDate
+	pm.EndDate = endDate
+	pm.Status = r.Form.Get("status")
+
+	_ = domain.PromotionService.Update(pm)
+
+	rp.App.Session.Put(r.Context(), "success", "promotion package is updated")
+	http.Redirect(w, r, "/admin/promotions", http.StatusSeeOther)
+}
+
+// Delete
+func (rp *Repository) DeletePromotion(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	fmt.Println(id)
+
+	_ = domain.PromotionService.Delete(id)
+
+	rp.App.Session.Put(r.Context(), "success", "promotion package is deleted")
+	http.Redirect(w, r, "/admin/promotions", http.StatusSeeOther)
 }

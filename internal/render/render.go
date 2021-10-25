@@ -16,7 +16,8 @@ import (
 
 var (
 	functions = template.FuncMap{
-		"humanDate": HumanDate,
+		"humanDate":    HumanDate,
+		"humanISODate": HumanISODate,
 	}
 	tmplCache = map[string]*template.Template{}
 	app       *configs.AppConfig
@@ -164,4 +165,10 @@ func HumanDate(t time.Time) string {
 	layoutUS := "January 2, 2006"
 	// layoutISO = "2006-01-02"
 	return t.Format(layoutUS)
+}
+
+// Humandate is return time format as YYYY-MM-DD
+func HumanISODate(t time.Time) string {
+	layoutISO := "2006-01-02"
+	return t.Format(layoutISO)
 }

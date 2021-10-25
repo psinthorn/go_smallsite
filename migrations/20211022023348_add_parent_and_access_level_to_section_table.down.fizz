@@ -1,0 +1,2 @@
+drop_column("sections","parent")
+drop_column("sections","access_level")

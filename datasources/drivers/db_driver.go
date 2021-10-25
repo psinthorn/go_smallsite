@@ -13,7 +13,7 @@ import (
 )
 
 var (
-	postgresDsn = "host=localhost port=5432 dbname=go_smallsite_bookings user=postgres password="
+	postgresDsn = "host=localhost port=5432 dbname=f2xhotel user=postgres password=postgres"
 )
 
 // DB to holds and store SLQ driver after we make database connection success
@@ -28,7 +28,7 @@ const (
 	maxDBIdleConn = 5
 	maxDBLifeTime = 5 * time.Minute
 
-	dsn = "host=localhost port=5432 dbname=go_smallsite_bookings user=postgres password="
+	dsn = "host=localhost port=5432 dbname=f2xhotel user=postgres password=postgres"
 )
 
 // func init() {
