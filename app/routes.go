@@ -92,7 +92,6 @@ func routes(app *configs.AppConfig) http.Handler {
 
 	// Administrator Section
 	// this section is required authentication to get full access authorization
-
 	mux.Route("/admin", func(mux chi.Router) {
 
 		// // Authentication middleware
@@ -174,6 +173,14 @@ func routes(app *configs.AppConfig) http.Handler {
 		mux.Get("/promotions-types/{id}", controllers.HandlerRepo.PromotionType)
 		mux.Post("/promotions-types/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
 		mux.Get("/promotions-types/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
+
+		// Section: Promotion-Types
+		mux.Post("/promotions-ratetypes", controllers.HandlerRepo.AddPromotionRateType)
+		mux.Get("/promotions-ratetypes", controllers.HandlerRepo.AdminPromotionRateTypes)
+		mux.Get("/promotions-ratetypes/new", controllers.HandlerRepo.PromotionRateTypeForm)
+		mux.Get("/promotions-ratetypes/{id}", controllers.HandlerRepo.PromotionRateType)
+		mux.Post("/promotions-ratetypes/{id}/update", controllers.HandlerRepo.UpdatePromotionRateType)
+		mux.Get("/promotions-ratetypes/{id}/delete", controllers.HandlerRepo.DeletePromotionRateType)
 
 		// Section: Room Rate
 		mux.Post("/roomrates", controllers.HandlerRepo.AddPromotionType)

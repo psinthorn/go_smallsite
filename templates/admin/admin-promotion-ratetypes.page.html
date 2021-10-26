@@ -1,0 +1,87 @@
+{{template "admin-base" .}}
+{{define "css"}}
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" type="text/css">
+{{end}}
+
+{{define "admin-page-title"}}
+    Promotion types
+{{end}}
+
+{{define "content"}}
+<div class="col-sm-12 col-md-12 col-lg-12">
+    {{$prts := index .Data "promotion_ratetypes"}}
+        <div class="table-responsive">
+            <table class="table table-hover table-sm" id="all-promotion_types">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    <tbody>
+                    {{range $prts }}
+                        <tr>
+                            <td></td>
+                            <td>{{.Title}}</td>
+                            <td>{{.Description}}</td>
+                            <td>{{humanDate .StartDate}}</td>
+                            <td>{{humanDate .EndDate}}</td>
+                            <td class="{{if eq .Status "disable" }} text-danger {{else}} text-success {{end}}">{{.Status}}</td>
+                            <td class="text-center">
+                                <a href="/admin/promotions-types/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
+                                <a href="/admin/promotions-types/{{.Id}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
+                                <!-- <a href="/admin/promotions-types/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a> -->
+                                <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>   
+                            </td>
+                        </tr>
+                    {{end}}
+                    </tbody>
+                </thead>
+            </table>
+        </div>
+    
+        <div class="mt-5 mb-5">
+                <div class="row">
+                    <div class="col">
+                        <a href="/admin/promotions-ratetypes/new" type="button" class="btn btn-success btn-sm" >Add</a>
+                        <a href="/admin/promotions-ratetypes" type="button" class="btn btn-warning btn-sm">Back</a>
+                    </div>
+                </div>
+        </div>
+
+</div>
+
+{{end}}
+
+{{define "js"}}
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" type="text/javascript"></script>
+<script>
+    // Waiting until all the necessary contetns is loaded then working on dataTable (show list of data)
+    document.addEventListener("DOMContentLoaded",function () {
+        const dataTable = new simpleDatatables.DataTable("#all-promotion_types", {
+        searchable: true,
+        fixedHeight: true,
+        })
+    })
+</script>
+
+<script>
+    function deleteRes(id) {
+        attention.custom({
+            icon: "warning",
+            msg: "are you sure want to delete?",
+            callback: function(result){
+                if(result !== false){
+                    window.location.href = "/admin/promotions-ratetypes/" + id + "/delete";
+                }
+            }
+        })
+    }
+</script>
+
+{{end}}
+    
