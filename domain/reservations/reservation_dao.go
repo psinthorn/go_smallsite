@@ -1,4 +1,4 @@
-package domain_reservation
+package reservations
 
 import (
 	"context"

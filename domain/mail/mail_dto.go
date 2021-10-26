@@ -1,4 +1,4 @@
-package domain_mail
+package mails
 
 type MailDataTemplate struct {
 	To       string `json: "to"`

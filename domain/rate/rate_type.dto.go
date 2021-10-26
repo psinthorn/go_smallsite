@@ -1,4 +1,4 @@
-package roomrates
+package rates
 
 import "time"
 

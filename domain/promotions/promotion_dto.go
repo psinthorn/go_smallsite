@@ -1,4 +1,4 @@
-package domain_promotions
+package promotions
 
 import (
 	"time"

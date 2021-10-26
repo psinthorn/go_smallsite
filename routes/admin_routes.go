@@ -1,4 +1,4 @@
-package main
+package routes
 
 import (
 	"net/http"
@@ -6,97 +6,20 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/psinthorn/go_smallsite/configs"
 	controllers "github.com/psinthorn/go_smallsite/controllers/handlers"
-	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
 // Routes use to map url with controller func
-func routes(app *configs.AppConfig) http.Handler {
+func AdminRoutes(app *configs.AppConfig) http.Handler {
 
 	mux := chi.NewRouter()
-	// mux.Use(middleware.Recoverer)
-	// mux.Use(utils.Middleware.NoSurf)
-	// mux.Use(SessionLoad)
-
-	// //mux.Use(utils.Middleware.WriteToConsole)
-	// // Static file folder
-	// fileServer := http.FileServer(http.Dir("./static/"))
-	// mux.Handle("/static/*", http.StripPrefix("/static", fileServer))
-
-	// // Section: General Pages routing
-	// mux.Get("/", controllers.HandlerRepo.Home)
-	// mux.Get("/about", controllers.HandlerRepo.About)
-	// mux.Get("/contact", controllers.HandlerRepo.Contact)
-
-	// // Section: Room routing
-	// mux.Get("/rooms", controllers.HandlerRepo.Rooms)
-	// mux.Get("/rooms/superior", controllers.HandlerRepo.Superior)
-	// mux.Get("/rooms/deluxe", controllers.HandlerRepo.Deluxe)
-
-	// // Section: users routing
-	// mux.Get("/users/login", controllers.HandlerRepo.Login)
-	// mux.Post("/users/login", controllers.HandlerRepo.PostLogin)
-	// mux.Get("/users/logout", controllers.HandlerRepo.Logout)
-
-	// // Section: Reservation routing
-	// mux.Route("/rooms", func(mux chi.Router) {
-	// 	// search form
-	// 	mux.Get("/search-availability", controllers.HandlerRepo.SearchAvailability)
-	// 	// search all room availability
-	// 	mux.Post("/search-availability", controllers.HandlerRepo.PostSearchAvailability)
-	// 	// choose available room for make reservation
-	// 	mux.Get("/reservation/choose-room/{id}/{type}/{no}", controllers.HandlerRepo.ChooseRoom)
-
-	// 	// serch room available by room type and return as json format
-	// 	mux.Post("/search-availability-response", controllers.HandlerRepo.AvailabilityJson)
-	// 	// searc availability by room type
-	// 	mux.Get("/reservation-by-room-type", controllers.HandlerRepo.ReservationByRoomType)
-
-	// 	// reservation form
-	// 	mux.Get("/reservation", controllers.HandlerRepo.Reservation)
-	// 	// create new reservation
-	// 	mux.Post("/reservation", controllers.HandlerRepo.PostReservation)
-	// 	// show summary reservation
-	// 	mux.Get("/reservation-summary", controllers.HandlerRepo.ReservationSummary)
-
-	// })
-
-	// // Section: Promotions routing
-	// mux.Route("/promotions", func(mux chi.Router) {
-	// 	// search form
-	// 	// search form
-	// 	mux.Get("/", controllers.HandlerRepo.PromotionTypes)
-	// 	//mux.Get("/promotion-details/{id}", controllers.HandlerRepo.PromotionDetails)
-	// 	mux.Get("/promotion-choose-room/{type}/{id}", controllers.HandlerRepo.PromotionRoomType)
-
-	// 	mux.Get("/lists", controllers.HandlerRepo.PromotionsList)
-
-	// // search all room availability
-	// mux.Post("/search-promotion-availability", controllers.HandlerRepo.PostSearchAvailability)
-	// // choose available room for make reservation
-	// mux.Get("/reseration/choose-room/{id}/{type}/{no}", controllers.HandlerRepo.ChooseRoom)
-
-	// // serch room available by room type and return as json format
-	// mux.Post("/search-availability-response", controllers.HandlerRepo.AvailabilityJson)
-	// // searc availability by room type
-	// mux.Get("/reservation-by-room-type", controllers.HandlerRepo.ReservationByRoomType)
-
-	// // reservation form
-	// mux.Get("/reservation", controllers.HandlerRepo.Reservation)
-	// // create new reservation
-	// mux.Post("/reservation", controllers.HandlerRepo.PostReservation)
-	// // show summary reservation
-	// mux.Get("/reservation-summary", controllers.HandlerRepo.ReservationSummary)
-
-	// })
 
 	// Administrator Section
 	// this section is required authentication to get full access authorization
-
 	mux.Route("/admin", func(mux chi.Router) {
 
-		// Authentication middleware
-		// all to below routes is need to authorize by this middleware
-		mux.Use(utils.Middleware.Auth)
+		// // Authentication middleware
+		// // all to below routes is need to authorize by this middleware
+		// mux.Use(utils.Middleware.Auth)
 
 		// Dasboard Section
 		// show summary dasboard
@@ -117,11 +40,13 @@ func routes(app *configs.AppConfig) http.Handler {
 
 		// Section: Reservation
 		// Add new reservation
-		mux.Get("/reservations/new", controllers.HandlerRepo.ReservationAddForm)
+		mux.Get("/reservations/form", controllers.HandlerRepo.ReservationAddForm)
 		mux.Post("/reservations", controllers.HandlerRepo.ReservationAdd)
-		mux.Get("/reservations/{id}", controllers.HandlerRepo.ReservationDetails)
+		//mux.Get("/reservations/{id}", controllers.HandlerRepo.Promotion)
 		// Show all reservation
 		mux.Get("/reservations", controllers.HandlerRepo.ReservationLists)
+		mux.Get("/reservations/new-reservations", controllers.HandlerRepo.NewReservationLists)
+		mux.Get("/reservations/calendar", controllers.HandlerRepo.ReservationCalendar)
 
 		// Edit Reservation
 		mux.Get("/reservations/edit/{id}", controllers.HandlerRepo.ReservationEditForm)
@@ -157,10 +82,45 @@ func routes(app *configs.AppConfig) http.Handler {
 		mux.Get("/rooms/room-status", controllers.HandlerRepo.AddNewRoomStatusForm)
 
 		// Section: Promotion
+		mux.Post("/promotions", controllers.HandlerRepo.AddPromotion)
+		mux.Get("/promotions", controllers.HandlerRepo.AdminPromotionsList)
 		mux.Get("/promotions/new", controllers.HandlerRepo.PromotionForm)
-		mux.Get("/promotions", controllers.HandlerRepo.PromotionsList)
-		mux.Get("/promotions/{id}/edit", controllers.HandlerRepo.PromotionTypes)
-		mux.Get("/promotions/types", controllers.HandlerRepo.AdminPromotionTypes)
+		mux.Get("/promotions/{id}", controllers.HandlerRepo.Promotion)
+		mux.Post("/promotions/{id}/update", controllers.HandlerRepo.UpdatePromotion)
+		mux.Get("/promotions/{id}/delete", controllers.HandlerRepo.DeletePromotion)
+
+		// Section: Promotion-Types
+		mux.Post("/promotions-types", controllers.HandlerRepo.AddPromotionType)
+		mux.Get("/promotions-types", controllers.HandlerRepo.AdminPromotionTypes)
+		mux.Get("/promotions-types/new", controllers.HandlerRepo.PromotionTypeForm)
+		mux.Get("/promotions-types/{id}", controllers.HandlerRepo.PromotionType)
+		mux.Post("/promotions-types/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
+		mux.Get("/promotions-types/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
+
+		// Section: Promotion-Types
+		mux.Post("/promotions-ratetypes", controllers.HandlerRepo.AddPromotionRateType)
+		mux.Get("/promotions-ratetypes", controllers.HandlerRepo.AdminPromotionRateTypes)
+		mux.Get("/promotions-ratetypes/new", controllers.HandlerRepo.PromotionRateTypeForm)
+		mux.Get("/promotions-ratetypes/{id}", controllers.HandlerRepo.PromotionRateType)
+		mux.Post("/promotions-ratetypes/{id}/update", controllers.HandlerRepo.UpdatePromotionRateType)
+		mux.Get("/promotions-ratetypes/{id}/delete", controllers.HandlerRepo.DeletePromotionRateType)
+
+		// Section: Room Rate
+		mux.Post("/roomrates", controllers.HandlerRepo.AddPromotionType)
+		mux.Get("/roomrate", controllers.HandlerRepo.AdminPromotionTypes)
+		mux.Get("/roomrates/new", controllers.HandlerRepo.PromotionTypeForm)
+		mux.Get("/roomrates/{id}", controllers.HandlerRepo.PromotionType)
+		mux.Post("/roomrate/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
+		mux.Get("/roomrate/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
+
+		// Section: Room Rate Type
+		// desc: type of room rate like rackrate, wholesale, ota, member, promotion
+		mux.Post("/roomrate-types", controllers.HandlerRepo.AddPromotionType)
+		mux.Get("/roomrate-type", controllers.HandlerRepo.AdminPromotionTypes)
+		mux.Get("/roomrates-types/new", controllers.HandlerRepo.PromotionTypeForm)
+		mux.Get("/roomrates-types/{id}", controllers.HandlerRepo.PromotionType)
+		mux.Post("/room-types/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
+		mux.Get("/roomrate-types/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
 
 		// Section: User
 		// Control and manage all users
