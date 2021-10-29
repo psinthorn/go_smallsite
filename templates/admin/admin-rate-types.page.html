@@ -30,7 +30,7 @@
                             <td>{{.Description}}</td>
                             <td class="{{if eq .Status "disable" }} text-danger {{else}} text-success {{end}}">{{.Status}}</td>
                             <td class="text-center">
-                                <a href="/admin/rates-stypes/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
+                                <a href="/admin/rates-types/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
                                 <a href="/admin/rates-types/{{.Id}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
                                 <!-- <a href="/admin/promotions-types/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a> -->
                                 <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>   

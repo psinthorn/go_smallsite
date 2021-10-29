@@ -12,7 +12,7 @@ const (
 	queryGetAllRateType           = `select * from rate_types order by id asc`
 	queryGetAllRateTypeWithStatus = `select * from rate_types where status = $1 order by id asc`
 	queryGetRateTypeById          = `select * from rate_types where id = $1`
-	queryUpdateRateTypeById       = `update rate_types set title= $1, short_name = $2, description = $3, status = $4, updated_at = $5 where id = $6`
+	queryUpdateRateTypeById       = `update rate_types set title= $1, acronym = $2, description = $3, status = $4, updated_at = $5 where id = $6`
 
 	queryDeleteRateTypeById = `delete from rate_types where id = $1`
 )
@@ -135,6 +135,11 @@ func (r *RateType) Update(rt RateType) error {
 		time.Now(),
 		rt.Id,
 	)
+	dbConn.SQL.Close()
+
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
@@ -153,6 +158,8 @@ func (r *RateType) Delete(id int) error {
 	if err != nil {
 		return err
 	}
+	dbConn.SQL.Close()
+
 	return nil
 }
 

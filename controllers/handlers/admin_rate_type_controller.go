@@ -13,7 +13,6 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
 	"github.com/psinthorn/go_smallsite/internal/render"
-	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
 // AdminPromotionTypes
@@ -61,9 +60,11 @@ func (rp *Repository) RateType(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 	}
 
+	fmt.Println(rateType)
+
 	data := make(map[string]interface{})
 	data["rate_type"] = rateType
-	render.Template(w, r, "admin--rate-type-details.page.html", &templates.TemplateData{
+	render.Template(w, r, "admin-rate-type-details.page.html", &templates.TemplateData{
 		Data:      data,
 		StringMap: stringMap,
 	})
@@ -164,29 +165,18 @@ func (rp *Repository) UpdateRateType(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sd := r.Form.Get("start_date")
-	ed := r.Form.Get("end_date")
-	// convert from string date to time.Time format
-	startDate, err := utils.UtilsService.StringToTime(sd)
+	rt, err := rates.RateTypeService.GetById(id)
+
+	rt.Title = r.Form.Get("title")
+	rt.Description = r.Form.Get("description")
+	rt.Acronym = r.Form.Get("acronym")
+	rt.Status = r.Form.Get("status")
+
+	err = rates.RateTypeService.Update(rt)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	endDate, err := utils.UtilsService.StringToTime(ed)
-	if err != nil {
-		helpers.ServerError(w, err)
-		return
-	}
-
-	pmt, err := domain.PromotionTypeService.GetById(id)
-
-	pmt.Title = r.Form.Get("title")
-	pmt.Description = r.Form.Get("description")
-	pmt.StartDate = startDate
-	pmt.EndDate = endDate
-	pmt.Status = r.Form.Get("status")
-
-	_ = domain.PromotionTypeService.Update(pmt)
 
 	rp.App.Session.Put(r.Context(), "success", "rate type is updated")
 	http.Redirect(w, r, "/admin/rates-types", http.StatusSeeOther)
