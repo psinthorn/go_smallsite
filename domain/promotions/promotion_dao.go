@@ -2,7 +2,6 @@ package promotions
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
@@ -235,11 +234,8 @@ func (s *Promotion) Delete(id int) error {
 		return err
 	}
 
-	fmt.Println(id)
-
 	_, err = dbConn.SQL.ExecContext(ctx, queryDeletePromotionById, id)
 	if err != nil {
-
 		return err
 	}
 

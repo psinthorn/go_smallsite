@@ -1,0 +1,123 @@
+{{template "admin-base" .}}
+<!-- {{define "banner"}}
+        <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
+{{end}} -->
+{{define "css"}}
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css">
+{{end}}
+{{define  "admin-page-title" }}
+    Rate Type
+{{end}}
+
+{{define "content"}}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col">
+                {{$IsReadOnly := index .StringMap "is_read"}}
+                {{$isEdit := index .StringMap "is_edit"}}
+                {{$isView := index .StringMap "is_view"}}
+             
+                {{$rt := index .Data "rate_type" }}
+                <form method="post" action="/admin/promotions-ratetypes" class="" novalidate class="needs-validation">
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label class="small" for="title">Rate Type Title: </label>
+                                        {{with .Form.Errors.Get "title"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}
+                                        <input class="form-control {{with .Form.Errors.Get "title"}} is-invalid {{end}}" 
+                                        type='text'
+                                        id="title" 
+                                        name='title'
+                                        autocomplete="off" 
+                                        value="{{$rt.Title}}"
+                                        required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="small" for="title">Acronym: </label>
+                                        {{with .Form.Errors.Get "acronym"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}
+                                        <input class="form-control {{with .Form.Errors.Get "acronym"}} is-invalid {{end}}" 
+                                        type='text'
+                                        id="acronym" 
+                                        name='acronym'
+                                        autocomplete="off" 
+                                        value="{{$rt.Acronym}}"
+                                        required>
+                                    </div>
+                                                                     
+                                    <div class="form-group">
+                                        <label class="small" for="description:">Description: </label>
+                                        {{with .Form.Errors.Get "description"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}   
+                                        <textarea class="form-control {{with .Form.Errors.Get "description"}} is-invalid {{end}}" 
+                                        id="description" 
+                                        name='description'  
+                                        autocomplete="off"
+                                        value="{{$rt.Description}}"  
+                                        rows="4" 
+                                        required>{{$rt.Description}}</textarea>
+                                    </div>
+                                </div>
+                            </div>                          
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">  
+                            <div class="col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label for="status" class="form-label">Status:</label>
+                                        {{with .Form.Errors.Get "status"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}
+                                        <input class="form-control {{with .Form.Errors.Get "status"}} is-invalid {{end}}" 
+                                        list="statusOptions" 
+                                        id="status" 
+                                        name="status"
+                                        autocomplete="off"
+                                        placeholder="select status"
+                                        required>
+                                        <datalist id="statusOptions">
+                                            <option value="enable">
+                                            <option value="disable">                        
+                                        </datalist>
+                                    </div>
+                            </div>
+                        </div>
+
+                    </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                                <div class="float-left">
+                                    <a href="/admin/rate-types" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
+                                </div>
+                                <div class="float-right">
+                                    <input type="submit" class="btn btn-sm btn-success mt-3" value="Submit" >
+                                </div>
+                                <div class="clearfix"></div>              
+                        </div>         
+                </form>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+<!-- <script>
+    const elem = document.getElementById('rate-type-dates');
+    const rangePicker = new DateRangePicker(elem, {
+        format: "yyyy-mm-dd",
+        minDate: new Date(),
+    });
+</script>
+
+</script> -->
+{{end}}
+    
