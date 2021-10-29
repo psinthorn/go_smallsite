@@ -1,0 +1,112 @@
+{{template "admin-base" .}}
+<!-- {{define "banner"}}
+        <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
+{{end}} -->
+{{define "css"}}
+    <!-- <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css"> -->
+{{end}}
+{{define  "admin-page-title" }}
+    Rate Type
+{{end}}
+
+{{define "content"}}
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col">
+                {{$IsReadOnly := index .StringMap "is_read"}}
+                {{$isEdit := index .StringMap "is_edit"}}
+                {{$isView := index .StringMap "is_view"}}
+             
+                {{$rt := index .Data "rate_type" }}
+               
+                <form method="post" action="/admin/rates-types/{{$rt.Id}}/update" class="" novalidate class="needs-validation">
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="form-group">
+                                        <label class="small" for="title">Rate Type Title: </label>
+                                        <input class="form-control" 
+                                        type='text'
+                                        id="title" 
+                                        name='title'
+                                        autocomplete="off" 
+                                        value="{{$rt.Title}}"
+                                        {{$IsReadOnly}}
+                                        required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="small" for="title">Acronym: </label>
+                                        <input class="form-control" 
+                                        type='text'
+                                        id="acronym" 
+                                        name='acronym'
+                                        autocomplete="off" 
+                                        value="{{$rt.Acronym}}"
+                                        {{$IsReadOnly}}
+                                        required>
+                                    </div>
+                                                                     
+                                    <div class="form-group">
+                                        <label class="small" for="description:">Description: </label> 
+                                        <textarea class="form-control" 
+                                        id="description" 
+                                        name='description'  
+                                        autocomplete="off"
+                                        value="{{$rt.Description}}"  
+                                        rows="4" 
+                                        {{$IsReadOnly}}
+                                        required>{{$rt.Description}}</textarea>
+                                    </div>
+                                </div>
+                            </div>                          
+                        </div>
+
+                        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">  
+                            <div class="col-sm-12 col-md-12 col-lg-12">                                 
+                                        <div class="form-group">
+                                            <label class="small" for="promotion_type_id">Status: </label>                           
+                                            <select class="form-control form-select form-select-lg mb-3 "
+                                            aria-label="select status" 
+                                            id="status"
+                                            name="status" 
+                                            required>                                           
+                                                <option {{if eq $rt.Status "enable" }}selected{{end}} value="enable">Enable</option>
+                                                <option {{if eq $rt.Status "disable" }}selected{{end}} value="disable">Disable</option>                                      
+                                            </select>                                    
+                                        </div>
+                            </div>
+                        </div>
+
+                    </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                                <!-- <div class="float-left">
+                                    <a href="/admin/rates-types" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
+                                </div>
+                                <div class="float-right">
+                                    <input type="submit" class="btn btn-sm btn-success mt-3" value="Submit" >
+                                </div>
+                                <div class="clearfix"></div>               -->
+                                <a href="/admin/rates-types" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
+                                {{if $isEdit }}
+                                    <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" >
+                                    <input type="submit" class="btn btn-sm btn-warning mt-3" value="Edit" hidden>
+                                {{else}}
+                                    <input type="submit" class="btn btn-sm btn-warning mt-3" value="Update" hidden>
+                                    <a href="/admin/rates-types/{{$rt.Id}}?edit=true" class="btn btn-sm btn-warning mt-3">Edit</a>
+                                {{end}}
+                        </div>         
+                </form>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+
+{{end}}
+    
