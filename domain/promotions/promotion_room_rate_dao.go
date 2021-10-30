@@ -9,6 +9,7 @@ import (
 
 const (
 	queryGetAllPromotionRoomRate = `select * from promotions_room_rate where status = $1`
+	insertPromotionerate         = `insert into room_rates (title, promotion_id, room_type_id, rate_type_id, rate, status, start_date, end_date) value ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id`
 )
 
 var PromotionRoomRateService promotionRoomRateInterface = &PromotionRoomRate{}
@@ -27,17 +28,17 @@ func (p *PromotionRoomRate) Create(pmr PromotionRoomRate) (int, error) {
 
 	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
 	if err != nil {
-		panic(err)
+		return 0, err
 	}
 
 	var newId int
-	err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotion, pmr.Title, pmr.RoomTypeId, pmr.PromotionId, pmr.Rate, pmr.Status, pmr.CreatedAt, pmr.UpdatedAt).Scan(&newId)
+	err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotion, pmr.Title, pmr.PromotionId, pmr.RoomTypeId, pmr.Rate, pmr.Status, pmr.CreatedAt, pmr.UpdatedAt).Scan(&newId)
 	if err != nil {
 		return 0, err
 	}
 	defer dbConn.SQL.Close()
-	return newId, err
 
+	return newId, err
 }
 
 // Get select and return all data from promotion room rate

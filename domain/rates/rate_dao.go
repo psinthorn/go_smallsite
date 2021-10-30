@@ -1,6 +1,22 @@
 package rates
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+	"time"
+
+	"github.com/psinthorn/go_smallsite/datasources/drivers"
+)
+
+const (
+	queryInsertRate           = `insert into rates (title, description, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6) returning id`
+	queryGetAllRate           = `select * from rates order by id asc`
+	queryGetAllRateWithStatus = `select * from rates where status = $1 order by id asc`
+	queryGetRateById          = `select * from rates where id = $1`
+	queryUpdateRateById       = `update rates set title= $1, acronym = $2, description = $3, status = $4, updated_at = $5 where id = $6`
+
+	queryDeleteRateById = `delete from rates where id = $1`
+)
 
 var RoomRateService roomRateInterface = &RoomRate{}
 
@@ -15,7 +31,12 @@ type roomRateInterface interface {
 }
 
 func (r *RoomRate) Create(rr RoomRate) (int, error) {
-	fmt.Println("Please implement me")
+	// rooms types
+
+	// promotion
+
+	// rate type
+
 	return 0, nil
 }
 
@@ -37,12 +58,25 @@ func (r *RoomRate) Update(RoomRate) error {
 }
 
 func (r *RoomRate) Delete(id int) error {
-	fmt.Println("Please implement me")
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		panic(err)
+	}
+
+	_, err = dbConn.SQL.ExecContext(ctx, queryDeleteRateById, id)
+	if err != nil {
+		return err
+	}
+	dbConn.SQL.Close()
+
 	return nil
 }
 
 func (r *RoomRate) AdminGet() ([]RoomRate, error) {
 	var rr []RoomRate
-	fmt.Println("Please implement me")
+
 	return rr, nil
 }

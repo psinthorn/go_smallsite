@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi"
 	domain "github.com/psinthorn/go_smallsite/domain/promotions"
 	"github.com/psinthorn/go_smallsite/domain/rates"
+	"github.com/psinthorn/go_smallsite/domain/rooms"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -76,16 +77,35 @@ func (rp *Repository) PromotionRateForm(w http.ResponseWriter, r *http.Request) 
 	if st == "" {
 		st = "enable"
 	}
-	promotionTypes, err := domain.PromotionTypeService.Get(st)
+
+	// get promotion
+	promotions, err := domain.PromotionService.Get(st)
 	if err != nil {
 		helpers.ServerError(w, err)
+		return
 	}
 
-	fmt.Println(promotionTypes)
-	data := make(map[string]interface{})
-	data["promotion_types"] = promotionTypes
+	// get room type
+	roomTypes, err := rooms.RoomTypeService.Get(st)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
 
-	render.Template(w, r, "admin-rate-type-add-form.page.html", &templates.TemplateData{
+	// get room type
+	rateTypes, err := rates.RateTypeService.Get(st)
+	if err != nil {
+		helpers.ServerError(w, err)
+		return
+	}
+
+	// get rate type
+
+	data := make(map[string]interface{})
+	data["room_types"] = roomTypes
+	data["promotions"] = promotions
+	data["rate_types"] = rateTypes
+	render.Template(w, r, "admin-promotion-ratetype-add-form.page.html", &templates.TemplateData{
 		Form: forms.New(nil),
 		Data: data,
 	})
