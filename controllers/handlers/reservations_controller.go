@@ -107,7 +107,7 @@ func (rp *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 
 	// fmt.Println("room type ID: ", rsvn.Room.RoomTypeId)
 	roomTypeID := rsvn.Room.RoomTypeId
-	roomType, err := domain.RoomTypeService.GetRoomTypeByID(roomTypeID)
+	roomType, err := domain.RoomTypeService.GetByID(roomTypeID)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -147,7 +147,7 @@ func (rp *Repository) ReservationByRoomType(w http.ResponseWriter, r *http.Reque
 
 	roomTypeID := r.URL.Query().Get("type")
 	roomTypeId, _ := strconv.Atoi(roomTypeID)
-	roomType, err := domain.RoomTypeService.GetRoomTypeByID(roomTypeId)
+	roomType, err := domain.RoomTypeService.GetByID(roomTypeId)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return

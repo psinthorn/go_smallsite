@@ -1,0 +1,148 @@
+{{template "admin-base" .}}
+<!-- {{define "banner"}}
+        <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
+{{end}} -->
+{{define "css"}}
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css">
+{{end}}
+{{define  "admin-page-title" }}
+    Manage Promotion Rate
+{{end}}
+
+{{define "content"}}
+    <div class="container mt-3">
+        <!-- <div class="row">
+            <div class="col">
+                <div class="float-left">
+                    <a href="/admin/promotions-rates" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div> -->
+        <div class="row">
+            <div class="col">
+                {{$pms := index .Data "promotions" }}
+                {{$rrts := index .Data "rate_types"}}
+                {{$rts := index .Data "room_types" }}
+                
+                <form method="post" action="/admin/promotions-rates" class="" novalidate class="needs-validation">
+                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="small" for="promotion_id">Promotion Rate: </label>
+                                        {{with .Form.Errors.Get "promotion_id"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}                               
+                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "promotion_id"}} is-invalid {{end}}"
+                                        aria-label="select promotion type" 
+                                        id="promotion_id"
+                                        name="promotion_id" 
+                                        required>
+                                            {{range $pms}}
+                                            <option value="{{.Id}}">{{.Title}}</option>
+                                            {{end}}
+                                        </select>                                    
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+                                    <div class="form-group">
+                                        <label class="small" for="room_type_id">Room Type: </label>
+                                        {{with .Form.Errors.Get "room_type_id"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}                               
+                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "room_type_id"}} is-invalid {{end}}"
+                                        aria-label="select room type" 
+                                        id="room_type_id"
+                                        name="room_type_id" 
+                                        required>
+                                            {{range $rts}}
+                                            <option value="{{.ID}}">{{.Title}}</option>
+                                            {{end}}
+                                        </select>                                    
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label class="small" for="rate_type_id">Rate Type: </label>
+                                        {{with .Form.Errors.Get "rate_type_id"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}                               
+                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "rate_type_id"}} is-invalid {{end}}"
+                                        aria-label="select room type" 
+                                        id="rate_type_id"
+                                        name="rate_type_id" 
+                                        required>
+                                            {{range $rrts}}
+                                            <option value="{{.Id}}">{{.Title}}</option>
+                                            {{end}}
+                                        </select>                                    
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label class="small" for="status">Status: </label>
+                                        {{with .Form.Errors.Get "status"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}                               
+                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "status"}} is-invalid {{end}}"
+                                        aria-label="select room type" 
+                                        id="status"
+                                        name="status" 
+                                        required>  
+                                            <option value="enable">Enable</option>
+                                            <option value="enable">Disable</option>
+                                        </select>                                    
+                                    </div>
+                                </div>
+
+
+                                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label class="small" for="rate:">Rate: </label>
+                                        {{with .Form.Errors.Get "rate"}}
+                                        <label class="text-danger">{{.}}</label>
+                                        {{end}}   
+                                        <input type="text" class="form-control {{with .Form.Errors.Get "rate"}} is-invalid {{end}}" 
+                                        id="rate" 
+                                        name='rate'  
+                                        autocomplete="off"
+                                        value=""  
+                                        rows="4" 
+                                        required/>
+                                    </div>
+                                </div>
+                            
+                            </div>
+                        </div>
+                    </div>
+                        <!-- <div class="float-left">
+                            <a href="/admin/promotions-rates/new" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
+                        </div> -->
+                        <div class="float-right">
+                            <input type="submit" class="btn btn-sm btn-success mt-3" value="Add" >
+                        </div>   
+                        <div class="clearfix"></div> 
+                </form>
+            </div>
+        </div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+    <script>
+        const elem = document.getElementById('promotion-dates');
+        const rangePicker = new DateRangePicker(elem, {
+            format: "yyyy-mm-dd",
+            minDate: new Date(),
+        });
+    </script>
+{{end}}
+    
