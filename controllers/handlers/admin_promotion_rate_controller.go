@@ -17,8 +17,8 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
-// AdminPromotionTypes
-func (rp *Repository) AdminPromotionRate(w http.ResponseWriter, r *http.Request) {
+// AdminPromotionRate
+func (rp *Repository) AdminPromotionRates(w http.ResponseWriter, r *http.Request) {
 	var rts []rates.RateType
 	rts, err := rates.RateTypeService.AdminGet()
 	if err != nil {
@@ -27,7 +27,7 @@ func (rp *Repository) AdminPromotionRate(w http.ResponseWriter, r *http.Request)
 
 	data := make(map[string]interface{})
 	data["rate_types"] = rts
-	render.Template(w, r, "admin-rate-types.page.html", &templates.TemplateData{
+	render.Template(w, r, "admin-promotion-rates.page.html", &templates.TemplateData{
 		Data: data,
 	})
 }
@@ -121,19 +121,28 @@ func (rp *Repository) AddPromotionRate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	title := r.Form.Get("title")
-	acronym := r.Form.Get("acronym")
-	description := r.Form.Get("description")
+	pmId, _ := strconv.Atoi(r.Form.Get("promotion_id"))
+	roomTypeId, _ := strconv.Atoi(r.Form.Get("room_type_id"))
+	rateTypeId, _ := strconv.Atoi(r.Form.Get("rate_type_id"))
+	rate, _ := strconv.Atoi(r.Form.Get("rate"))
 	status := r.Form.Get("status")
 
+	fmt.Print(r.Form.Get("promotion_id"))
+	fmt.Print(r.Form.Get("room_type_id"))
+	fmt.Print(r.Form.Get("rate_type_id"))
+	fmt.Print(r.Form.Get("rate"))
+
 	// form.Has("first_name", r)
-	form.Required("title", "acronym", "description", "status")
+	form.Required("title", "status")
 	// minimum require on input field
 	form.MinLength("title", 8, r)
 
-	rt := rates.RateType{
+	pr := rates.PromotionRate{
 		Title:       title,
-		Acronym:     acronym,
-		Description: description,
+		PromotionId: pmId,
+		RoomTypeId:  roomTypeId,
+		RateTypeId:  rateTypeId,
+		Rate:        float32(rate),
 		Status:      status,
 		CreatedAt:   time.Now(),
 		UpdatedAt:   time.Now(),
@@ -143,13 +152,15 @@ func (rp *Repository) AddPromotionRate(w http.ResponseWriter, r *http.Request) {
 	if !form.Valid() {
 		stringMap := make(map[string]string)
 		stringMap["title"] = title
-		stringMap["acronym"] = acronym
-		stringMap["description"] = description
+		stringMap["promotion_id"] = string(pmId)
+		stringMap["room_type_id"] = string(roomTypeId)
+		stringMap["rate_type_id"] = string(rateTypeId)
+		stringMap["rate"] = string(rate)
 		stringMap["status"] = status
 
 		data := make(map[string]interface{})
-		data["rate_type"] = rt
-		render.Template(w, r, "admin-rate-type-add-form.page.html", &templates.TemplateData{
+		data["rate_type"] = pr
+		render.Template(w, r, "admin-promotion-ratetype-add-form.page.html", &templates.TemplateData{
 			Form:      form,
 			Data:      data,
 			StringMap: stringMap,
@@ -157,15 +168,17 @@ func (rp *Repository) AddPromotionRate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	_, err = rates.RateTypeService.Create(rt)
+	id, err := rates.PromotionRateService.Create(pr)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
 
-	rp.App.Session.Put(r.Context(), "rate_type", rt)
+	fmt.Println(id)
+
+	rp.App.Session.Put(r.Context(), "rate_type", pr)
 	rp.App.Session.Put(r.Context(), "success", "New rate type added :)")
-	http.Redirect(w, r, "/admin/rate-types", http.StatusSeeOther)
+	http.Redirect(w, r, "/admin/promotion-rates/new", http.StatusSeeOther)
 
 }
 

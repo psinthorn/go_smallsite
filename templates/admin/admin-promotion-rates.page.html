@@ -26,21 +26,21 @@
                 {{$rrts := index .Data "rate_types"}}
                 {{$rts := index .Data "room_types" }}
                 
-                <form method="post" action="/admin/promotions" class="" novalidate class="needs-validation">
+                <form method="post" action="/admin/promotions-rates" class="" novalidate class="needs-validation">
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
                                     <div class="form-group">
-                                        <label class="small" for="promotion_type_id">Promotion Package: </label>
-                                        {{with .Form.Errors.Get "promotion_type_id"}}
+                                        <label class="small" for="promotion_id">Promotion Rate: </label>
+                                        {{with .Form.Errors.Get "promotion_id"}}
                                         <label class="text-danger">{{.}}</label>
                                         {{end}}                               
-                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "promotion_type_id"}} is-invalid {{end}}"
+                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "promotion_id"}} is-invalid {{end}}"
                                         aria-label="select promotion type" 
-                                        id="promotion_type_id"
-                                        name="promotion_type_id" 
+                                        id="promotion_id"
+                                        name="promotion_id" 
                                         required>
                                             {{range $pms}}
                                             <option value="{{.Id}}">{{.Title}}</option>
