@@ -10,18 +10,16 @@ import (
 const (
 	queryInsertPromotionRate = `insert into promotions_room_rate (title, room_type_id, rate_type_id, promotion_type_id, rate, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id`
 
-	queryGetAllPromotionRates = `select pmt.id, pmt.title, pmt.description, pmt.price, pmt.promotion_type_id, pmt.start_date, pmt.end_date, pmt.status, pmt.created_at, pmt.updated_at, pt.id, pt.title
-							from promotions pmt
+	queryGetAllPromotionRates = `select pmr.id, pmr.title, pmr.description, pmr.price, pmr.promotion_type_id, pmr.start_date, pmr.end_date, pmr.status, pmr.created_at, pmr.updated_at, pt.id, pt.title
+							from promotions pmr
 							left join promotion_types pt
-							on (pmt.promotion_type_id = pt.id)
-							where pmt.status = $1
-							order by pmt.id desc`
+							on (pmr.promotion_type_id = pt.id)
+							where pmr.status = $1
+							order by pmr.id desc`
 
-	queryAdminGetAllPromotionRates = `select pmt.id, pmt.title, pmt.description, pmt.price, pmt.promotion_type_id, pmt.start_date, pmt.end_date, pmt.status, pmt.created_at, pmt.updated_at, pt.id, pt.title
-							from promotions pmt
-							left join promotion_types pt
-							on (pmt.promotion_type_id = pt.id)
-							order by pmt.id desc`
+	queryAdminGetAllPromotionRates = `select pmr.id, pmr.title, pmr.promotion_id, pmr.room_type_id, pmr.rate_type_id, pmr.rate, pmr.start_date, pmr.end_date, pmr.status, pmr.created_at, pmr.updated_at
+							from promotions_room_rate pmr
+							order by pmr.id desc`
 
 	queryGetPromotionRateById = `SELECT pm.id, pm.title, pm.description, pm.price, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
 							from promotions pm

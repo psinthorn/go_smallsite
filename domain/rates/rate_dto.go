@@ -25,7 +25,7 @@ type promotionRate struct {
 	EndDate     time.Time `json:"end_date"`
 	PromotionId int       `json:"promotion_id"`
 	RoomTypeId  int       `json:"room_type_id"`
-	RateTypeId  int       `json: rate_type_id`
+	RateTypeId  int       `json:"rate_type_id"`
 	Rate        float32   `json:"rate"`
 	Status      string    `json:"status"`
 	CreatedAt   time.Time `json:"created_at"`
