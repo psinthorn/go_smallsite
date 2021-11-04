@@ -168,12 +168,13 @@ func routes(app *configs.AppConfig) http.Handler {
 		mux.Get("/rates-types/{id}/delete", controllers.HandlerRepo.DeleteRateType)
 
 		// Section: Room Rate
-		mux.Post("/roomrates", controllers.HandlerRepo.AddPromotionType)
-		mux.Get("/roomrate", controllers.HandlerRepo.AdminPromotionTypes)
-		mux.Get("/roomrates/new", controllers.HandlerRepo.PromotionTypeForm)
-		mux.Get("/roomrates/{id}", controllers.HandlerRepo.PromotionType)
-		mux.Post("/roomrate/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
-		mux.Get("/roomrate/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
+		mux.Post("/rates", controllers.HandlerRepo.AdminRates)
+		mux.Get("/rates-rooms", controllers.HandlerRepo.AdminRates)
+		mux.Get("/rates-promotions", controllers.HandlerRepo.AdminPromotionRates)
+		mux.Get("/rates/new", controllers.HandlerRepo.AdminRateForm)
+		mux.Get("/rates/{id}", controllers.HandlerRepo.PromotionType)
+		mux.Post("/rates/{id}/update", controllers.HandlerRepo.UpdatePromotionType)
+		mux.Get("/rates/{id}/delete", controllers.HandlerRepo.DeletePromotionType)
 
 		// Section: Promotion
 		mux.Post("/promotions", controllers.HandlerRepo.AddPromotion)
