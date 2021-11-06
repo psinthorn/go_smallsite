@@ -9,6 +9,7 @@ import (
 	"github.com/go-chi/chi"
 	domain "github.com/psinthorn/go_smallsite/domain/promotions"
 	domain_promotions "github.com/psinthorn/go_smallsite/domain/promotions"
+	"github.com/psinthorn/go_smallsite/domain/rates"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
@@ -196,6 +197,12 @@ func (rp *Repository) Promotion(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 	}
 
+	var pmrs []rates.PromotionRate
+	pmrs, err = rates.PromotionRateService.GetRatesByPromotionId(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
 	st := r.URL.Query().Get("status")
 	if st == "" {
 		st = "enable"
@@ -206,6 +213,7 @@ func (rp *Repository) Promotion(w http.ResponseWriter, r *http.Request) {
 	}
 
 	data := make(map[string]interface{})
+	data["promotions_rates"] = pmrs
 	data["promotion"] = pm
 	data["promotion_types"] = promotionTypes
 	render.Template(w, r, "admin-promotion-details.page.html", &templates.TemplateData{

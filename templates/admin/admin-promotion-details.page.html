@@ -144,6 +144,61 @@
                 </form>
             </div>
         </div>
+
+         {{/* promotions rate  */}}
+        <p class="mt-5">
+         <h2 class="lead mb-3">Promotion room rate</h2>
+        </p>
+        {{$pmrs := index .Data "promotions_rates" }}
+            <div class="table-responsive">
+                <table class="table table-hover table-sm" id="all-promotion_types">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Name</th>
+                            <th class="d-none">Room Type</th>
+                            <th>Promotion</th>
+                            <th>Rate</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th></th>
+                        </tr>
+                        <tbody>
+                        {{range $pmrs }}
+                            <tr>
+                                <td></td>
+                                <td>{{.Title}}</td>
+                                <td class="d-none">{{.RoomTypeId}}</td>
+                                <td>{{.PromotionId}}</td>
+                                <td>{{.Rate}}</td>
+                                <td>{{humanDate .StartDate}}</td>
+                                <td>{{humanDate .EndDate}}</td>
+                                <td class="{{if eq .Status "disable" }} text-danger {{else}} text-success {{end}}">{{.Status}}</td>
+                                <td class="text-center">
+                                    <a href="/admin/promotions-types/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
+                                    <a href="/admin/promotions-types/{{.Id}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
+                                    <!-- <a href="/admin/promotions-types/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a> -->
+                                    <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>   
+                                </td>
+                            </tr>
+                        {{end}}
+                        </tbody>
+                    </thead>
+                </table>
+            </div>
+    
+            <div class="mt-5 mb-5">
+                    <div class="row">
+                        <div class="col">
+                            <!-- <a href="/admin/promotions-types/new" type="button" class="btn btn-success btn-sm" >Add</a> -->
+                            <a href="/admin/promotions-types" type="button" class="btn btn-warning btn-sm">Back</a>
+                        </div>
+                    </div>
+            </div>
+
+        </div>
+
     </div>
 {{end}}
 

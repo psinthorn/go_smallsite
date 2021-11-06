@@ -141,7 +141,6 @@ func (rp *Repository) AddPromotionRate(w http.ResponseWriter, r *http.Request) {
 		Title:       title,
 		PromotionId: pmId,
 		RoomTypeId:  roomTypeId,
-		RateTypeId:  rateTypeId,
 		Rate:        float32(rate),
 		Status:      status,
 		CreatedAt:   time.Now(),

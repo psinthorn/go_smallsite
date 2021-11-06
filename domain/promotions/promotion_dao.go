@@ -2,13 +2,18 @@ package promotions
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
+	"github.com/psinthorn/go_smallsite/domain/rates"
+	"github.com/psinthorn/go_smallsite/domain/rooms"
 )
 
 const (
 	queryInsertPromotion = `insert into promotions (title, description, price, start_date, end_date, promotion_type_id, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id`
+
+	queryInsertPromotionRate = `insert into promotions_room_rate (title, room_type_id, promotion_id, start_date, end_date, rate, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id`
 
 	queryGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
 							from promotions pms
@@ -63,6 +68,34 @@ func (s *Promotion) Create(p Promotion) (int, error) {
 	if err != nil {
 		return 0, err
 	}
+
+	// Auto generate by room type
+	// get promotion type id from returnin id
+	// get all room type
+	var newProRateId int
+	roomTypes, err := rooms.RoomTypeService.GetAll()
+	for _, x := range roomTypes {
+		var pr rates.PromotionRate
+		pr.Title = x.Title
+		pr.RoomTypeId = x.ID
+		pr.PromotionId = newProId
+		pr.Rate = 0
+		pr.Status = p.Status
+		pr.StartDate = p.StartDate
+		pr.EndDate = p.EndDate
+		pr.CreatedAt = time.Now()
+		pr.UpdatedAt = time.Now()
+
+		err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotionRate, pr.Title, pr.RoomTypeId, pr.PromotionId, pr.StartDate, pr.EndDate, pr.Rate, pr.Status, pr.CreatedAt, pr.UpdatedAt).Scan(&newProRateId)
+		if err != nil {
+			return 0, err
+		}
+		fmt.Println("New prorate id")
+		fmt.Println(newProRateId)
+		fmt.Println(x.Title)
+	}
+	// loop and generate promotion
+
 	defer dbConn.SQL.Close()
 	return newProId, err
 }
@@ -165,7 +198,7 @@ func (s *Promotion) AdminGet() ([]Promotion, error) {
 
 }
 
-// GetRoomByID select room by id and return to request
+// GetByID select room by id and return to request
 func (s *Promotion) GetById(id int) (Promotion, error) {
 	var pm Promotion
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)

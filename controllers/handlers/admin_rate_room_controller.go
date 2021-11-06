@@ -27,7 +27,7 @@ func (rp *Repository) AdminRates(w http.ResponseWriter, r *http.Request) {
 
 	data := make(map[string]interface{})
 	data["rate_types"] = rts
-	render.Template(w, r, "admin-rates-rooms.page.html", &templates.TemplateData{
+	render.Template(w, r, "admin-rates.page.html", &templates.TemplateData{
 		Data: data,
 	})
 }
@@ -98,6 +98,8 @@ func (rp *Repository) AdminRateForm(w http.ResponseWriter, r *http.Request) {
 		helpers.ServerError(w, err)
 		return
 	}
+	fmt.Println("rate types: ")
+	fmt.Println(rateTypes)
 
 	// get rate type
 
@@ -105,7 +107,7 @@ func (rp *Repository) AdminRateForm(w http.ResponseWriter, r *http.Request) {
 	data["room_types"] = roomTypes
 	data["promotions"] = promotions
 	data["rate_types"] = rateTypes
-	render.Template(w, r, "admin-promotion-ratetype-add-form.page.html", &templates.TemplateData{
+	render.Template(w, r, "admin-rates-form.page.html", &templates.TemplateData{
 		Form: forms.New(nil),
 		Data: data,
 	})
@@ -141,7 +143,6 @@ func (rp *Repository) AddRoomRate(w http.ResponseWriter, r *http.Request) {
 		Title:       title,
 		PromotionId: pmId,
 		RoomTypeId:  roomTypeId,
-		RateTypeId:  rateTypeId,
 		Rate:        float32(rate),
 		Status:      status,
 		CreatedAt:   time.Now(),

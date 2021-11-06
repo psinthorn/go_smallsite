@@ -10,129 +10,56 @@
     Manage Promotion Rate
 {{end}}
 
-{{define "content"}}
-    <div class="container mt-3">
-        <!-- <div class="row">
-            <div class="col">
-                <div class="float-left">
-                    <a href="/admin/promotions-rates" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
-                </div>
-                <div class="clearfix"></div>
-            </div>
-        </div> -->
-        <div class="row">
-            <div class="col">
-                {{$pmrs := index .Data "promotions_rates" }}
-                {{/* {{$rrts := index .Data "rate_types"}}
-                {{$rts := index .Data "room_types" }} */}}
-                
-                <form method="post" action="/admin/promotions-rates" class="" novalidate class="needs-validation">
-                    <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                                    <div class="form-group">
-                                        <label class="small" for="promotion_id">Promotion Rate: </label>
-                                        {{with .Form.Errors.Get "promotion_id"}}
-                                        <label class="text-danger">{{.}}</label>
-                                        {{end}}                               
-                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "promotion_id"}} is-invalid {{end}}"
-                                        aria-label="select promotion type" 
-                                        id="promotion_id"
-                                        name="promotion_id" 
-                                        required>
-                                            {{range $pmrs}}
-                                            <option value="{{.Id}}">{{.Title}}</option>
-                                            {{end}}
-                                        </select>                                    
-                                    </div>
-                                </div>
-
-                                {{/* <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                                    <div class="form-group">
-                                        <label class="small" for="room_type_id">Room Type: </label>
-                                        {{with .Form.Errors.Get "room_type_id"}}
-                                        <label class="text-danger">{{.}}</label>
-                                        {{end}}                               
-                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "room_type_id"}} is-invalid {{end}}"
-                                        aria-label="select room type" 
-                                        id="room_type_id"
-                                        name="room_type_id" 
-                                        required>
-                                            {{range $rts}}
-                                            <option value="{{.ID}}">{{.Title}}</option>
-                                            {{end}}
-                                        </select>                                    
-                                    </div>
-                                </div>
-
-                                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                                    <div class="form-group">
-                                        <label class="small" for="rate_type_id">Rate Type: </label>
-                                        {{with .Form.Errors.Get "rate_type_id"}}
-                                        <label class="text-danger">{{.}}</label>
-                                        {{end}}                               
-                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "rate_type_id"}} is-invalid {{end}}"
-                                        aria-label="select room type" 
-                                        id="rate_type_id"
-                                        name="rate_type_id" 
-                                        required>
-                                            {{range $rrts}}
-                                            <option value="{{.Id}}">{{.Title}}</option>
-                                            {{end}}
-                                        </select>                                    
-                                    </div>
-                                </div> */}}
-
-                                <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                                    <div class="form-group">
-                                        <label class="small" for="status">Status: </label>
-                                        {{with .Form.Errors.Get "status"}}
-                                        <label class="text-danger">{{.}}</label>
-                                        {{end}}                               
-                                        <select class="form-control form-select form-select-lg mb-3 {{with .Form.Errors.Get "status"}} is-invalid {{end}}"
-                                        aria-label="select room type" 
-                                        id="status"
-                                        name="status" 
-                                        required>  
-                                            <option value="enable">Enable</option>
-                                            <option value="enable">Disable</option>
-                                        </select>                                    
-                                    </div>
-                                </div>
-
-
-                                {{/* <div class="col-xs-12 col-sm-12 col-md-2 col-lg-2">
-                                    <div class="form-group">
-                                        <label class="small" for="rate:">Rate: </label>
-                                        {{with .Form.Errors.Get "rate"}}
-                                        <label class="text-danger">{{.}}</label>
-                                        {{end}}   
-                                        <input type="text" class="form-control {{with .Form.Errors.Get "rate"}} is-invalid {{end}}" 
-                                        id="rate" 
-                                        name='rate'  
-                                        autocomplete="off"
-                                        value=""  
-                                        rows="4" 
-                                        required/>
-                                    </div>
-                                </div> */}}
-                            
-                            </div>
-                        </div>
-                    </div>
-                        <!-- <div class="float-left">
-                            <a href="/admin/promotions-rates/new" type="button" class="btn btn-sm btn-primary mt-3" value="Back" >Back</a>
-                        </div> -->
-                        <div class="float-right">
-                            <input type="submit" class="btn btn-sm btn-success mt-3" value="Add" >
-                        </div>   
-                        <div class="clearfix"></div> 
-                </form>
-            </div>
+{{define "content"}}  
+    {{$pmrs := index .Data "promotions_rates" }}
+        <div class="table-responsive">
+            <table class="table table-hover table-sm" id="all-promotion_types">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th class="d-none">Room Type</th>
+                        <th>Promotion</th>
+                        <th>Rate</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    <tbody>
+                    {{range $pmrs }}
+                        <tr>
+                            <td></td>
+                            <td>{{.Title}}</td>
+                            <td class="d-none">{{.RoomTypeId}}</td>
+                            <td>{{.PromotionId}}</td>
+                            <td>{{.Rate}}</td>
+                            <td>{{humanDate .StartDate}}</td>
+                            <td>{{humanDate .EndDate}}</td>
+                            <td class="{{if eq .Status "disable" }} text-danger {{else}} text-success {{end}}">{{.Status}}</td>
+                            <td class="text-center">
+                                <a href="/admin/promotions-types/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
+                                <a href="/admin/promotions-types/{{.Id}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
+                                <!-- <a href="/admin/promotions-types/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a> -->
+                                <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>   
+                            </td>
+                        </tr>
+                    {{end}}
+                    </tbody>
+                </thead>
+            </table>
         </div>
-    </div>
+    
+        <div class="mt-5 mb-5">
+                <div class="row">
+                    <div class="col">
+                        <a href="/admin/promotions-types/new" type="button" class="btn btn-success btn-sm" >Add</a>
+                        <a href="/admin/promotion-types" type="button" class="btn btn-warning btn-sm">Back</a>
+                    </div>
+                </div>
+        </div>
+
+</div>
 {{end}}
 
 {{define "js"}}

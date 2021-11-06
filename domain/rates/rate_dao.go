@@ -16,6 +16,8 @@ const (
 	queryUpdateRateById       = `update rates set title= $1, acronym = $2, description = $3, status = $4, updated_at = $5 where id = $6`
 
 	queryDeleteRateById = `delete from rates where id = $1`
+
+	querySelectRoomTypeIdAndTitle = `select id, title frome room_type`
 )
 
 var RoomRateService roomRateInterface = &RoomRate{}
