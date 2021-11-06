@@ -17,8 +17,13 @@ const (
 							where pmr.status = $1
 							order by pmr.id desc`
 
-	queryAdminGetAllPromotionRates = `select pmr.id, pmr.title, pmr.promotion_id, pmr.room_type_id, pmr.rate_type_id, pmr.rate, pmr.start_date, pmr.end_date, pmr.status, pmr.created_at, pmr.updated_at
+	queryAdminGetAllPromotionRates = `select pmr.id, pmr.title, pmr.room_type_id, pmr.promotion_id, pmr.start_date, pmr.end_date, pmr.rate, pmr.status, pmr.created_at, pmr.updated_at
 							from promotions_room_rate pmr
+							order by pmr.id desc`
+
+	queryAdminGetAllPromotionRatesById = `select pmr.id, pmr.title, pmr.room_type_id, pmr.promotion_id, pmr.rate, pmr.start_date, pmr.end_date, pmr.status, pmr.created_at, pmr.updated_at
+							from promotions_room_rate pmr
+							where promotion_id = $1
 							order by pmr.id desc`
 
 	queryGetPromotionRateById = `SELECT pm.id, pm.title, pm.description, pm.price, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
@@ -34,7 +39,6 @@ const (
 
 var PromotionRateService promotionRateInterface = &PromotionRate{}
 
-type PromotionRate promotionRate
 type promotionRateInterface interface {
 	Create(PromotionRate) (int, error)
 	Get(string) ([]PromotionRate, error)
@@ -43,6 +47,7 @@ type promotionRateInterface interface {
 	Delete(int) error
 
 	AdminGet() ([]PromotionRate, error)
+	GetRatesByPromotionId(int) ([]PromotionRate, error)
 }
 
 // Create insert and return room data
@@ -57,7 +62,7 @@ func (s *PromotionRate) Create(p PromotionRate) (int, error) {
 	}
 
 	var newProId int
-	err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotionRate, p.Title, p.RoomTypeId, p.RateTypeId, p.PromotionId, p.Rate, p.StartDate, p.EndDate, p.Status, p.CreatedAt, p.UpdatedAt).Scan(&newProId)
+	err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotionRate, p.Title, p.RoomTypeId, p.PromotionId, p.Rate, p.StartDate, p.EndDate, p.Status, p.CreatedAt, p.UpdatedAt).Scan(&newProId)
 	if err != nil {
 		return 0, err
 	}
@@ -87,7 +92,6 @@ func (s *PromotionRate) Get(st string) ([]PromotionRate, error) {
 		err := rows.Scan(
 			&p.Id,
 			&p.Title,
-			&p.RateTypeId,
 			&p.RoomTypeId,
 			&p.PromotionId,
 			&p.StartDate,
@@ -135,13 +139,12 @@ func (s *PromotionRate) AdminGet() ([]PromotionRate, error) {
 		err := rows.Scan(
 			&p.Id,
 			&p.Title,
-			&p.RateTypeId,
 			&p.RoomTypeId,
 			&p.PromotionId,
 			&p.StartDate,
 			&p.EndDate,
-			&p.Status,
 			&p.Rate,
+			&p.Status,
 			&p.CreatedAt,
 			&p.UpdatedAt,
 			// &p.PromotionType.Id,
@@ -163,7 +166,7 @@ func (s *PromotionRate) AdminGet() ([]PromotionRate, error) {
 
 }
 
-// GetRoomByID select room by id and return to request
+// GetPromotionByID select room by id and return to request
 func (s *PromotionRate) GetById(id int) (PromotionRate, error) {
 	var pr PromotionRate
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
@@ -177,11 +180,9 @@ func (s *PromotionRate) GetById(id int) (PromotionRate, error) {
 	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionRateById, id).Scan(
 		&pr.Id,
 		&pr.Title,
-
-		&pr.Rate,
 		pr.RoomTypeId,
-		pr.RateTypeId,
 		pr.PromotionId,
+		&pr.Rate,
 		&pr.StartDate,
 		&pr.EndDate,
 		&pr.Status,
@@ -212,7 +213,6 @@ func (s *PromotionRate) Update(pr PromotionRate) error {
 	_, err = dbConn.SQL.QueryContext(ctx, queryUpdatePromotionRateById,
 		pr.Title,
 		pr.RoomTypeId,
-		pr.RateTypeId,
 		pr.PromotionId,
 		pr.StartDate,
 		pr.EndDate,
@@ -241,4 +241,52 @@ func (s *PromotionRate) Delete(id int) error {
 	}
 
 	return nil
+}
+
+// GetRatesByPromotionId return all rates that belongs to promotion id
+func (s *PromotionRate) GetRatesByPromotionId(id int) ([]PromotionRate, error) {
+	var pmrs []PromotionRate
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return pmrs, err
+	}
+
+	rows, err := dbConn.SQL.QueryContext(ctx, queryAdminGetAllPromotionRatesById, id)
+	if err != nil {
+		return pmrs, err
+	}
+	defer rows.Close()
+
+	for rows.Next() {
+		var p PromotionRate
+		err := rows.Scan(
+			&p.Id,
+			&p.Title,
+			&p.RoomTypeId,
+			&p.PromotionId,
+			&p.Rate,
+			&p.StartDate,
+			&p.EndDate,
+			&p.Status,
+			&p.CreatedAt,
+			&p.UpdatedAt,
+			// &p.PromotionType.Id,
+			// &p.PromotionType.Title,
+		)
+
+		if err != nil {
+			return pmrs, err
+		}
+
+		pmrs = append(pmrs, p)
+	}
+
+	if err = rows.Err(); err != nil {
+		return pmrs, err
+	}
+
+	return pmrs, nil
 }

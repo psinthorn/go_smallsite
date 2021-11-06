@@ -9,10 +9,11 @@ import (
 )
 
 const (
-	queryInsertRoomType      = `INSERT INTO room_types (title, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5) returning id`
-	queryGetRoomTypeByStatus = `select id, title  from room_types  where status = $1`
-	querygetRoomtypeByID     = `select id, title from room_types where id = $1`
-	queryDeleteRoomTypeById  = `delete from room_types where id = $1`
+	queryInsertRoomType         = `INSERT INTO room_types (title, description, status, created_at, updated_at) values ($1,$2,$3,$4,$5) returning id`
+	queryGetRoomTypeByStatus    = `select id, title  from room_types  where status = $1`
+	queryGetAllRoomTypeByStatus = `select id, title  from room_types`
+	querygetRoomtypeByID        = `select id, title from room_types where id = $1`
+	queryDeleteRoomTypeById     = `delete from room_types where id = $1`
 )
 
 var RoomTypeService roomTypeInterface = &RoomType{}
@@ -83,6 +84,33 @@ func (rs *RoomType) Get(status string) ([]RoomType, error) {
 // GetAll
 func (rs *RoomType) GetAll() ([]RoomType, error) {
 	var rts []RoomType
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return rts, err
+	}
+	rows, err := dbConn.SQL.QueryContext(ctx, queryGetAllRoomTypeByStatus)
+	for rows.Next() {
+		var rt RoomType
+		err := rows.Scan(
+			&rt.ID,
+			&rt.Title,
+		)
+
+		if err != nil {
+			return rts, err
+		}
+
+		rts = append(rts, rt)
+
+	}
+	if err = rows.Err(); err != nil {
+		return rts, err
+	}
+	defer rows.Close()
+	fmt.Println(rts)
 	return rts, nil
 }
 

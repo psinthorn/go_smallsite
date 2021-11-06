@@ -1,0 +1,79 @@
+{{template "admin-base" .}}
+<!-- {{define "banner"}}
+        <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">        
+{{end}} -->
+{{define "css"}}
+    <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.1.2/dist/css/datepicker-bs4.min.css">
+{{end}}
+{{define  "admin-page-title" }}
+    Manage Rates
+{{end}}
+
+{{define "content"}}
+    <div class="container mt-3">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+        {{$pms := index .Data "promotions"}}
+        <div class="table-responsive">
+            <table class="table table-hover table-sm" id="all-promotions">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Name</th>
+                        <th>Rate</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Promotion Type</th>
+                        <th>Status</th>
+                        <th></th>
+                    </tr>
+                    <tbody>
+                    {{range $pms }}     
+                   
+                        <tr>
+                            <td></td>
+                            <td>{{.Title}}</td>
+                            <td>{{.Price}}</td> 
+                            <td>{{humanDate .StartDate}}</td>
+                            <td>{{humanDate .EndDate}}</td>
+                            <td>{{.PromotionType.Title}}</td>
+                            <td class="{{if eq .Status "disable" }} text-danger {{else}} text-success {{end}}">{{.Status}}</td>
+                            <td class="text-center">                       
+                                <!-- <div class="float-left"> -->
+                                    <a href="/admin/promotions/{{.Id}}?edit=false" type="button" class="btn btn-success btn-sm">View</a>
+                                    <a href="/admin/promotions/{{.Id}}?edit=true" type="button" class="btn btn-warning btn-sm">Edit</a>
+                                <!-- </div>         -->
+                                <!-- <div class="float-right"> -->
+                                    <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>   
+                                <!-- </div>                               -->
+                            </td>
+                        </tr>                 
+                    {{end}}
+                    </tbody>
+                </thead>
+            </table>
+        </div>
+</div>
+
+<div class="mt-5 mb-5">
+        <div class="row">
+            <div class="col">
+                <a href="/admin/rates/new" type="button" class="btn btn-success btn-sm" >Add</a>
+                <!-- <a href="/admin/promotions" type="button" class="btn btn-warning btn-sm">Back</a> -->
+            </div>
+        </div>
+</div>
+    </div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+    <script>
+        const elem = document.getElementById('promotion-dates');
+        const rangePicker = new DateRangePicker(elem, {
+            format: "yyyy-mm-dd",
+            minDate: new Date(),
+        });
+    </script>
+{{end}}
+    

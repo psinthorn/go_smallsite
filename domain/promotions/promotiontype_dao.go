@@ -42,6 +42,7 @@ func (pm *PromotionType) Create(p PromotionType) (int, error) {
 	if err != nil {
 		return 0, nil
 	}
+
 	defer dbConn.SQL.Close()
 
 	return newPromotionTypeId, nil
