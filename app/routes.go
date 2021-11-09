@@ -197,7 +197,7 @@ func routes(app *configs.AppConfig) http.Handler {
 		mux.Get("/promotions-rates", controllers.HandlerRepo.AdminPromotionRates)
 		mux.Get("/promotions-rates/new", controllers.HandlerRepo.PromotionRateForm)
 		mux.Get("/promotions-rates/{id}", controllers.HandlerRepo.RateType)
-		mux.Post("/promotions-rates/{id}/generate", controllers.HandlerRepo.AdminPromotionRates)
+		mux.Post("/promotions-rates/{id}/generate", controllers.HandlerRepo.PromotionRateGenerator)
 		mux.Post("/promotions-rates/{id}/update", controllers.HandlerRepo.UpdatePromotionRate)
 		mux.Get("/promotions-rates/{id}/delete", controllers.HandlerRepo.DeletePromotionRate)
 

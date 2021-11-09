@@ -157,10 +157,14 @@
             <h2 class="lead mb-3">Promotion room rate</h2>
             <hr/>
            </p>
+
          {{$prmslength := len $pmrs }}
          {{if eq $prmslength 0 }} 
-         no room rate available :) <br/>
-         <a href="/admin/promotions-rates/{{$pm.Id}}" class="btn btn-success">generate rate</a>
+         <p class="text-center">no room rate available :)</p>
+            <form method="post" action="/admin/promotions-rates/{{$pm.Id}}/generate" class="" novalidate>
+                <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
+                <input type="submit" class="btn btn-success" value="generate rate"></input>
+            </form>
          {{else}}
             <div class="table-responsive">
                 <table class="table table-hover table-sm" id="all-promotion_types">
@@ -194,7 +198,7 @@
                                     <!-- <a href="/admin/promotions-types/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a> -->
                                     <a id="rate-button-{{.Id}}"  onclick="updateBtn({{.Id}})" href="#!" class="btn btn-warning btn-sm">Edit</a>
                                     <!-- <a href="/admin/promotions-types/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a> -->
-                                    <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>   
+                                    <!-- <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>    -->
                                 </td>
                             </form>
                             </tr>
@@ -208,7 +212,7 @@
                     <div class="row">
                         <div class="col">
                             <!-- <a href="/admin/promotions-types/new" type="button" class="btn btn-success btn-sm" >Add</a> -->
-                            <a href="/admin/promotions-types" type="button" class="btn btn-primary btn-sm">Back</a>
+                            <a href="/admin/promotions" type="button" class="btn btn-primary btn-sm">Back</a>
                         </div>
                     </div>
             </div>

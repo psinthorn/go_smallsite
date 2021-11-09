@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/go-chi/chi"
+	"github.com/psinthorn/go_smallsite/domain/promotions"
 	domain "github.com/psinthorn/go_smallsite/domain/promotions"
 	domain_promotions "github.com/psinthorn/go_smallsite/domain/promotions"
 	"github.com/psinthorn/go_smallsite/domain/rates"
@@ -16,6 +17,10 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/render"
 	"github.com/psinthorn/go_smallsite/internal/utils"
 )
+
+type PromotionController interface {
+	PromotionsList()
+}
 
 // PromotionList
 func (rp *Repository) PromotionsList(w http.ResponseWriter, r *http.Request) {
@@ -292,4 +297,22 @@ func (rp *Repository) DeletePromotion(w http.ResponseWriter, r *http.Request) {
 
 	rp.App.Session.Put(r.Context(), "success", "promotion package is deleted")
 	http.Redirect(w, r, "/admin/promotions", http.StatusSeeOther)
+}
+
+// PromotionrateGenerator auto generate promotion rate by promotion id
+func (rp *Repository) PromotionRateGenerator(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(chi.URLParam(r, "id"))
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+
+	fmt.Println(id)
+
+	_, err = promotions.PromotionService.CreatePromotionRate(id)
+	if err != nil {
+		helpers.ServerError(w, err)
+	}
+	rp.App.Session.Put(r.Context(), "success", "promotion rates is generated")
+	http.Redirect(w, r, "/admin/promotions/"+strconv.Itoa(id)+"?edit=false", http.StatusSeeOther)
+
 }

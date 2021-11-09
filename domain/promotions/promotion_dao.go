@@ -112,7 +112,7 @@ func (s *Promotion) CreatePromotionRate(id int) (int, error) {
 	pm, err := s.GetById(id)
 
 	// Get promotion rate by promotion id
-	pmr, err := rates.PromotionRateService.AdminGet()
+	pmr, err := rates.PromotionRateService.GetRatesByPromotionId(id)
 	if err != nil {
 		return 0, err
 	}
