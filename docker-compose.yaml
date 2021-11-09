@@ -70,6 +70,7 @@ services:
       - pgadmin:/root/.pgadmin
 volumes:
   .db_data:
+    driver: local
   pgadmin:
       
     

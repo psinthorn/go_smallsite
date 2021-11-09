@@ -2,7 +2,6 @@ package promotions
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
@@ -46,6 +45,7 @@ type promotionDomainInterface interface {
 	Create(Promotion) (int, error)
 	Get(string) ([]Promotion, error)
 	GetById(int) (Promotion, error)
+	CreatePromotionRate(int) (int, error)
 	Update(Promotion) error
 	Delete(int) error
 
@@ -72,6 +72,7 @@ func (s *Promotion) Create(p Promotion) (int, error) {
 	// Auto generate by room type
 	// get promotion type id from returnin id
 	// get all room type
+	// loop and generate promotion
 	var newProRateId int
 	roomTypes, err := rooms.RoomTypeService.GetAll()
 	for _, x := range roomTypes {
@@ -90,14 +91,60 @@ func (s *Promotion) Create(p Promotion) (int, error) {
 		if err != nil {
 			return 0, err
 		}
-		fmt.Println("New prorate id")
-		fmt.Println(newProRateId)
-		fmt.Println(x.Title)
 	}
-	// loop and generate promotion
 
 	defer dbConn.SQL.Close()
 	return newProId, err
+}
+
+// CreatePromotionRate
+// เพิ่มข้อมมูลห้องพักเก็บในดาต้าเบสและคืนข้อมูลที่เพิ่มสำเร็จแล้วกลับให้ผู้ใช้งาน
+func (s *Promotion) CreatePromotionRate(id int) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+	defer cancel()
+
+	dbConn, err := drivers.ConnectDB("pgx", drivers.PgDsn)
+	if err != nil {
+		return 0, err
+	}
+
+	// get promotion by id
+	pm, err := s.GetById(id)
+
+	// Get promotion rate by promotion id
+	pmr, err := rates.PromotionRateService.AdminGet()
+	if err != nil {
+		return 0, err
+	}
+
+	var newProRateId int
+	if len(pmr) <= 0 {
+		// Auto generate by room type
+		// get promotion type id from returnin id
+		// get all room type
+		// loop and generate promotion
+		roomTypes, err := rooms.RoomTypeService.GetAll()
+		for _, x := range roomTypes {
+			var pr rates.PromotionRate
+			pr.Title = x.Title
+			pr.RoomTypeId = x.ID
+			pr.PromotionId = id
+			pr.Rate = 0
+			pr.Status = pm.Status
+			pr.StartDate = pm.StartDate
+			pr.EndDate = pm.EndDate
+			pr.CreatedAt = time.Now()
+			pr.UpdatedAt = time.Now()
+
+			err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotionRate, pr.Title, pr.RoomTypeId, pr.PromotionId, pr.StartDate, pr.EndDate, pr.Rate, pr.Status, pr.CreatedAt, pr.UpdatedAt).Scan(&newProRateId)
+			if err != nil {
+				return 0, err
+			}
+		}
+	}
+	defer dbConn.SQL.Close()
+
+	return newProRateId, err
 }
 
 // Get select all rooms  data from table and return all rooms slice to request
