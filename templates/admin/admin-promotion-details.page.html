@@ -20,6 +20,12 @@
              
                 {{$pm := index .Data "promotion" }}
                 {{$pmts := index .Data "promotion_types" }}
+                {{$pmrs := index .Data "promotions_rates" }}
+               
+
+                <p class="lead mb-3"><span class="font-weight-bold">Package Name: </span>{{$pm.Title}}
+                    <hr/>
+                </p>
                 <form method="post" action="/admin/promotions/{{$pm.Id}}/update" class="" novalidate>
                     <input type="hidden" name="csrf_token" value="{{.CSRFToken}}" />
 
@@ -40,9 +46,10 @@
                                         aria-label="select promotion type" 
                                         id="promotion_type_id"
                                         name="promotion_type_id" 
-                                        required>                                           
+                                        required>     
+
                                             {{range $pmts}}
-                                            <option value="{{.Id}}" >{{.Title}}</option>
+                                            <option {{if eq .Id .Id}}selected{{end}} value="{{.Id}}" >{{.Title}}</option>
                                             {{end}}                                        
                                         </select>                                    
                                     </div>
@@ -146,10 +153,15 @@
         </div>
 
          {{/* promotions rate  */}}
-        <p class="mt-5">
-         <h2 class="lead mb-3">Promotion room rate</h2>
-        </p>
-        {{$pmrs := index .Data "promotions_rates" }}
+         <p class="mt-5">
+            <h2 class="lead mb-3">Promotion room rate</h2>
+            <hr/>
+           </p>
+         {{$prmslength := len $pmrs }}
+         {{if eq $prmslength 0 }} 
+         no room rate available :) <br/>
+         <a href="/admin/promotions-rates/{{$pm.Id}}" class="btn btn-success">generate rate</a>
+         {{else}}
             <div class="table-responsive">
                 <table class="table table-hover table-sm" id="all-promotion_types">
                     <thead>
@@ -157,7 +169,7 @@
                             <th></th>
                             <th>Name</th>
                             <th class="d-none">Room Type</th>
-                            <th>Promotion</th>
+                            <!-- <th>Promotion</th> -->
                             <th>Rate</th>
                             <th>Start Date</th>
                             <th>End Date</th>
@@ -165,22 +177,26 @@
                             <th></th>
                         </tr>
                         <tbody>
+                           
                         {{range $pmrs }}
                             <tr>
+                                <form method="post" action="/admin/promotions/{{$pm.Id}}/update" class="" novalidate>
+                                <input type="hidden" value="{{.Id}}" id="pro_rate_id" name="pro_rate_id">
                                 <td></td>
                                 <td>{{.Title}}</td>
                                 <td class="d-none">{{.RoomTypeId}}</td>
-                                <td>{{.PromotionId}}</td>
+                                <!-- <td>{{.PromotionId}}</td> -->
                                 <td>{{.Rate}}</td>
                                 <td>{{humanDate .StartDate}}</td>
                                 <td>{{humanDate .EndDate}}</td>
                                 <td class="{{if eq .Status "disable" }} text-danger {{else}} text-success {{end}}">{{.Status}}</td>
                                 <td class="text-center">
-                                    <a href="/admin/promotions-types/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a>
-                                    <a href="/admin/promotions-types/{{.Id}}?edit=true"type="button" class="btn btn-warning btn-sm">Edit</a>
+                                    <!-- <a href="/admin/promotions-types/{{.Id}}?edit=false"type="button" class="btn btn-success btn-sm">View</a> -->
+                                    <a id="rate-button-{{.Id}}"  onclick="updateBtn({{.Id}})" href="#!" class="btn btn-warning btn-sm">Edit</a>
                                     <!-- <a href="/admin/promotions-types/{{.Id}}/delete" type="button" class="btn btn-danger btn-sm">Delete</a> -->
                                     <a href="#!" onclick="deleteRes({{.Id}})" type="button" class="btn btn-danger btn-sm">Delete</a>   
                                 </td>
+                            </form>
                             </tr>
                         {{end}}
                         </tbody>
@@ -192,14 +208,15 @@
                     <div class="row">
                         <div class="col">
                             <!-- <a href="/admin/promotions-types/new" type="button" class="btn btn-success btn-sm" >Add</a> -->
-                            <a href="/admin/promotions-types" type="button" class="btn btn-warning btn-sm">Back</a>
+                            <a href="/admin/promotions-types" type="button" class="btn btn-primary btn-sm">Back</a>
                         </div>
                     </div>
             </div>
 
+            {{end}} 
         </div>
-
     </div>
+</div>
 {{end}}
 
 {{define "js"}}
@@ -212,6 +229,93 @@
     });
 </script>
 
+<script>
+    
+    function updateBtn(id) {
+    // document.getElementById("rate-button-" + id).addEventListener("click", function () {
+    let html = `
+    <form id="promotion-rate-form" action="/rooms/search-availability-response" method="post" novalidate class="needs-validation"> 
+        <div class="form-row">
+          <input type="hidden" value="1" id="room_id" name="room_id">
+          <div class="col">
+                <div class="form-row" id="promotion-rate-modal">
+                    <div class="col">
+                        <input required  class="form-control" type="text" name="rate" id="rate" placeholder="rate" autocomplete="off">
+                    </div>
+                    <div class="col">
+                        <select class="form-control form-select form-select-lg mb-3 "
+                            aria-label="select status" 
+                            id="status"
+                            name="status" 
+                            required>                                           
+                                <option selected value="enable">Enable</option>
+                                <option selected value="disable">Disable</option>                                      
+                        </select>      
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    `;
+        attention.custom({
+        title: '<div class="leade">Update rate</div>',
+        msg: html,
+
+        willOpen: () => {
+                    const elem = document.getElementById("promotion-rate-modal");
+        },
+
+        didOpen: () => {
+                    document.getElementById("rate").removeAttribute("disabled");
+                    document.getElementById("status").removeAttribute("disabled");
+        },
+            callback: (results) => {
+            let form = document.getElementById("promotion-rate-form");
+
+            // retrive data from all form input field
+            let formData = new FormData(form);
+
+            // append csrf to form
+            formData.append("csrf_token", "{{.CSRFToken}}");
+
+            fetch("/admin/promotions-rates/"+id+"/update", {
+                method: 'post',
+                body: formData,
+            }).then(response => response.json()).then(data => {
+                        if (data.Ok) {
+                            attention.custom({
+                                icon: "success",
+                                showConfirmButton: false,
+                                showCloseButton: true,
+                                showCancelButton: false,
+                                msg: `<p>Refresh</p> <a href="/admin/promotins/`+id+`?edit=false` 
+                                + data.RoomID 
+                                + "&sd="
+                                + data.StartDate 
+                                + "&ed="
+                                + data.EndDate
+                                + `"` 
+                                + `type="button" class="btn btn-success">`
+                                + `OK</a>`
+                                ,
+                            })
+                        } else {
+                            attention.custom({
+                                icon: "warning",
+                                showConfirmButton: false,
+                                showCloseButton: false,
+                                showCancelButton: true,
+                                cancelButtonText:
+                                'Promotion Rate',
+                                msg: `<p>Please re-check input data</p>`,
+                            })
+                        }
+                    })
+                    }
+                });
+        // })
+    }
 </script>
+
 {{end}}
     

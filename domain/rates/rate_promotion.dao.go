@@ -2,6 +2,7 @@ package rates
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/psinthorn/go_smallsite/datasources/drivers"
@@ -26,13 +27,9 @@ const (
 							where promotion_id = $1
 							order by pmr.id desc`
 
-	queryGetPromotionRateById = `SELECT pm.id, pm.title, pm.description, pm.price, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
-							from promotions pm
-							left join promotion_types pt
-							on (pm.promotion_type_id = pt.id)
-							where pm.id = $1`
+	queryGetPromotionRateById = `SELECT pm.id, pm.title, room_type_id, pm.promotion_id, pm.start_date, pm.end_date, pm.rate, pm.status, pm.created_at, pm.updated_at from promotions_room_rate pm where pm.id = $1`
 
-	queryUpdatePromotionRateById = `update promotions set title= $1, description = $2, promotion_type_id = $3, start_date = $4, end_date = $5, price = $6, status = $7, updated_at = $8 where id = $9`
+	queryUpdatePromotionRateById = `update promotions_room_rate set rate = $1, status = $2, updated_at = $3 where id = $4`
 
 	queryDeletePromotionRateById = `delete from promotions_room_rate where id = $1`
 )
@@ -147,8 +144,6 @@ func (s *PromotionRate) AdminGet() ([]PromotionRate, error) {
 			&p.Status,
 			&p.CreatedAt,
 			&p.UpdatedAt,
-			// &p.PromotionType.Id,
-			// &p.PromotionType.Title,
 		)
 
 		if err != nil {
@@ -177,14 +172,16 @@ func (s *PromotionRate) GetById(id int) (PromotionRate, error) {
 		return pr, err
 	}
 
+	fmt.Println(id)
+
 	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionRateById, id).Scan(
 		&pr.Id,
 		&pr.Title,
-		pr.RoomTypeId,
-		pr.PromotionId,
-		&pr.Rate,
+		&pr.RoomTypeId,
+		&pr.PromotionId,
 		&pr.StartDate,
 		&pr.EndDate,
+		&pr.Rate,
 		&pr.Status,
 		&pr.CreatedAt,
 		&pr.UpdatedAt,
@@ -211,11 +208,11 @@ func (s *PromotionRate) Update(pr PromotionRate) error {
 		return err
 	}
 	_, err = dbConn.SQL.QueryContext(ctx, queryUpdatePromotionRateById,
-		pr.Title,
-		pr.RoomTypeId,
-		pr.PromotionId,
-		pr.StartDate,
-		pr.EndDate,
+		// pr.Title,
+		// pr.RoomTypeId,
+		// pr.PromotionId,
+		// pr.StartDate,
+		// pr.EndDate,
 		pr.Rate,
 		pr.Status,
 		time.Now(),

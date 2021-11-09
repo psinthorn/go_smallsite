@@ -14,7 +14,6 @@ import (
 	"github.com/psinthorn/go_smallsite/internal/forms"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
 	"github.com/psinthorn/go_smallsite/internal/render"
-	"github.com/psinthorn/go_smallsite/internal/utils"
 )
 
 // AdminPromotionRate
@@ -181,7 +180,7 @@ func (rp *Repository) AddPromotionRate(w http.ResponseWriter, r *http.Request) {
 
 }
 
-// Update promotion
+// UpdatePromotionRate update promotion rate for each room type and status
 func (rp *Repository) UpdatePromotionRate(w http.ResponseWriter, r *http.Request) {
 	//form := forms.New(r.PostForm)
 	err := r.ParseForm()
@@ -195,33 +194,26 @@ func (rp *Repository) UpdatePromotionRate(w http.ResponseWriter, r *http.Request
 		helpers.ServerError(w, err)
 		return
 	}
-
-	sd := r.Form.Get("start_date")
-	ed := r.Form.Get("end_date")
-	// convert from string date to time.Time format
-	startDate, err := utils.UtilsService.StringToTime(sd)
+	rate, err := strconv.Atoi(r.Form.Get("rate"))
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
-	endDate, err := utils.UtilsService.StringToTime(ed)
+	status := r.Form.Get("status")
+
+	var pmr rates.PromotionRate
+	pmr, err = rates.PromotionRateService.GetById(id)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
 	}
+	pmr.Rate = float32(rate)
+	pmr.Status = status
 
-	pmt, err := domain.PromotionTypeService.GetById(id)
+	_ = rates.PromotionRateService.Update(pmr)
 
-	pmt.Title = r.Form.Get("title")
-	pmt.Description = r.Form.Get("description")
-	pmt.StartDate = startDate
-	pmt.EndDate = endDate
-	pmt.Status = r.Form.Get("status")
-
-	_ = domain.PromotionTypeService.Update(pmt)
-
-	rp.App.Session.Put(r.Context(), "success", "promotion type is updated")
-	http.Redirect(w, r, "/admin/promotions-ratetypes", http.StatusSeeOther)
+	rp.App.Session.Put(r.Context(), "success", "promotion rate is updated")
+	http.Redirect(w, r, fmt.Sprintf("/admin/promotions/26?edit=false"), http.StatusSeeOther)
 }
 
 // Delete
