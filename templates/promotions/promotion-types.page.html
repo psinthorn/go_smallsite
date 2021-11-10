@@ -8,6 +8,7 @@
         <!-- <h2 class="mb-5 text-center text-grey">Special Promotions</h1> -->
             {{$pts := index .Data "promotion_types"}} 
             {{$pms := index .Data "promotions"}} 
+            {{$pmrs := index .Data "promotions_rates"}}
               
         {{range $pt := $pts}}
             <div class="card mb-3">
@@ -76,40 +77,39 @@
                                 <div class="card align-middle mb-3">
                                     <div class="card-body">
                                         <div class="row text-center">
-                                            <div class="col-sm-12 col-md-4 col-lg-4">
+                                            <div class="col-sm-12 col-md-6 col-lg-6 mb-3">
                                                 <p class="lead">{{$pm.Title}}</p>
-                                            </div>
-                                            <div class="col-sm-12 col-md-6 col-lg-6 mt-1 mb-3">
                                                 <p class="small">
                                                     Start From <span class="lead text-danger">{{$pm.Price}}</span> baht.
                                                     <br/><span>{{$pm.Description}}</span>
                                                 </p>
                                             </div>
-                                            <div class="col-sm-12 col-md-2 col-lg-2">
-                                                <a href="/promotions/promotion-choose-room/{{$pm.PromotionTypeId}}/{{$pm.Id}}" class="btn btn-success">Book Now</a>
-                                            </div>
-                                            <div class="row m-3">
-                                                <div class="col-sm-12 col-md-12 com-lg-12 p-3">
-                                                 <div id="accordion">
-                                                    <div class="card">
-                                                      <div class="card-header" id="heading{{$pm.Id}}">
-                                                        <h5 class="mb-0 text-center">
-                                                          <button class="btn btn-link" data-toggle="collapse" data-target="#collapse{{$pm.Id}}" aria-expanded="true" aria-controls="collapse{{$pm.Id}}">
-                                                            Choose Room
-                                                          </button>
-                                                        </h5>
-                                                      </div>
-                                                  
-                                                      <div id="collapse{{$pm.Id}}" class="collapse hide" aria-labelledby="heading{{$pm.Id}}" data-parent="#accordion">
-                                                        <div class="card-body">
-                                                          Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                            <div class="col-sm-12 col-md-6 col-lg-6 mt-1 mb-3 text-left">
+                                            <p class="lead">Promotion Room Rate</p>
+                                            <hr/>
+                                                {{range $pmrs}}
+                                                {{if eq .PromotionId $pm.Id}}
+                                                    <div class="row">
+                                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                                            <p class="small">{{.Title}}</p>
                                                         </div>
-                                                      </div>
+                                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                                            <p class="lead">{{.Rate}}</p>
+                                                        </div>
+                                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                                            <a href="/promotions/promotion-choose-room/{{$pm.PromotionTypeId}}/{{$pm.Id}}" class="btn btn-sm btn-success">Book Now</a>
+                                                        </div>
                                                     </div>
-                                                </div> 
+                                                    
+                                                {{end}}
+                                                {{end}}
                                             </div>
-                                            </div>
+                                            {{/* <div class="col-sm-12 col-md-4 col-lg-4">
+                                                
+                                                <a href="/promotions/promotion-choose-room/{{$pm.PromotionTypeId}}/{{$pm.Id}}" class="btn btn-success">Book Now</a>
+                                            </div> */}}
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 {{end}}
