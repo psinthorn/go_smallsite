@@ -19,7 +19,7 @@ const (
 							left join promotion_types pt 
 							on (pms.promotion_type_id = pt.id) 
 							where pms.status = $1   
-							order by pms.id desc`
+							order by pms.id asc`
 
 	queryAdminGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
 							from promotions pms

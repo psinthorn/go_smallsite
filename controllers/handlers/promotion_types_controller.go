@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	domain "github.com/psinthorn/go_smallsite/domain/promotions"
+	"github.com/psinthorn/go_smallsite/domain/rates"
 	"github.com/psinthorn/go_smallsite/domain/templates"
 	"github.com/psinthorn/go_smallsite/internal/helpers"
 	"github.com/psinthorn/go_smallsite/internal/render"
@@ -20,6 +21,7 @@ func (rp *Repository) PromotionTypes(w http.ResponseWriter, r *http.Request) {
 	}
 	pts, err := domain.PromotionTypeService.Get(st)
 	pms, err := domain.PromotionService.Get(st)
+	pmrs, err := rates.PromotionRateService.Get(st)
 	if err != nil {
 		helpers.ServerError(w, err)
 		return
@@ -31,6 +33,7 @@ func (rp *Repository) PromotionTypes(w http.ResponseWriter, r *http.Request) {
 	data := make(map[string]interface{})
 	data["promotion_types"] = pts
 	data["promotions"] = pms
+	data["promotions_rates"] = pmrs
 
 	render.Template(w, r, "promotion-types.page.html", &templates.TemplateData{
 		Data: data,
