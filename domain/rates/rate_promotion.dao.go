@@ -9,23 +9,25 @@ import (
 )
 
 const (
-	queryInsertPromotionRate = `insert into promotions_room_rate (title, room_type_id, promotion_type_id, rate, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id`
+	queryInsertPromotionRate = `insert into promotions_room_rate (title, image, room_type_id, promotion_type_id, rate, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) returning id`
 
-	queryGetAllPromotionRates = `select pmr.id, pmr.title, pmr.room_type_id, pmr.promotion_id, pmr.start_date, pmr.end_date, pmr.rate, pmr.status, pmr.created_at, pmr.updated_at
+	queryGetAllPromotionRates = `select pmr.id, pmr.title, pmr.image, pmr.room_type_id, pmr.promotion_id, pmr.start_date, pmr.end_date, pmr.rate, pmr.status, pmr.created_at, pmr.updated_at, rt.id, rt.title, rt.description
 							from promotions_room_rate pmr
+							left join room_types rt 
+							on (pmr.room_type_id = rt.id) 
 							where pmr.status = $1
 							order by pmr.rate asc`
 
-	queryAdminGetAllPromotionRates = `select pmr.id, pmr.title, pmr.room_type_id, pmr.promotion_id, pmr.start_date, pmr.end_date, pmr.rate, pmr.status, pmr.created_at, pmr.updated_at
+	queryAdminGetAllPromotionRates = `select pmr.id, pmr.title, pmr.image, pmr.room_type_id, pmr.promotion_id, pmr.start_date, pmr.end_date, pmr.rate, pmr.status, pmr.created_at, pmr.updated_at
 							from promotions_room_rate pmr
 							order by pmr.id desc`
 
-	queryAdminGetAllPromotionRatesById = `select pmr.id, pmr.title, pmr.room_type_id, pmr.promotion_id, pmr.rate, pmr.start_date, pmr.end_date, pmr.status, pmr.created_at, pmr.updated_at
+	queryAdminGetAllPromotionRatesById = `select pmr.id, pmr.title, pmr.image, pmr.room_type_id, pmr.promotion_id, pmr.rate, pmr.start_date, pmr.end_date, pmr.status, pmr.created_at, pmr.updated_at
 							from promotions_room_rate pmr
 							where promotion_id = $1
 							order by pmr.id desc`
 
-	queryGetPromotionRateById = `SELECT pm.id, pm.title, room_type_id, pm.promotion_id, pm.start_date, pm.end_date, pm.rate, pm.status, pm.created_at, pm.updated_at from promotions_room_rate pm where pm.id = $1`
+	queryGetPromotionRateById = `SELECT pm.id, pm.title, pmr.image, room_type_id, pm.promotion_id, pm.start_date, pm.end_date, pm.rate, pm.status, pm.created_at, pm.updated_at from promotions_room_rate pm where pm.id = $1`
 
 	queryUpdatePromotionRateById = `update promotions_room_rate set rate = $1, status = $2, updated_at = $3 where id = $4`
 
@@ -87,6 +89,7 @@ func (s *PromotionRate) Get(st string) ([]PromotionRate, error) {
 		err := rows.Scan(
 			&p.Id,
 			&p.Title,
+			&p.Image,
 			&p.RoomTypeId,
 			&p.PromotionId,
 			&p.StartDate,
@@ -95,6 +98,9 @@ func (s *PromotionRate) Get(st string) ([]PromotionRate, error) {
 			&p.Status,
 			&p.CreatedAt,
 			&p.UpdatedAt,
+			&p.RoomType.ID,
+			&p.RoomType.Title,
+			&p.RoomType.Description,
 		)
 
 		if err != nil {
@@ -134,6 +140,7 @@ func (s *PromotionRate) AdminGet() ([]PromotionRate, error) {
 		err := rows.Scan(
 			&p.Id,
 			&p.Title,
+			&p.Image,
 			&p.RoomTypeId,
 			&p.PromotionId,
 			&p.StartDate,
@@ -175,6 +182,7 @@ func (s *PromotionRate) GetById(id int) (PromotionRate, error) {
 	err = dbConn.SQL.QueryRowContext(ctx, queryGetPromotionRateById, id).Scan(
 		&pr.Id,
 		&pr.Title,
+		&pr.Image,
 		&pr.RoomTypeId,
 		&pr.PromotionId,
 		&pr.StartDate,
@@ -260,6 +268,7 @@ func (s *PromotionRate) GetRatesByPromotionId(id int) ([]PromotionRate, error) {
 		err := rows.Scan(
 			&p.Id,
 			&p.Title,
+			&p.Image,
 			&p.RoomTypeId,
 			&p.PromotionId,
 			&p.Rate,

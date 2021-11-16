@@ -10,30 +10,30 @@ import (
 )
 
 const (
-	queryInsertPromotion = `insert into promotions (title, description, price, start_date, end_date, promotion_type_id, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id`
+	queryInsertPromotion = `insert into promotions (title, description, price, Image, start_date, end_date, promotion_type_id, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) returning id`
 
 	queryInsertPromotionRate = `insert into promotions_room_rate (title, room_type_id, promotion_id, start_date, end_date, rate, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9) returning id`
 
-	queryGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
+	queryGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.image, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
 							from promotions pms
 							left join promotion_types pt 
 							on (pms.promotion_type_id = pt.id) 
 							where pms.status = $1   
 							order by pms.id asc`
 
-	queryAdminGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
+	queryAdminGetAllPromotions = `select pms.id, pms.title, pms.description, pms.price, pms.image, pms.promotion_type_id, pms.start_date, pms.end_date, pms.status, pms.created_at, pms.updated_at, pt.id, pt.title
 							from promotions pms
 							left join promotion_types pt 
 							on (pms.promotion_type_id = pt.id)   
 							order by pms.id desc`
 
-	queryGetPromotionById = `SELECT pm.id, pm.title, pm.description, pm.price, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
+	queryGetPromotionById = `SELECT pm.id, pm.title, pm.description, pm.price, pms.image, pm.promotion_type_id, pm.start_date, pm.end_date, pm.status, pm.created_at, pm.updated_at, pt.id, pt.title
 							from promotions pm 
 							left join promotion_types pt 
 							on (pm.promotion_type_id = pt.id) 
 							where pm.id = $1`
 
-	queryUpdateById = `update promotions set title= $1, description = $2, promotion_type_id = $3, start_date = $4, end_date = $5, price = $6, status = $7, updated_at = $8 where id = $9`
+	queryUpdateById = `update promotions set title= $1, description = $2, promotion_type_id = $3, start_date = $4, end_date = $5, price = $6, status = $7, updated_at = $8, image = $9 where id = $9`
 
 	queryDeletePromotionById = `delete from promotions where id = $1`
 )
@@ -64,7 +64,7 @@ func (s *Promotion) Create(p Promotion) (int, error) {
 	}
 
 	var newProId int
-	err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotion, p.Title, p.Description, p.Price, p.StartDate, p.EndDate, p.PromotionTypeId, p.Status, p.CreatedAt, p.UpdatedAt).Scan(&newProId)
+	err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotion, p.Title, p.Description, p.Price, p.Image, p.StartDate, p.EndDate, p.PromotionTypeId, p.Status, p.CreatedAt, p.UpdatedAt).Scan(&newProId)
 	if err != nil {
 		return 0, err
 	}
@@ -171,6 +171,7 @@ func (s *Promotion) Get(st string) ([]Promotion, error) {
 			&p.Title,
 			&p.Description,
 			&p.Price,
+			&p.Image,
 			&p.PromotionTypeId,
 			&p.StartDate,
 			&p.EndDate,
@@ -220,6 +221,7 @@ func (s *Promotion) AdminGet() ([]Promotion, error) {
 			&p.Title,
 			&p.Description,
 			&p.Price,
+			&p.Image,
 			&p.PromotionTypeId,
 			&p.StartDate,
 			&p.EndDate,
@@ -261,6 +263,7 @@ func (s *Promotion) GetById(id int) (Promotion, error) {
 		&pm.Title,
 		&pm.Description,
 		&pm.Price,
+		&pm.Image,
 		&pm.PromotionTypeId,
 		&pm.StartDate,
 		&pm.EndDate,
@@ -293,6 +296,7 @@ func (s *Promotion) Update(pm Promotion) error {
 		pm.Title,
 		pm.Description,
 		pm.PromotionTypeId,
+		pm.Image,
 		pm.StartDate,
 		pm.EndDate,
 		pm.Price,

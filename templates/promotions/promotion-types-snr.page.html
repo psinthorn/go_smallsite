@@ -1,0 +1,246 @@
+{{template "base" .}}
+{{template "navbar-top" .}}
+{{define "banner"}}
+        <!-- <img src="/static/images/contact-samui-natien-resort-villas-17.png" class="img-fluid d-block w-100" style="height: 260px; margin: 0; border: 0;" alt="Samui Natien Resort">         -->
+{{end}}
+{{define "content"}}
+    <div class="container mt-5">   
+        <!-- <h2 class="mb-5 text-center text-grey">Special Promotions</h1> -->
+            {{$pts := index .Data "promotion_types"}} 
+            {{$pms := index .Data "promotions"}} 
+            {{$pmrs := index .Data "promotions_rates"}}
+              
+        {{range $pt := $pts}}
+           
+            <div class="row">
+                            <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 text-center">
+                                <img class="img-fluid" src="/static/images/promotions/special-deal/png/snr_long_stay_with_text_01.png" alt="">
+                            </div>
+            </div>
+
+            <div class="row">
+                <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 text-center">
+                        <!-- <p>Valid {{humanDate $pt.StartDate}} - {{humanDate $pt.EndDate}}</p> -->
+                            <p class="lead">
+                                {{$pt.Description}}
+                            </p>  
+                            <br/> 
+                                    <!-- <p class="lead text-danger">Vacation is Calling</p> -->
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 text-center">
+                    <p class="lead" style="color: #7DD2F6;">All Accomodations Included</p>
+                    <div class="d-flex justify-content-center">
+                        <ul class="list-group list-group-horizontal">
+                            <li class="list-group-item border-0"><div class="ms-2 fw-bold">Breakfast</div></li>
+                            <li class="list-group-item border-0"><p class="ms-2 fw-bold">Airport transfer</p></li>
+                            <li class="list-group-item border-0"><p class="fs-5">Pool</p></li>
+                        </ul>
+                        
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <img style="height: 8px;" src="/static/images/snr_mall_line_09.png" alt="">
+                    </div>
+                </div>
+                       
+                
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 text-center">
+                    <img class="img-fluid" src="/static/images/promotions/special-deal/png/snr_stay_today_with_text.png" alt="">
+                </div>
+            </div>
+
+            <div class="row mt-3 mb-3">
+                            <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 text-center">
+                                <p class="lead text-center">When is the best time for you?</p>
+                            </div>
+            </div>
+
+            <div class="row mb-3">
+                            <div class="col-sm-8 col-md-8 col-lg-8 offset-sm-2 offset-md-2 offset-lg-2">
+                                <div class="row">
+                                    <div class="col-sm-4 col-md-6 col-lg-6 text-center">
+                                        <img class="img-fluid" src="/static/images/promotions/special-deal/png/snr_period1_color.png" alt="">
+                                    </div>
+                                    <div class="col-sm-4 col-md-6 col-lg-6 text-center">
+                                        <img class="img-fluid" src="/static/images/promotions/special-deal/png/snr_period2_grey.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+            </div>
+
+            <div class="row mt-5 mb-3">
+                            <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 text-center">
+                                <p class="lead text-center">How many nights are you staying?</p>
+                            </div>
+            </div>          
+               
+            <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 text-center text-center">
+                        <div class="row">    
+                            {{range $pm := $pms}}              
+                                <div class="col-sm-4 col-md-4 col-lg-4 p-2 text-center" >
+                                    <a href="#!" onclick="stayMorePayLess({{.Id}})">
+                                        <img id="stay4pay3" class="img-fluid" src="/static/images/promotions/special-deal/png/{{$pm.Image}}" alt="">
+                                    </a>
+                                </div>
+                            {{end}} 
+                        </div>
+            </div>
+              
+                <div id="stayMorePayLess" class="d-none">
+                    <div class="col-sm-8 col-md-8 col-lg-8 offset-sm-2 offset-md-2 offset-lg-2">     
+                        {{range $pmr := $pmrs}}
+                            {{if eq $pmr.PromotionId 6}}                              
+                                <div class="card w-100 m-3">
+                                    <div class="card-body">
+                                        <div class="row"> 
+                                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                                <img id="{{$pmr.Id}}" class="img-fluid" src="/static/images/accommodations/{{$pmr.Image}}" alt="">
+                                            <img src="" alt="">
+                                            </div>
+                                            <div class="col-sm-6 col-md-6 col-lg-6">
+                                               <h4>{{$pmr.Title}}</h3> 
+                                                <div class="small">{{$pmr.RoomType.Description}}</div>
+                                                <div class="row">
+                                                    <div class="col-sm-12 col-md-12 col-lg-12 mt-3">
+                                                        <h5 style="color: #7DD2F6;">{{$pmr.RoomType.Title}}</h5>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-6 col-md-6 col-lg-6">
+                                                        <div class="align-text-bottom">
+                                                            <h1 class="fs-1 fw-bold" style="color: #7DD2F6;">{{$pmr.Rate}}</h1>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-md-6 col-lg-6">
+                                                        <div class="align-text-bottom">
+                                                            <h6 class="my-0 mb-0" font-size: 0.9rem;>Baht</h6>
+                                                            <small class="text-muted mt-0" style="font-size: 0.7rem;">*Price Included vat 7%.</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <span class="small mt-1" style="font-size: 0.7rem;">*Booking policy for this promotion will be notify by email.</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> 
+                            {{end}}                     
+                        {{end}}
+                    </div> 
+                </div>
+        {{end}} 
+    </div> <!--  end content -->
+{{end}}
+
+{{define "img-footer"}}
+<div class="container">
+    <div class="row mt-5 mb-5">
+        <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 mt-5 text-center">
+            <img class="img-fluid" src="/static/images/promotions/special-deal/png/snr_our_natien_with_text.png" alt="">
+        </div>
+    </div>
+    <div class="row">
+        <img class="img-fluid" src="/static/images/promotions/special-deal/snr_perspective_sha.jpg" alt="">   
+    </div>  
+</div>
+{{end}}
+
+{{define "js"}}
+    <!-- if you have specific javascript for this page put it here -->
+    <script>
+        function stayMorePayLess(id){
+            console.log(id);
+            document.getElementById("stayMorePayLess").classList.add("d-none")
+            document.getElementById("stayMorePayLess").classList.remove("d-none")
+        }
+    </script>
+    <script>
+
+        document.getElementById("check-availability-button").addEventListener("click", function () {
+        let html = `
+        <form id="check-availability-form" action="/rooms/search-availability-response" method="post" novalidate class="needs-validation">
+              <div class="form-row">
+                <input type="hidden" value="2" id="room_id" name="room_id">
+                <div class="col">
+                      <div class="form-row" id="reservation-dates-modal">
+                          <div class="col">
+                              <input required disabled class="form-control" type="text" name="start_date" id="start_date" placeholder="Arrival" autocomplete="off">
+                          </div>
+                          <div class="col">
+                              <input required disabled class="form-control" type="text" name="end_date" id="end_date" placeholder="Departure" autocomplete="off">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+        `;
+        attention.custom({
+            title: 'Choose your dates',
+            msg: html,
+
+            willOpen: () => {
+                      const elem = document.getElementById("reservation-dates-modal");
+                      const rp = new DateRangePicker(elem, {
+                          format: 'yyyy-mm-dd',
+                          showOnFocus: true,
+                          minDate: new Date(),
+                      })
+            },
+
+            didOpen: () => {
+                      document.getElementById("start_date").removeAttribute("disabled");
+                      document.getElementById("end_date").removeAttribute("disabled");
+            },
+
+              callback: (results) => {
+                let form = document.getElementById("check-availability-form");
+
+                // retrive data from all form input field
+                let formData = new FormData(form);
+
+                // append csrf to form
+                formData.append("csrf_token", "{{.CSRFToken}}");
+
+                fetch("/rooms/search-availability-response", {
+                    method: 'post',
+                    body: formData,
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.Ok) {
+                        console.log(data.RoomID)
+                        attention.custom({
+                            icon: "success",
+                            showConfirmButton: false,
+                            showCloseButton: true,
+                            showCancelButton: false,
+                            msg: `<p>Room is available</p> <a href="/rooms/reservation-by-room-type?type=` 
+                            + data.RoomID 
+                            + "&sd="
+                            + data.StartDate 
+                            + "&ed="
+                            + data.EndDate
+                            + `"` 
+                            + `type="button" class="btn btn-success">`
+                            + `Book Now</a>`,
+                        })
+                    } else {
+                        attention.custom({
+                            icon: "warning",
+                            showConfirmButton: false,
+                            showCloseButton: false,
+                            showCancelButton: true,
+                            cancelButtonText:
+                            'Choose new dates',
+                            msg: `<p>Sorry :( Room is not available</p>`,
+                        })
+                    }
+                })
+              }
+          });
+      })
+    </script>
+{{end}}
+    

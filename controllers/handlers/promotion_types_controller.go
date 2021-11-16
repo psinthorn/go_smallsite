@@ -35,7 +35,7 @@ func (rp *Repository) PromotionTypes(w http.ResponseWriter, r *http.Request) {
 	data["promotions"] = pms
 	data["promotions_rates"] = pmrs
 
-	render.Template(w, r, "promotion-types.page.html", &templates.TemplateData{
+	render.Template(w, r, "promotion-types-snr.page.html", &templates.TemplateData{
 		Data: data,
 	})
 }
