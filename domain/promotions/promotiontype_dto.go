@@ -6,6 +6,7 @@ type promotionType struct {
 	Id          int       `json:"id"`
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
+	Image       string    `json:"image"`
 	StartDate   time.Time `json:"start_date"`
 	EndDate     time.Time `json:"end_date"`
 	Facility    string    `json:"facility"`

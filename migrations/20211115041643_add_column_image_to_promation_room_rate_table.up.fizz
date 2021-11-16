@@ -1,0 +1,1 @@
+add_column("promotions_room_rate","image", "string", {"default": "f2xhotel.png"})

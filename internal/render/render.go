@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/dustin/go-humanize"
 	"github.com/justinas/nosurf"
 	"github.com/psinthorn/go_smallsite/configs"
 	"github.com/psinthorn/go_smallsite/domain/templates"
@@ -18,6 +19,7 @@ var (
 	functions = template.FuncMap{
 		"humanDate":    HumanDate,
 		"humanISODate": HumanISODate,
+		"comma":        humanize.Comma,
 	}
 	tmplCache = map[string]*template.Template{}
 	app       *configs.AppConfig

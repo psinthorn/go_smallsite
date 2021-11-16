@@ -8,11 +8,11 @@ import (
 )
 
 const (
-	queryGetAllPromotionTypes      = `select id, title, description, start_date, end_date, status,created_at, updated_at from promotion_types where status = $1 order by id desc`
-	queryAdminGetAllPromotionTypes = `select id, title, description, start_date, end_date, status,created_at, updated_at from promotion_types order by id desc`
-	queryInsertPromotionType       = `INSERT INTO promotion_types (title, description, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5, $6, $7) returning id`
-	queryGetPromotionTypeById      = `SELECT pmt.id, pmt.title, pmt.description, pmt.start_date, pmt.end_date, pmt.status, pmt.created_at, pmt.updated_at from promotion_types pmt where pmt.id = $1`
-	queryUpdatePromotionType       = `update promotion_types set title= $1, description = $2, start_date = $3, end_date = $4, status = $5, updated_at = $6 where id = $7`
+	queryGetAllPromotionTypes      = `select id, title, description, image, start_date, end_date, status,created_at, updated_at from promotion_types where status = $1 order by id desc`
+	queryAdminGetAllPromotionTypes = `select id, title, description, image, start_date, end_date, status,created_at, updated_at from promotion_types order by id desc`
+	queryInsertPromotionType       = `INSERT INTO promotion_types (title, description, image, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5, $6, $7, $8) returning id`
+	queryGetPromotionTypeById      = `SELECT pmt.id, pmt.title, pmt.description, pm.image, pmt.start_date, pmt.end_date, pmt.status, pmt.created_at, pmt.updated_at from promotion_types pmt where pmt.id = $1`
+	queryUpdatePromotionType       = `update promotion_types set title= $1, description = $2, start_date = $3, end_date = $4, status = $5, updated_at = $6, image = $8 where id = $7`
 	queryDeletePromotionType       = `delete from promotion_types where id = $1`
 )
 
@@ -38,7 +38,7 @@ func (pm *PromotionType) Create(p PromotionType) (int, error) {
 	}
 
 	var newPromotionTypeId int
-	err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotionType, p.Title, p.Description, p.StartDate, p.EndDate, p.Status, p.CreatedAt, p.UpdatedAt).Scan(&newPromotionTypeId)
+	err = dbConn.SQL.QueryRowContext(ctx, queryInsertPromotionType, p.Title, p.Description, p.Image, p.StartDate, p.EndDate, p.Status, p.CreatedAt, p.UpdatedAt).Scan(&newPromotionTypeId)
 	if err != nil {
 		return 0, nil
 	}
@@ -71,6 +71,7 @@ func (pm *PromotionType) Get(status string) ([]PromotionType, error) {
 			&pt.Id,
 			&pt.Title,
 			&pt.Description,
+			&pt.Image,
 			&pt.StartDate,
 			&pt.EndDate,
 			&pt.Status,
@@ -113,6 +114,7 @@ func (pm *PromotionType) AdminGet() ([]PromotionType, error) {
 			&pt.Id,
 			&pt.Title,
 			&pt.Description,
+			&pt.Image,
 			&pt.StartDate,
 			&pt.EndDate,
 			&pt.Status,
@@ -147,6 +149,7 @@ func (s *PromotionType) GetById(id int) (PromotionType, error) {
 		&pmt.Id,
 		&pmt.Title,
 		&pmt.Description,
+		&pmt.Image,
 		&pmt.StartDate,
 		&pmt.EndDate,
 		&pmt.Status,
@@ -175,6 +178,7 @@ func (s *PromotionType) Update(pmt PromotionType) error {
 	_, err = dbConn.SQL.QueryContext(ctx, queryUpdatePromotionType,
 		pmt.Title,
 		pmt.Description,
+		pmt.Image,
 		pmt.StartDate,
 		pmt.EndDate,
 		pmt.Status,
