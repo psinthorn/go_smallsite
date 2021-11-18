@@ -78,7 +78,7 @@
                
             <div class="col-sm-6 col-md-6 col-lg-6 offset-sm-3 offset-md-3 offset-lg-3 text-center text-center">
                         <div class="row">    
-                            {{range $pm := $pms}}              
+                            {{range $pm := $pms}}    
                                 <div class="col-sm-4 col-md-4 col-lg-4 p-2 text-center" >
                                     <a href="#!" onclick="stayMorePayLess({{.Id}})">
                                         <img id="stay4pay3" class="img-fluid" src="/static/images/promotions/special-deal/png/{{$pm.Image}}" alt="">
@@ -87,11 +87,16 @@
                             {{end}} 
                         </div>
             </div>
-              
-                <div id="stayMorePayLess" class="d-none">
-                    <div class="col-sm-8 col-md-8 col-lg-8 offset-sm-2 offset-md-2 offset-lg-2">     
+
+                <div id="status_spinner" class="text-center">
+                </div>    
+
+                <div id="staymore_payless" class="d-none">
+                    <div class="col-sm-8 col-md-8 col-lg-8 offset-sm-2 offset-md-2 offset-lg-2"> 
+
                         {{range $pmr := $pmrs}}
-                            {{if eq $pmr.PromotionId 6}}                              
+                            {{if eq $pmr.PromotionId 4}}
+                                <div id="pro_select"></div>                
                                 <div class="card w-100 m-3">
                                     <div class="card-body">
                                         <div class="row"> 
@@ -104,18 +109,18 @@
                                                 <div class="small">{{$pmr.RoomType.Description}}</div>
                                                 <div class="row">
                                                     <div class="col-sm-12 col-md-12 col-lg-12 mt-3">
-                                                        <h5 style="color: #7DD2F6;">{{$pmr.RoomType.Title}}</h5>
+                                                        <h5 style="color: #7DD2F6;">{{$pmr.PromotionTitle}}</h5>
                                                     </div>
                                                 </div>
                                                 <div class="row">
                                                     <div class="col-sm-6 col-md-6 col-lg-6">
-                                                        <div class="align-text-bottom">
+                                                        <div class="align-text-middle">
                                                             <h1 class="fs-1 fw-bold" style="color: #7DD2F6;">{{$pmr.Rate}}</h1>
                                                         </div>
                                                     </div>
                                                     <div class="col-sm-6 col-md-6 col-lg-6">
                                                         <div class="align-text-bottom">
-                                                            <h6 class="my-0 mb-0" font-size: 0.9rem;>Baht</h6>
+                                                            <h6 class="my-0 mb-0" style="font-size: 0.9rem;">Baht</h6>
                                                             <small class="text-muted mt-0" style="font-size: 0.7rem;">*Price Included vat 7%.</small>
                                                         </div>
                                                     </div>
@@ -130,6 +135,10 @@
                         {{end}}
                     </div> 
                 </div>
+
+
+
+
         {{end}} 
     </div> <!--  end content -->
 {{end}}
@@ -150,10 +159,22 @@
 {{define "js"}}
     <!-- if you have specific javascript for this page put it here -->
     <script>
-        function stayMorePayLess(id){
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function stayMorePayLess(id){
+            let html = `<div id="status_spinner" class="spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>`;
+            document.getElementById("status_spinner").innerHTML = html ;     
+            await sleep(2000);
+            document.getElementById("staymore_payless").classList.add("d-none")
+            document.getElementById("staymore_payless").classList.remove("d-none")
+            document.getElementById("status_spinner").classList.add("d-none")
+           
             console.log(id);
-            document.getElementById("stayMorePayLess").classList.add("d-none")
-            document.getElementById("stayMorePayLess").classList.remove("d-none")
+           
         }
     </script>
     <script>

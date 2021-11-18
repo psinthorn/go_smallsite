@@ -11,10 +11,12 @@ import (
 const (
 	queryInsertPromotionRate = `insert into promotions_room_rate (title, image, room_type_id, promotion_type_id, rate, start_date, end_date, status, created_at, updated_at) values ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11) returning id`
 
-	queryGetAllPromotionRates = `select pmr.id, pmr.title, pmr.image, pmr.room_type_id, pmr.promotion_id, pmr.start_date, pmr.end_date, pmr.rate, pmr.status, pmr.created_at, pmr.updated_at, rt.id, rt.title, rt.description
+	queryGetAllPromotionRates = `select pmr.id, pmr.title, pmr.image, pmr.room_type_id, pmr.promotion_id, pmr.start_date, pmr.end_date, pmr.rate, pmr.status, pmr.created_at, pmr.updated_at, rt.id, rt.title, rt.description, pm.title
 							from promotions_room_rate pmr
 							left join room_types rt 
 							on (pmr.room_type_id = rt.id) 
+							left join promotions pm 
+							on (pmr.promotion_id = pm.id) 
 							where pmr.status = $1
 							order by pmr.rate asc`
 
@@ -28,6 +30,15 @@ const (
 							order by pmr.id desc`
 
 	queryGetPromotionRateById = `SELECT pm.id, pm.title, pmr.image, room_type_id, pm.promotion_id, pm.start_date, pm.end_date, pm.rate, pm.status, pm.created_at, pm.updated_at from promotions_room_rate pm where pm.id = $1`
+
+	queryGetAllPromotionRatesByPromotionId = `select pmr.id, pmr.title, pmr.image, pmr.room_type_id, pmr.promotion_id, pmr.start_date, pmr.end_date, pmr.rate, pmr.status, pmr.created_at, pmr.updated_at, rt.id, rt.title, rt.description, pm.title
+							from promotions_room_rate pmr
+							left join room_types rt 
+							on (pmr.room_type_id = rt.id) 
+							left join promotions pm 
+							on (pmr.promotion_id = pm.id) 
+							where pmr.status = $1 && pmr.promotion_id = $2
+							order by pmr.rate asc`
 
 	queryUpdatePromotionRateById = `update promotions_room_rate set rate = $1, status = $2, updated_at = $3 where id = $4`
 
@@ -101,6 +112,7 @@ func (s *PromotionRate) Get(st string) ([]PromotionRate, error) {
 			&p.RoomType.ID,
 			&p.RoomType.Title,
 			&p.RoomType.Description,
+			&p.PromotionTitle,
 		)
 
 		if err != nil {

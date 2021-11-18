@@ -25,17 +25,17 @@ type roomRate struct {
 }
 
 type promotionRate struct {
-	Id          int            `json:id`
-	Title       string         `json:"title"`
-	Image       string         `json:"image"`
-	PromotionId int            `json:"promotion_id"`
-	RoomTypeId  int            `json:"room_type_id"`
-	Rate        float32        `json:"rate"`
-	StartDate   time.Time      `json:"start_date"`
-	EndDate     time.Time      `json:"end_date"`
-	Status      string         `json:"status"`
-	CreatedAt   time.Time      `json:"created_at"`
-	UpdatedAt   time.Time      `json:"updated_at"`
-	RoomType    rooms.RoomType `json:"room_type"`
-	// Promotion   string         `json:"promotion"`
+	Id             int            `json:id`
+	Title          string         `json:"title"`
+	Image          string         `json:"image"`
+	PromotionId    int            `json:"promotion_id"`
+	RoomTypeId     int            `json:"room_type_id"`
+	Rate           float32        `json:"rate"`
+	StartDate      time.Time      `json:"start_date"`
+	EndDate        time.Time      `json:"end_date"`
+	Status         string         `json:"status"`
+	CreatedAt      time.Time      `json:"created_at"`
+	UpdatedAt      time.Time      `json:"updated_at"`
+	RoomType       rooms.RoomType `json:"room_type"`
+	PromotionTitle interface{}    `json:"promotion"`
 }
