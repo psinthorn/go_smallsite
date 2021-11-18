@@ -19,7 +19,7 @@ var (
 	functions = template.FuncMap{
 		"humanDate":    HumanDate,
 		"humanISODate": HumanISODate,
-		"comma":        humanize.Comma,
+		"commaRate":    humanize.Comma,
 	}
 	tmplCache = map[string]*template.Template{}
 	app       *configs.AppConfig
